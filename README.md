@@ -28,6 +28,6 @@ Port of School Life Diary Android App for PC.
 Developed by maicol07. Copyright © 2017 - maicol07
 Website: https://www.maicol07.tk
 App website: https://apps.maicol07.tk
-### Segnalazione bug
+### Bug report
 You can report bug from the release date of the first beta version.
 Bug Tracker website: https://apps.maicol07.tk/bugs
