@@ -1,4 +1,5 @@
 <img src="https://apps.maicol07.tk/app/sld/img/ic_launcher.png" align="right" />
+
 # School Life Diary PC Version
 ## Italian version
 Porting dell'app android School Life Diary per PC.
