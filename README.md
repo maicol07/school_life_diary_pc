@@ -16,9 +16,8 @@ Sito web: https://www.maicol07.tk
 
 Sito web app: https://apps.maicol07.tk
 ### Segnalazione bug
-È possibile segnalare bug a partire dalla data di uscita della prima beta del programma.
+È possibile segnalare bug a partire dalla data di uscita della prima beta del programma nella sezione issues
 
-Sito web bug tracker: https://apps.maicol07.tk/bugs
 ## English version
 Port of School Life Diary Android App for PC.
 ### Functions
@@ -34,6 +33,4 @@ Website: https://www.maicol07.tk
 
 App website: https://apps.maicol07.tk
 ### Bug report
-You can report bug from the release date of the first beta version.
-
-Bug Tracker website: https://apps.maicol07.tk/bugs
+You can report bug from the release date of the first beta version in the issues tab.
