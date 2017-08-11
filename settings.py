@@ -31,9 +31,6 @@ def cambiaValore0():
     
 def inizializza():
     global ds
-    if not(os.path.exists(r"settings.npy")):
-        ds={"ORE_MAX_GIORNATA":5}
-        np.save('settings.npy', ds) 
     ds=np.load('settings.npy').item()
     v0["text"]=ds["ORE_MAX_GIORNATA"]
 #Creazione finestra

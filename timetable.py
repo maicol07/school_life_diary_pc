@@ -10,19 +10,19 @@ def Salvataggio(p,var):
         np.save('timetable.npy', dt)
         tkinter.messagebox.showinfo(title="Successo!", message="Salvataggio effettuato con successo!")
         wtc.destroy()
+        wt.destroy()
         creaFinestra()
     except:
         tkinter.messagebox.showerror(title="Errore!", message="Si è verificato un errore, riprovare oppure contattare lo sviluppatore")
 
-def CambiaOrario(p): #p è la posizione in coordinate x e y (tupla) del pulsante cliccato 
+def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante cliccato 
     global wtc
     wtc=Toplevel()
     wtc.title("Modifica Orario - Orario scolastico - School Life Diary")
     wtc.iconbitmap('sld_icon_beta.ico')
     wtc.geometry("%dx%d+%d+%d" % (450, 200, 600, 250))
     dg={1:"Lunedì",2:"Martedì",3:"Mercoledì",4:"Giovedì",5:"Venerdì",6:"Sabato"}
-    print(p)
-    l=Label(wtc, text="Inserire la materia da visualizzare nell'orario la "+str(p[1])+"a ora del "+dg[p[0]-1]+".")
+    l=Label(wtc, text="Inserire la materia da visualizzare nell'orario la "+str(p[1])+"a ora del "+dg[p[0]]+".")
     l.pack(padx=10,pady=10)
     var=StringVar(value="")
     e=Entry(wtc, textvariable=var)
@@ -46,6 +46,7 @@ def inizializza():
 #Creazione finestra
 def creaFinestra():
     inizializza()
+    global wt
     wt=Toplevel()
     wt.title("Orario scolastico - School Life Diary")
     wt.iconbitmap('sld_icon_beta.ico')
@@ -71,8 +72,7 @@ def creaFinestra():
         h.grid(row=i, column=0, padx=5, pady=5)
         i+=1
     for c in range(1,x+2):
-        for i in range(1, x+1):
-            print((c,i))
-            bh=Button(ft, text=dt[(c,i)], width=10, command=lambda: CambiaOrario((c,i)))
+        for i in range(1, 7):
+            bh=Button(ft, text=dt[(c,i)], width=10, command=lambda c=c,i=i: CambiaOrario((c,i)))
             bh.grid(row=i, column=c)
     wt.mainloop()

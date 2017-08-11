@@ -12,6 +12,13 @@ from tkinter import *
 import tkinter.messagebox
 import settings
 import timetable
+import os.path
+import numpy as np
+
+#Inizializzazione impostazioni e creazione file
+if not(os.path.exists(r"settings.npy")):
+    ds={"ORE_MAX_GIORNATA":5}
+    np.save('settings.npy', ds)
 
 #Funzioni
 
