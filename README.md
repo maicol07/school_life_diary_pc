@@ -9,6 +9,12 @@ Porting dell'app android School Life Diary per PC.
 - Gestione dei voti (da sviluppare)
 - Gestione delle note (annotazioni, da sviluppare)
 - Agenda (compiti, verifiche, ecc...; integrazione con Google Calendar; da sviluppare)
+### Schermate
+
+<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_1.png"/>
+<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_2.png"/>
+<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_3.png"/>
+
 ### Crediti
 Sviluppato da maicol07. Copyright © 2017 - maicol07
 
