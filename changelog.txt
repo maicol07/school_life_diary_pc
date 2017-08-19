@@ -1,0 +1,8 @@
+Versione 0.2:
+- Gestione delle materie con implementazione nell'orario
+- Link all'agenda (in futuro verrà integrata nel software)
+- Link alla sezione voti mobile (in futuro verrà integrata nel software)
+- Miglioramenti grafici: ora per gli utenti Windows verrà utilizzato il tema base di Windows invece che il tema di Windows XP/2000; mentre per gli utenti MAC e Linux si utilizza il tema predefinito (aqua per i MAC)
+
+Versione 0.1:
+- Prima beta con gestione completa dell'orario e impostazioni relative

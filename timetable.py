@@ -1,13 +1,23 @@
 #Importazione di Tkinter
 from tkinter import *
+from tkinter.ttk import *
 import tkinter.messagebox
 import numpy as np
 import os.path
 
+global pathset
+global fn_set
+global fn_time
+fn_set = "settings.npy"
+fn_time = "timetable.npy"
+homedir = os.path.expanduser("~")
+pathset = os.path.join(homedir, "\Documents\School Life Diary")
+
+
 def Salvataggio(p,var):
     try:
         dt[p]=var.get()
-        np.save('timetable.npy', dt)
+        np.save(os.path.join(pathset, fn_time), dt)
         tkinter.messagebox.showinfo(title="Successo!", message="Salvataggio effettuato con successo!")
         wtc.destroy()
         wt.destroy()
@@ -19,7 +29,7 @@ def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante
     global wtc
     wtc=Toplevel()
     wtc.title("Modifica Orario - Orario scolastico - School Life Diary")
-    wtc.iconbitmap('sld_icon_beta.ico')
+    wtc.iconbitmap("sld_icon_beta.ico")
     wtc.geometry("%dx%d+%d+%d" % (450, 200, 600, 250))
     dg={1:"Lunedì",2:"Martedì",3:"Mercoledì",4:"Giovedì",5:"Venerdì",6:"Sabato"}
     l=Label(wtc, text="Inserire la materia da visualizzare nell'orario la "+str(p[1])+"a ora del "+dg[p[0]]+".")
@@ -34,23 +44,28 @@ def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante
 def inizializza():
     global ds
     global dt
-    ds=np.load('settings.npy').item()
-    if not(os.path.exists(r"timetable.npy")):
+    ds=np.load(os.path.join(pathset, fn_set)).item()
+    if not(os.path.exists(os.path.join(pathset, fn_time))):
         dt={}
         dt["ORE_MAX_GIORNATA"]=ds["ORE_MAX_GIORNATA"]
         for x in range(1,ds["ORE_MAX_GIORNATA"]+2):
             for i in range (1,7):
                 dt[(x,i)]=""
-        np.save('timetable.npy', dt) 
-    dt=np.load('timetable.npy').item()
+        np.save(os.path.join(pathset, fn_time), dt) 
+    dt=np.load(os.path.join(pathset, fn_time)).item()
 #Creazione finestra
 def creaFinestra():
     inizializza()
     global wt
     wt=Toplevel()
     wt.title("Orario scolastico - School Life Diary")
-    wt.iconbitmap('sld_icon_beta.ico')
+    wt.iconbitmap("sld_icon_beta.ico")
     wt.geometry("%dx%d+%d+%d" % (600, 300, 600, 250))
+    s=Style()
+    try:
+        s.theme_use("vista")
+    except:
+        s.theme_use()
     ft=Frame(wt)
     ft.pack()
     l1=Label(ft,text="Lunedì")

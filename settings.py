@@ -1,12 +1,19 @@
 #Importazione di Tkinter e librerie utili
 from tkinter import *
+from tkinter.ttk import *
 import tkinter.messagebox
 import os.path #serve per verificare se un file è presente o no
 import numpy as np #utility per il salvataggio delle impostazioni in un file .npy
+
+global pathset
+global fn_set
+fn_set = "settings.npy"
+homedir = os.path.expanduser("~")
+pathset = os.path.join(homedir, "\Documents\School Life Diary")
 def salvataggio0():
     try:
         ds["ORE_MAX_GIORNATA"]=sv.get()
-        np.save('settings.npy', ds) 
+        np.save(os.path.join(pathset, fn_set), ds) 
         tkinter.messagebox.showinfo(title="Successo!", message="Parametro modificato con successo!")
         wcv.destroy()
         v0["text"]=ds["ORE_MAX_GIORNATA"]
@@ -17,7 +24,7 @@ def cambiaValore0():
     global wcv
     wcv=Toplevel()
     wcv.title("Cambia valore - Impostazioni - School Life Diary")
-    wcv.iconbitmap('sld_icon_beta.ico')
+    wcv.iconbitmap("sld_icon_beta.ico")
     wcv.geometry("%dx%d+%d+%d" % (400, 200, 600, 250))
     etichetta1=Label(wcv, text="Sceglere il valore da attribuire al parametro:")
     var=DoubleVar()
@@ -31,13 +38,18 @@ def cambiaValore0():
     
 def inizializza():
     global ds
-    ds=np.load('settings.npy').item()
+    ds=np.load(os.path.join(pathset, fn_set)).item()
     v0["text"]=ds["ORE_MAX_GIORNATA"]
 #Creazione finestra
 def creaFinestra():
+    s=Style()
+    try:
+        s.theme_use("vista")
+    except:
+        s.theme_use()
     ws=Toplevel()
     ws.title("Impostazioni - School Life Diary")
-    ws.iconbitmap('sld_icon_beta.ico')
+    ws.iconbitmap("sld_icon_beta.ico")
     ws.geometry("%dx%d+%d+%d" % (900, 400, 600, 250))
     fs=Frame(ws)
     fs.pack()
