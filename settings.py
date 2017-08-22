@@ -5,21 +5,24 @@ import tkinter.messagebox
 import os.path #serve per verificare se un file è presente o no
 import numpy as np #utility per il salvataggio delle impostazioni in un file .npy
 
-global pathset
+global path
 global fn_set
 fn_set = "settings.npy"
-homedir = os.path.expanduser("~")
-pathset = os.path.join(homedir, "\Documents\School Life Diary")
+path = os.path.expanduser(r'~\Documents\School Life Diary')
 def salvataggio0():
     try:
-        ds["ORE_MAX_GIORNATA"]=sv.get()
-        np.save(os.path.join(pathset, fn_set), ds) 
+        ds["ORE_MAX_GIORNATA"]=int(sv.get())
+        np.save(os.path.join(path, fn_set), ds) 
         tkinter.messagebox.showinfo(title="Successo!", message="Parametro modificato con successo!")
         wcv.destroy()
         v0["text"]=ds["ORE_MAX_GIORNATA"]
     except:
         tkinter.messagebox.showerror(title="ERRORE!", message="Si è verificato un errore durante la modifica del parametro. Riprovare o contattare lo sviluppatore!")
-
+def accept_whole_number_only(e=None):
+    value = sv.get()
+    if int(value) != value:
+        sv.set(round(value))
+        
 def cambiaValore0():
     global wcv
     wcv=Toplevel()
@@ -27,18 +30,20 @@ def cambiaValore0():
     wcv.iconbitmap("sld_icon_beta.ico")
     wcv.geometry("%dx%d+%d+%d" % (400, 200, 600, 250))
     etichetta1=Label(wcv, text="Sceglere il valore da attribuire al parametro:")
-    var=DoubleVar()
+    var=IntVar()
     global sv
-    sv=Scale(wcv, variable=var, from_=4, to=8, orient=HORIZONTAL)
+    sv=Scale(wcv, variable=var, from_=4, to=8, orient=HORIZONTAL, command=accept_whole_number_only)
+    lvar=Label(wcv, textvariable=var)
     bt1=Button(wcv,text="SALVA", command=salvataggio0)
     etichetta1.pack(padx=10, pady=10)
+    lvar.pack(padx=10, pady=2)
     sv.pack(padx=10, pady=10)
     bt1.pack(padx=10, pady=10)
     wcv.mainloop()
     
 def inizializza():
     global ds
-    ds=np.load(os.path.join(pathset, fn_set)).item()
+    ds=np.load(os.path.join(path, fn_set)).item()
     v0["text"]=ds["ORE_MAX_GIORNATA"]
 #Creazione finestra
 def creaFinestra():

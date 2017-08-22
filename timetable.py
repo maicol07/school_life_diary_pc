@@ -1,23 +1,27 @@
-#Importazione di Tkinter
-from tkinter import *
-from tkinter.ttk import *
-import tkinter.messagebox
 import numpy as np
 import os.path
-
-global pathset
+global path
 global fn_set
 global fn_time
 fn_set = "settings.npy"
 fn_time = "timetable.npy"
-homedir = os.path.expanduser("~")
-pathset = os.path.join(homedir, "\Documents\School Life Diary")
-
+path = os.path.expanduser(r'~\Documents\School Life Diary')
+global ds
+global dt
+ds=np.load(os.path.join(path, fn_set)).item()
+try:
+    dt=np.load(os.path.join(path, fn_time)).item()
+except:
+    dt={"ORE_MAX_GIORNATA":ds["ORE_MAX_GIORNATA"]}
+#Importazione di Tkinter
+from tkinter import *
+from tkinter.ttk import *
+import tkinter.messagebox
 
 def Salvataggio(p,var):
     try:
         dt[p]=var.get()
-        np.save(os.path.join(pathset, fn_time), dt)
+        np.save(os.path.join(path, fn_time), dt)
         tkinter.messagebox.showinfo(title="Successo!", message="Salvataggio effettuato con successo!")
         wtc.destroy()
         wt.destroy()
@@ -42,17 +46,20 @@ def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante
     wtc.mainloop()
 
 def inizializza():
-    global ds
-    global dt
-    ds=np.load(os.path.join(pathset, fn_set)).item()
-    if not(os.path.exists(os.path.join(pathset, fn_time))):
+    if not(os.path.exists(os.path.join(path, fn_time))):
         dt={}
         dt["ORE_MAX_GIORNATA"]=ds["ORE_MAX_GIORNATA"]
-        for x in range(1,ds["ORE_MAX_GIORNATA"]+2):
-            for i in range (1,7):
-                dt[(x,i)]=""
-        np.save(os.path.join(pathset, fn_time), dt) 
-    dt=np.load(os.path.join(pathset, fn_time)).item()
+        for r in range(1,ds["ORE_MAX_GIORNATA"]+1):
+            for c in range (1,7):
+                dt[(c,r)]=""
+        np.save(os.path.join(path, fn_time), dt)
+    if dt["ORE_MAX_GIORNATA"]!=ds["ORE_MAX_GIORNATA"]:
+        dt["ORE_MAX_GIORNATA"]=ds["ORE_MAX_GIORNATA"]
+        for r in range(1,ds["ORE_MAX_GIORNATA"]+1):
+            for c in range (1,7):
+                dt[(c,r)]=""
+        np.save(os.path.join(path, fn_time), dt)
+    dt=np.load(os.path.join(path, fn_time)).item()
 #Creazione finestra
 def creaFinestra():
     inizializza()
@@ -86,8 +93,8 @@ def creaFinestra():
         h=Label(ft, text=str(i)+"° ora")
         h.grid(row=i, column=0, padx=5, pady=5)
         i+=1
-    for c in range(1,x+2):
-        for i in range(1, 7):
-            bh=Button(ft, text=dt[(c,i)], width=10, command=lambda c=c,i=i: CambiaOrario((c,i)))
-            bh.grid(row=i, column=c)
+    for r in range(1,x+1):
+        for c in range(1,7):
+            bh=Button(ft, text=dt[(c,r)], width=10, command=lambda c=c,r=r: CambiaOrario((c,r)))
+            bh.grid(row=r, column=c)
     wt.mainloop()

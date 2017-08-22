@@ -14,21 +14,17 @@ global pathset
 # filename for the file you want to save
 output_filename = "settings.npy"
 
-homedir = os.path.expanduser("~")
-
-# construct the directory string
-pathset = os.path.join(homedir, "\Documents\School Life Diary")
-
+path = os.path.expanduser(r'~\Documents\School Life Diary')
 # check the directory does not exist
-if not(os.path.exists(pathset)):
+if not(os.path.exists(path)):
 
     # create the directory you want to save to
-    os.mkdir(pathset)
+    os.mkdir(path)
 
     ds = {"ORE_MAX_GIORNATA": 5}
 
     # write the file in the new directory
-    np.save(os.path.join(pathset, output_filename), ds)
+    np.save(os.path.join(path, output_filename), ds)
 
 # Importazione tkinter e funzioni utili
 from tkinter import *
@@ -40,10 +36,10 @@ import subjects
 
 #Funzioni
 
-def b2():
+def b3():
     tkinter.messagebox.showwarning(title="Funzione non disponibile",
                                    message="LA FUNZIONE NON È ANCORA DISPONIBILE!")
-def b3():
+def b2():
     import webbrowser
     webbrowser.open('https://apps.maicol07.tk/app/sld/voti/')
 def b4():
