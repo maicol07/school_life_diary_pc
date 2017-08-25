@@ -31,8 +31,8 @@ from tkinter import *
 from tkinter.ttk import Style
 import tkinter.messagebox
 import settings
-import timetable
 import subjects
+import timetable
 
 #Funzioni
 

@@ -29,6 +29,8 @@ def Salvataggio(p,var):
     except:
         tkinter.messagebox.showerror(title="Errore!", message="Si è verificato un errore, riprovare oppure contattare lo sviluppatore")
 
+def updtcblist(e,m):
+        e["values"]=list(m.keys())
 def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante cliccato 
     global wtc
     wtc=Toplevel()
@@ -38,14 +40,24 @@ def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante
     dg={1:"Lunedì",2:"Martedì",3:"Mercoledì",4:"Giovedì",5:"Venerdì",6:"Sabato"}
     l=Label(wtc, text="Inserire la materia da visualizzare nell'orario la "+str(p[1])+"a ora del "+dg[p[0]]+".")
     l.pack(padx=10,pady=10)
-    var=StringVar(value="")
-    e=Entry(wtc, textvariable=var)
+    #var=StringVar(value="Seleziona materia")
+    try:
+        m=np.load(os.path.join(path, "subjects.npy")).item()
+    except:
+        tkinter.messagebox.showerror(title="Nessuna materia inserita!",
+                                     message="Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!")
+    #e=OptionMenu(wtc, var, *m)
+    e=Combobox(wtc, postcommand = lambda: updtcblist(e,m))
     e.pack(padx=10,pady=10)
-    b=Button(wtc, text="SALVA", command=lambda: Salvataggio(p,var))
+    b=Button(wtc, text="SALVA", command=lambda: Salvataggio(p,e))
     b.pack(padx=10,pady=10)
     wtc.mainloop()
 
-def inizializza():
+def inizializza(dt):
+    try:
+        dt=np.load(os.path.join(path, fn_time)).item()
+    except:
+        dt={"ORE_MAX_GIORNATA":ds["ORE_MAX_GIORNATA"]}
     if not(os.path.exists(os.path.join(path, fn_time))):
         dt={}
         dt["ORE_MAX_GIORNATA"]=ds["ORE_MAX_GIORNATA"]
@@ -62,7 +74,7 @@ def inizializza():
     dt=np.load(os.path.join(path, fn_time)).item()
 #Creazione finestra
 def creaFinestra():
-    inizializza()
+    inizializza(dt)
     global wt
     wt=Toplevel()
     wt.title("Orario scolastico - School Life Diary")
