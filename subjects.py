@@ -1,6 +1,7 @@
 import os.path
 import numpy as np
 global m
+m={}
 global fn_sub
 global path
 # filename for the file you want to save
@@ -20,17 +21,18 @@ from tkinter.ttk import *
 global old_mat
 
 def inizializza():
-    #try:
-    m=np.load(os.path.join(path, fn_sub)).item()
-    #except ValueError:
-    #    m={}
+    try:
+        global m
+        m=np.load(os.path.join(path, fn_sub)).item()
+    except ValueError:
+        m={}
 def Salvataggio(mode,var):
     try:
         if mode=="add":
             m[var.get()]=[var.get()]
             wa.destroy()
         elif mode=="edit":
-            m[old_mat][0]=[var.get()]
+            m[old_mat][0]=var.get()
             we.destroy()
         elif mode=="del":
             del m[old_mat]
@@ -91,14 +93,11 @@ def edit():
     we.mainloop()
 def riempiListbox(lb):
     for e in m:
-        print(m[e])
         lb.insert(list(m.keys()).index(e),m[e][0])
 def creaFinestra():
-    m=np.load(os.path.join(path, fn_sub)).item()
     global wim
     wim=Toplevel()
     inizializza()
-    print(m)
     wim.title("Materie - School Life Diary")
     wim.iconbitmap("sld_icon_beta.ico")
     wim.geometry("%dx%d+%d+%d" % (325, 325, 600, 200))

@@ -6,27 +6,33 @@ import tkinter.messagebox
 import os.path #serve per verificare se un file è presente o no
 import numpy as np #utility per il salvataggio delle impostazioni in un file .npy
 from zipfile import *
+import subprocess
 import time
 global path
 global fn_set
 fn_set = "settings.npy"
 path = os.path.expanduser(r'~\Documents\School Life Diary')
 def backup():
-    fn_bk=r"\backups"
+    fn_bk="backups"
     bfoldpath=os.path.join(path,fn_bk)
-    print(bfoldpath)
-    if not(os.path.exists(os.path.join(path,r"\backups"))):
-        os.mkdir(os.path.join(path,r"\backups"))
+    if not(os.path.exists(os.path.join(path,fn_bk))):
+        os.mkdir(os.path.join(path,fn_bk))
     bzip=ZipFile(os.path.join(path,
-                              r"\backups",
-                              r"\backup"+time.strftime("%d-%m-%Y")+"-"+time.strftime("%H-%M-%S")+".zip"),
+                              fn_bk,
+                              "backup-"+time.strftime("%d-%m-%Y")+"-"+time.strftime("%H-%M-%S")+".zip"),
                  "w",ZIP_DEFLATED)
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            bzip.write(os.path.join(root, file))
+    filelist = [ f for f in os.listdir(".") if f.endswith(".npy") ]
+    for f in filelist:
+        bzip.write(f, os.path.basename(f))
     bzip.close()
+    subprocess.Popen(r'explorer /select,"'+os.path.join(path,
+                              fn_bk,
+                              "backup-"+time.strftime("%d-%m-%Y")+"-"+time.strftime("%H-%M-%S")+".zip")+'"')
     tkinter.messagebox.showinfo(title="Backup effettuato!",
-                                message="Backup creato con successo! Puoi prelevare il backup al seguente indirizzo nel tuo computer: Computer (oppure Questo PC per Windows 8/8.1/10)/Documenti/School Life Diary/backups.")
+                                message="""Backup creato con successo!
+Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: """+os.path.join(path,
+                              fn_bk,
+                              "backup-"+time.strftime("%d-%m-%Y")+"-"+time.strftime("%H-%M-%S")+".zip"))
 def ripristino():
     try:
         bkpath=filedialog.askopenfilename()
@@ -34,9 +40,12 @@ def ripristino():
         bk.extractall(path)
         bk.close()
         tkinter.messagebox.showinfo(title="Ripristino effettuato!",
-                                    message="Backup ripristinato con successo!")
+                                    message="Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!")
     except FileNotFoundError:
         return
+    else:
+        tkinter.messagebox.showerror(title="Ripristino non riuscito",
+                                     message="Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, oppure contattare lo sviluppatore.")
 def cancellatutto():
     for i in range(3):
         sc=tkinter.messagebox.askyesno(title="Conferma n."+str(i),
@@ -49,14 +58,15 @@ Questo include:
 - Agenda (no Google Calendar online)
 - Impostazioni.\n
 NON potrai più recuperare i tuoi dati se vai avanti a meno che non abbia effettuato un backup precedentemente.
-Conferme rimaste prima dell'eliminazione: """+str(3-i)+")")
+Conferme rimaste prima dell'eliminazione: """+str(3-i))
         if sc==False:
             return
-    for root, dirs, files in os.walk(path):
-        for file in files:
-            os.remove(os.path.join(path,file))
+    filelist = [ f for f in os.listdir(".") if f.endswith(".npy") ]
+    for f in filelist:
+        os.remove(f)
+    ws.destroy()
     tkinter.messagebox.showinfo(title="Dati cancellati correttamente",
-                                message="Tutti i tuoi dati sono stati cancellati con successo!")
+                                message="Tutti i tuoi dati sono stati cancellati con successo! Riavvia l'applicazione per non riscontrare errori!")
 def salvataggio0():
     try:
         ds["ORE_MAX_GIORNATA"]=int(sv.get())
@@ -103,6 +113,7 @@ def creaFinestra():
         s.theme_use("vista")
     except:
         s.theme_use()
+    global ws
     ws=Toplevel()
     ws.title("Impostazioni - School Life Diary")
     ws.iconbitmap("sld_icon_beta.ico")

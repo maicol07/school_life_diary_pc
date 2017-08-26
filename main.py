@@ -17,12 +17,10 @@ output_filename = "settings.npy"
 path = os.path.expanduser(r'~\Documents\School Life Diary')
 # check the directory does not exist
 if not(os.path.exists(path)):
-
     # create the directory you want to save to
     os.mkdir(path)
-
+if not(os.path.exists(os.path.join(path,output_filename))):
     ds = {"ORE_MAX_GIORNATA": 5}
-
     # write the file in the new directory
     np.save(os.path.join(path, output_filename), ds)
 
