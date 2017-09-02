@@ -1,0 +1,211 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-09-02 14:44+0200\n"
+"PO-Revision-Date: 2017-09-02 15:32+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.4\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: it\n"
+
+#: settings.py:35
+msgid "Salvataggio effettuato"
+msgstr "Salvataggio effettuato"
+
+#: settings.py:36
+msgid "La lingua scelta è stata salvata. RIAVVIA PER RENDERE EFFETTIVE LE MODIFICHE!"
+msgstr "La lingua scelta è stata salvata. RIAVVIA PER RENDERE EFFETTIVE LE MODIFICHE!"
+
+#: settings.py:38
+msgid "Salvataggio non riuscito"
+msgstr "Salvataggio non riuscito"
+
+#: settings.py:39
+msgid " Errore: "
+msgstr " Errore: "
+
+#: settings.py:39
+msgid ""
+"Il salvataggio non è andato a buon fine, riprova o contatta lo sviluppatore per ricevere "
+"maggiore aiuto."
+msgstr ""
+"Il salvataggio non è andato a buon fine, riprova o contatta lo sviluppatore per ricevere "
+"maggiore aiuto."
+
+#: settings.py:44
+msgid "Cambia lingua"
+msgstr "Cambia lingua"
+
+#: settings.py:47
+msgid "Inglese"
+msgstr "Inglese"
+
+#: settings.py:47
+msgid "Italiano"
+msgstr "Italiano"
+
+#: settings.py:48
+msgid "Scegliere la propria lingua: "
+msgstr "Scegliere la propria lingua: "
+
+#: settings.py:52
+msgid "CAMBIA"
+msgstr "CAMBIA"
+
+#: settings.py:70
+msgid "Backup effettuato!"
+msgstr "Backup effettuato!"
+
+#: settings.py:71
+msgid ""
+"Backup creato con successo!\n"
+"Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: "
+msgstr ""
+"Backup creato con successo!\n"
+"Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: "
+
+#: settings.py:81
+msgid "Ripristino effettuato!"
+msgstr "Ripristino effettuato!"
+
+#: settings.py:82
+msgid "Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"
+msgstr "Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"
+
+#: settings.py:86
+msgid "Ripristino non riuscito"
+msgstr "Ripristino non riuscito"
+
+#: settings.py:87
+msgid ""
+"Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, oppure "
+"contattare lo sviluppatore."
+msgstr ""
+"Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, oppure "
+"contattare lo sviluppatore."
+
+#: settings.py:90
+msgid "Conferma n."
+msgstr "Conferma n."
+
+#: settings.py:91
+msgid ""
+"Sei sicuro di voler eliminare TUTTI i dati presenti nell'applicazione?\n"
+"Questo include:\n"
+"- Orario\n"
+"- Materie\n"
+"- Voti (no online)\n"
+"- Note\n"
+"- Agenda (no Google Calendar online)\n"
+"- Impostazioni\n"
+"NON potrai più recuperare i tuoi dati se vai avanti a meno che non abbia effettuato un "
+"backup precedentemente.\n"
+"Conferme rimaste prima dell'eliminazione: "
+msgstr ""
+"Sei sicuro di voler eliminare TUTTI i dati presenti nell'applicazione?\n"
+"Questo include:\n"
+"- Orario\n"
+"- Materie\n"
+"- Voti (no online)\n"
+"- Note\n"
+"- Agenda (no Google Calendar online)\n"
+"- Impostazioni\n"
+"NON potrai più recuperare i tuoi dati se vai avanti a meno che non abbia effettuato un "
+"backup precedentemente.\n"
+"Conferme rimaste prima dell'eliminazione: "
+
+#: settings.py:107
+msgid "Dati cancellati correttamente"
+msgstr "Dati cancellati correttamente"
+
+#: settings.py:108
+msgid ""
+"Tutti i tuoi dati sono stati cancellati con successo! Riavvia l'applicazione per non "
+"riscontrare errori!"
+msgstr ""
+"Tutti i tuoi dati sono stati cancellati con successo! Riavvia l'applicazione per non "
+"riscontrare errori!"
+
+#: settings.py:113
+msgid "Successo!"
+msgstr "Successo!"
+
+#: settings.py:114
+msgid ""
+"Parametro modificato con successo! RICORDATI DI RIAVVIARE L'APPLICAZIONE PER RENDERE "
+"EFFETTIVE LE MODIFICHE!!"
+msgstr ""
+"Parametro modificato con successo! RICORDATI DI RIAVVIARE L'APPLICAZIONE PER RENDERE "
+"EFFETTIVE LE MODIFICHE!!"
+
+#: settings.py:120
+msgid "ERRORE!"
+msgstr "ERRORE!"
+
+#: settings.py:121
+msgid ""
+"Si è verificato un errore durante la modifica del parametro. Riprovare o contattare lo "
+"sviluppatore!"
+msgstr ""
+"Si è verificato un errore durante la modifica del parametro. Riprovare o contattare lo "
+"sviluppatore!"
+
+#: settings.py:130
+msgid "Cambia valore - Impostazioni"
+msgstr "Cambia valore - Impostazioni"
+
+#: settings.py:133
+msgid "Sceglere il valore da attribuire al parametro:"
+msgstr "Sceglere il valore da attribuire al parametro:"
+
+#: settings.py:138
+msgid "SALVA"
+msgstr "SALVA"
+
+#: settings.py:158
+msgid "Impostazioni"
+msgstr "Impostazioni"
+
+#: settings.py:163
+msgid "Parametro"
+msgstr "Parametro"
+
+#: settings.py:164
+msgid "Valore attuale"
+msgstr "Valore attuale"
+
+#: settings.py:165
+msgid "Descrizione"
+msgstr "Descrizione"
+
+#: settings.py:166
+msgid "Azioni"
+msgstr "Azioni"
+
+#: settings.py:174
+msgid "Imposta il numero di ore massime per giornate da visualizzare nell'orario"
+msgstr "Imposta il numero di ore massime per giornate da visualizzare nell'orario"
+
+#: settings.py:175
+msgid "Cambia"
+msgstr "Cambia"
+
+#: settings.py:181
+msgid "ESEGUI BACKUP"
+msgstr "ESEGUI BACKUP"
+
+#: settings.py:182
+msgid "ESEGUI RIPRISTINO"
+msgstr "ESEGUI RIPRISTINO"
+
+#: settings.py:183
+msgid "CANCELLA TUTTO"
+msgstr "CANCELLA TUTTO"
