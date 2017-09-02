@@ -1,0 +1,119 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-09-02 12:21+0200\n"
+"PO-Revision-Date: 2017-09-02 16:06+0200\n"
+"Last-Translator: Maicol <maicolbattistini@live.it>, 2017\n"
+"Language-Team: English (https://www.transifex.com/maicol07/teams/78236/"
+"en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
+
+#: main.py:58 main.py:125
+msgid "Informazioni"
+msgstr "About"
+
+#: main.py:65
+msgid "sviluppato e mantenuto da maicol07"
+msgstr "developed and mantained by maicol07"
+
+#: main.py:66
+msgid "Sito web: "
+msgstr "Website:"
+
+#: main.py:71
+msgid "GitHub School Life Diary: "
+msgstr "GitHub School Life Diary:"
+
+#: main.py:75
+msgid ""
+"Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza "
+"Creative Commons 3.0"
+msgstr ""
+"Some icons made by Pixel Buddha from www.flaticon.com has Creative Commons "
+"3.0 license"
+
+#: main.py:77
+msgid "Traduttori: "
+msgstr "Translators:"
+
+#: main.py:80
+msgid "Vuoi diventare anche tu un traduttore?"
+msgstr "Would you like to become a translator?"
+
+#: main.py:81
+msgid "CLICCA QUI!"
+msgstr "CLICK HERE!!"
+
+#: main.py:85
+msgid "Funzione non disponibile"
+msgstr "Feature not available"
+
+#: main.py:86
+msgid "LA FUNZIONE NON È ANCORA DISPONIBILE!"
+msgstr "This feature is not available just yet!"
+
+#: main.py:113
+msgid "File"
+msgstr "File"
+
+#: main.py:114
+msgid "Esci"
+msgstr "Exit"
+
+#: main.py:116
+msgid "Opzioni"
+msgstr "Options"
+
+#: main.py:117
+msgid "Impostazioni"
+msgstr "Settings"
+
+#: main.py:119
+msgid "Cambia lingua"
+msgstr "Change language"
+
+#: main.py:121
+msgid "Aiuto"
+msgstr "Help"
+
+#: main.py:122
+msgid "Guida"
+msgstr "Guide"
+
+#: main.py:150
+msgid "ORARIO"
+msgstr "TIMETABLE"
+
+#: main.py:153
+msgid "MATERIE"
+msgstr "SUBJECTS"
+
+#: main.py:156
+msgid "VOTI"
+msgstr "MARKS"
+
+#: main.py:158
+msgid "NOTE"
+msgstr "NOTES"
+
+#: main.py:160
+msgid "AGENDA"
+msgstr "AGENDA"
+
+#: main.py:162
+msgid "IMPOSTAZIONI"
+msgstr "SETTINGS"
+
+#: main.py:165
+msgid "ESCI"
+msgstr "EXIT"
