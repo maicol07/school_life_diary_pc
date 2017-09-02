@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-09-02 12:21+0200\n"
-"PO-Revision-Date: 2017-09-02 16:03+0200\n"
+"POT-Creation-Date: 2017-09-02 21:29+0200\n"
+"PO-Revision-Date: 2017-09-02 21:33+0200\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,23 +16,23 @@ msgstr ""
 "Language-Team: \n"
 "Language: it\n"
 
-#: main.py:58 main.py:125
+#: main.py:57 main.py:143
 msgid "Informazioni"
 msgstr "Informazioni"
 
-#: main.py:65
+#: main.py:64
 msgid "sviluppato e mantenuto da maicol07"
 msgstr "sviluppato e mantenuto da maicol07"
 
-#: main.py:66
+#: main.py:65
 msgid "Sito web: "
 msgstr "Sito web: "
 
-#: main.py:71
+#: main.py:70
 msgid "GitHub School Life Diary: "
 msgstr "GitHub School Life Diary: "
 
-#: main.py:75
+#: main.py:74
 msgid ""
 "Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza "
 "Creative Commons 3.0"
@@ -40,78 +40,98 @@ msgstr ""
 "Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza "
 "Creative Commons 3.0"
 
-#: main.py:77
+#: main.py:76
 msgid "Traduttori: "
 msgstr "Traduttori: "
 
-#: main.py:80
+#: main.py:79
 msgid "Vuoi diventare anche tu un traduttore?"
 msgstr "Vuoi diventare anche tu un traduttore?"
 
-#: main.py:81
+#: main.py:80
 msgid "CLICCA QUI!"
 msgstr "CLICCA QUI!"
 
-#: main.py:85
+#: main.py:84
 msgid "Funzione non disponibile"
 msgstr "Funzione non disponibile"
 
-#: main.py:86
+#: main.py:85
 msgid "LA FUNZIONE NON È ANCORA DISPONIBILE!"
 msgstr "LA FUNZIONE NON È ANCORA DISPONIBILE!"
 
-#: main.py:113
+#: main.py:110
+msgid "Nuova versione disponibile!"
+msgstr "Nuova versione disponibile!"
+
+#: main.py:111
+msgid ""
+"\n"
+"Ti consigliamo di aggiornare il prima possibile per non perdere le "
+"novità, i miglioramenti e le correzioni di problemi.\n"
+"Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione"
+msgstr ""
+"\n"
+"Ti consigliamo di aggiornare il prima possibile per non perdere le "
+"novità, i miglioramenti e le correzioni di problemi.\n"
+"Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione"
+
+#: main.py:111
+msgid "È disponibile una nuova versione di School Life Diary."
+msgstr "È disponibile una nuova versione di School Life Diary."
+
+#: main.py:131
 msgid "File"
 msgstr "File"
 
-#: main.py:114
+#: main.py:132
 msgid "Esci"
 msgstr "Esci"
 
-#: main.py:116
+#: main.py:134
 msgid "Opzioni"
 msgstr "Opzioni"
 
-#: main.py:117
+#: main.py:135
 msgid "Impostazioni"
 msgstr "Impostazioni"
 
-#: main.py:119
+#: main.py:137
 msgid "Cambia lingua"
 msgstr "Cambia lingua"
 
-#: main.py:121
+#: main.py:139
 msgid "Aiuto"
 msgstr "Aiuto"
 
-#: main.py:122
+#: main.py:140
 msgid "Guida"
 msgstr "Guida"
 
-#: main.py:150
+#: main.py:168
 msgid "ORARIO"
 msgstr "ORARIO"
 
-#: main.py:153
+#: main.py:171
 msgid "MATERIE"
 msgstr "MATERIE"
 
-#: main.py:156
+#: main.py:174
 msgid "VOTI"
 msgstr "VOTI"
 
-#: main.py:158
+#: main.py:176
 msgid "NOTE"
 msgstr "NOTE"
 
-#: main.py:160
+#: main.py:178
 msgid "AGENDA"
 msgstr "AGENDA"
 
-#: main.py:162
+#: main.py:180
 msgid "IMPOSTAZIONI"
 msgstr "IMPOSTAZIONI"
 
-#: main.py:165
+#: main.py:183
 msgid "ESCI"
 msgstr "ESCI"
