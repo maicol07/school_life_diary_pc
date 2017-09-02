@@ -1,0 +1,92 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-09-02 15:53+0200\n"
+"PO-Revision-Date: 2017-09-02 15:58+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.4\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
+
+#: timetable.py:38
+msgid "Successo!"
+msgstr "Success!"
+
+#: timetable.py:39
+msgid "Salvataggio effettuato con successo!"
+msgstr "Saved successfully!"
+
+#: timetable.py:44
+msgid "Errore!"
+msgstr "Error!"
+
+#: timetable.py:44
+msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
+msgstr "An error has occurred, try again or contact the developer"
+
+#: timetable.py:51
+msgid "Modifica Orario - Orario scolastico"
+msgstr "Edit Timetable - Timetable"
+
+#: timetable.py:54
+msgid "Inserire la materia da visualizzare nell'orario la"
+msgstr "Insert the subject to be displayed in the"
+
+#: timetable.py:54
+msgid "° ora del"
+msgstr "° hour of"
+
+#: timetable.py:59
+msgid "Nessuna materia inserita!"
+msgstr "No subject inserted!"
+
+#: timetable.py:60
+msgid ""
+"Errore! Nessuna materia inserita. Inserire delle materie dalla sezione "
+"materie!"
+msgstr "Error! No subect added. Add some subjects from the subjects section!"
+
+#: timetable.py:63
+msgid "SALVA"
+msgstr "SAVE"
+
+#: timetable.py:91
+msgid "Orario scolastico"
+msgstr "Timetable"
+
+#: timetable.py:102
+msgid "Giovedì"
+msgstr "Thursday"
+
+#: timetable.py:102
+msgid "Lunedì"
+msgstr "Monday"
+
+#: timetable.py:102
+msgid "Martedì"
+msgstr "Tuesday"
+
+#: timetable.py:102
+msgid "Mercoledì"
+msgstr "Wednesday"
+
+#: timetable.py:102
+msgid "Sabato"
+msgstr "Saturday"
+
+#: timetable.py:102
+msgid "Venerdì"
+msgstr "Friday"
+
+#: timetable.py:109
+msgid "° ora"
+msgstr "° hour"

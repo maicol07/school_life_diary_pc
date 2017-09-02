@@ -1,0 +1,74 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-09-02 15:51+0200\n"
+"PO-Revision-Date: 2017-09-02 15:53+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.4\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
+
+#: subjects.py:52
+msgid "Successo!"
+msgstr "Success!"
+
+#: subjects.py:53
+msgid "Salvataggio effettuato con successo!"
+msgstr "Saved successfully!"
+
+#: subjects.py:57
+msgid "Errore!"
+msgstr "Error!"
+
+#: subjects.py:58
+msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
+msgstr "An error has occurred, try again or contact the developer"
+
+#: subjects.py:62
+msgid "Nessuna materia selezionata"
+msgstr "No subject selected"
+
+#: subjects.py:63
+msgid "ERRORE! Nessuna materia selezionata!"
+msgstr "Error! No subject selected!"
+
+#: subjects.py:68 subjects.py:71
+msgid "Conferma eliminazione"
+msgstr "Confirm deletion"
+
+#: subjects.py:69 subjects.py:72
+msgid "Si è sicuri di voler eliminare la materia"
+msgstr "Are you sure you want to delete the subject"
+
+#: subjects.py:80
+msgid "Inserisci materia"
+msgstr "Enter subject"
+
+#: subjects.py:83
+msgid "Inserire la nuova materia"
+msgstr "Insert the new subject"
+
+#: subjects.py:88 subjects.py:105
+msgid "SALVA"
+msgstr "SAVE"
+
+#: subjects.py:97
+msgid "Modifica materia"
+msgstr "Edit Subject"
+
+#: subjects.py:100
+msgid "Inserire la materia da modificare (Vecchia materia:"
+msgstr "Enter the subject to be changed (Old subject:"
+
+#: subjects.py:115
+msgid "Materie"
+msgstr "Subjects"

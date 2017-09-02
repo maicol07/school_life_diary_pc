@@ -1,1 +1,106 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-08-29 18:57+0200\n"
+"PO-Revision-Date: 2017-08-29 19:06+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.4\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: en\n"
 
+#: main.py:48 main.py:99
+msgid "Informazioni"
+msgstr "About"
+
+#: main.py:56
+msgid "sviluppato e mantenuto da maicol07"
+msgstr "developed and maintained by maicol07"
+
+#: main.py:57
+msgid "Sito web: "
+msgstr "Website:"
+
+#: main.py:61
+msgid "GitHub School Life Diary: "
+msgstr "Github School Life Diary:"
+
+#: main.py:64
+msgid "Traduttori: "
+msgstr "Translators:"
+
+#: main.py:67
+msgid "Vuoi diventare anche tu un traduttore? Clicca qui!"
+msgstr "Do you want to become a translator? Click here!"
+
+#: main.py:71
+msgid "Funzione non disponibile"
+msgstr "Feature not available"
+
+#: main.py:72
+msgid "LA FUNZIONE NON  ANCORA DISPONIBILE!"
+msgstr "This feature is not available just yet!"
+
+#: main.py:91
+msgid "File"
+msgstr "File"
+
+#: main.py:92
+msgid "Esci"
+msgstr "Exit"
+
+#: main.py:93
+msgid "Opzioni"
+msgstr "Options"
+
+#: main.py:94
+msgid "Impostazioni"
+msgstr "Settings"
+
+#: main.py:95
+msgid "Cambia lingua"
+msgstr "Change language"
+
+#: main.py:96
+msgid "Aiuto"
+msgstr "Help"
+
+#: main.py:97
+msgid "Guida"
+msgstr "Guide"
+
+#: main.py:113
+msgid "ORARIO"
+msgstr "TIMETABLE"
+
+#: main.py:115
+msgid "MATERIE"
+msgstr "SUBJECTS"
+
+#: main.py:117
+msgid "VOTI"
+msgstr "MARKS"
+
+#: main.py:118
+msgid "NOTE"
+msgstr "NOTES"
+
+#: main.py:119
+msgid "AGENDA"
+msgstr "AGENDA"
+
+#: main.py:120
+msgid "IMPOSTAZIONI"
+msgstr "SETTINGS"
+
+#: main.py:122
+msgid "ESCI"
+msgstr "EXIT"
