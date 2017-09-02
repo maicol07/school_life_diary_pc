@@ -17,39 +17,50 @@ except:
 from tkinter import *
 from tkinter.ttk import *
 import tkinter.messagebox
+import gettext
+import ctypes
+import locale
+if not(os.path.exists(os.path.join(path,"language.txt"))):
+    windll = ctypes.windll.kernel32
+    lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
+    lgl=["en","it"]
+    lg = gettext.translation("settings", localedir='locale', languages=[lgcode[0:2]])
+else:
+    fl=open(os.path.join(path,"language.txt"),"r")
+    lgcode=fl.readline()
+    lg = gettext.translation('settings', localedir='locale', languages=[lgcode])
+lg.install()
 
 def Salvataggio(p,var):
     try:
         dt[p]=var.get()
         np.save(os.path.join(path, fn_time), dt)
-        tkinter.messagebox.showinfo(title="Successo!", message="Salvataggio effettuato con successo!")
+        tkinter.messagebox.showinfo(title=_("Successo!"),
+                                    message=_("Salvataggio effettuato con successo!"))
         wtc.destroy()
         wt.destroy()
         creaFinestra()
     except:
-        tkinter.messagebox.showerror(title="Errore!", message="Si è verificato un errore, riprovare oppure contattare lo sviluppatore")
+        tkinter.messagebox.showerror(title=_("Errore!"), message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore"))
 
 def updtcblist(e,m):
         e["values"]=list(m.keys())
 def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante cliccato 
     global wtc
     wtc=Toplevel()
-    wtc.title("Modifica Orario - Orario scolastico - School Life Diary")
+    wtc.title(_("Modifica Orario - Orario scolastico")+" - School Life Diary")
     wtc.iconbitmap("sld_icon_beta.ico")
-    wtc.geometry("%dx%d+%d+%d" % (450, 200, 600, 250))
-    dg={1:"Lunedì",2:"Martedì",3:"Mercoledì",4:"Giovedì",5:"Venerdì",6:"Sabato"}
-    l=Label(wtc, text="Inserire la materia da visualizzare nell'orario la "+str(p[1])+"a ora del "+dg[p[0]]+".")
+    wtc.geometry("450x200+600+250")
+    l=Label(wtc, text=_("Inserire la materia da visualizzare nell'orario la")+" "+str(p[1])+_("° ora del")+" "+dg[p[0]]+".")
     l.pack(padx=10,pady=10)
-    #var=StringVar(value="Seleziona materia")
     try:
         m=np.load(os.path.join(path, "subjects.npy")).item()
     except:
-        tkinter.messagebox.showerror(title="Nessuna materia inserita!",
-                                     message="Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!")
-    #e=OptionMenu(wtc, var, *m)
+        tkinter.messagebox.showerror(title=_("Nessuna materia inserita!"),
+                                     message=_("Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!"))
     e=Combobox(wtc, postcommand = lambda: updtcblist(e,m))
     e.pack(padx=10,pady=10)
-    b=Button(wtc, text="SALVA", command=lambda: Salvataggio(p,e))
+    b=Button(wtc, text=_("SALVA"), command=lambda: Salvataggio(p,e))
     b.pack(padx=10,pady=10)
     wtc.mainloop()
 
@@ -77,9 +88,9 @@ def creaFinestra():
     inizializza(dt)
     global wt
     wt=Toplevel()
-    wt.title("Orario scolastico - School Life Diary")
+    wt.title(_("Orario scolastico")+" - School Life Diary")
     wt.iconbitmap("sld_icon_beta.ico")
-    wt.geometry("%dx%d+%d+%d" % (600, 300, 600, 250))
+    wt.geometry("600x300+600+250")
     s=Style()
     try:
         s.theme_use("vista")
@@ -87,22 +98,15 @@ def creaFinestra():
         s.theme_use()
     ft=Frame(wt)
     ft.pack()
-    l1=Label(ft,text="Lunedì")
-    l2=Label(ft,text="Martedì")
-    l3=Label(ft,text="Mercoledì")
-    l4=Label(ft,text="Giovedì")
-    l5=Label(ft,text="Venerdì")
-    l6=Label(ft,text="Sabato")
-    l1.grid(row=0, column=1, pady=10, padx=5)
-    l2.grid(row=0, column=2, pady=10, padx=5)
-    l3.grid(row=0, column=3, pady=10, padx=5)
-    l4.grid(row=0, column=4, pady=10, padx=5)
-    l5.grid(row=0, column=5, pady=10, padx=5)
-    l6.grid(row=0, column=6, pady=10, padx=5)
+    global dg
+    dg={1:_("Lunedì"),2:_("Martedì"),3:_("Mercoledì"),4:_("Giovedì"),5:_("Venerdì"),6:_("Sabato")}
+    for i in len(dg):
+        l=Label(ft,text=dg[i])
+    l.grid(row=0, column=i, pady=10, padx=5)
     i=1
     x=ds["ORE_MAX_GIORNATA"]
     for i in range(1,x+1):
-        h=Label(ft, text=str(i)+"° ora")
+        h=Label(ft, text=str(i)+_("° ora"))
         h.grid(row=i, column=0, padx=5, pady=5)
         i+=1
     for r in range(1,x+1):
