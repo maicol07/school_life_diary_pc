@@ -5,11 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-09-02 12:21+0200\n"
-"PO-Revision-Date: 2017-09-02 16:06+0200\n"
+"POT-Creation-Date: 2017-09-02 21:29+0200\n"
+"PO-Revision-Date: 2017-09-02 21:32+0200\n"
 "Last-Translator: Maicol <maicolbattistini@live.it>, 2017\n"
-"Language-Team: English (https://www.transifex.com/maicol07/teams/78236/"
-"en/)\n"
+"Language-Team: English (https://www.transifex.com/maicol07/teams/78236/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,23 +17,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.4\n"
 
-#: main.py:58 main.py:125
+#: main.py:57 main.py:143
 msgid "Informazioni"
 msgstr "About"
 
-#: main.py:65
+#: main.py:64
 msgid "sviluppato e mantenuto da maicol07"
 msgstr "developed and mantained by maicol07"
 
-#: main.py:66
+#: main.py:65
 msgid "Sito web: "
 msgstr "Website:"
 
-#: main.py:71
+#: main.py:70
 msgid "GitHub School Life Diary: "
 msgstr "GitHub School Life Diary:"
 
-#: main.py:75
+#: main.py:74
 msgid ""
 "Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza "
 "Creative Commons 3.0"
@@ -42,78 +41,98 @@ msgstr ""
 "Some icons made by Pixel Buddha from www.flaticon.com has Creative Commons "
 "3.0 license"
 
-#: main.py:77
+#: main.py:76
 msgid "Traduttori: "
 msgstr "Translators:"
 
-#: main.py:80
+#: main.py:79
 msgid "Vuoi diventare anche tu un traduttore?"
 msgstr "Would you like to become a translator?"
 
-#: main.py:81
+#: main.py:80
 msgid "CLICCA QUI!"
 msgstr "CLICK HERE!!"
 
-#: main.py:85
+#: main.py:84
 msgid "Funzione non disponibile"
 msgstr "Feature not available"
 
-#: main.py:86
+#: main.py:85
 msgid "LA FUNZIONE NON È ANCORA DISPONIBILE!"
 msgstr "This feature is not available just yet!"
 
-#: main.py:113
+#: main.py:110
+msgid "Nuova versione disponibile!"
+msgstr "New version available!"
+
+#: main.py:111
+msgid ""
+"\n"
+"Ti consigliamo di aggiornare il prima possibile per non perdere le novità, "
+"i miglioramenti e le correzioni di problemi.\n"
+"Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione"
+msgstr ""
+"\n"
+"We recommend that you update as soon as possible to take advantage of new "
+"features, improvements and bug fixes.\n"
+"Would you like to go to the page where you can download the update to version"
+
+#: main.py:111
+msgid "È disponibile una nuova versione di School Life Diary."
+msgstr "A new version of School Life Diary is avaible!"
+
+#: main.py:131
 msgid "File"
 msgstr "File"
 
-#: main.py:114
+#: main.py:132
 msgid "Esci"
 msgstr "Exit"
 
-#: main.py:116
+#: main.py:134
 msgid "Opzioni"
 msgstr "Options"
 
-#: main.py:117
+#: main.py:135
 msgid "Impostazioni"
 msgstr "Settings"
 
-#: main.py:119
+#: main.py:137
 msgid "Cambia lingua"
 msgstr "Change language"
 
-#: main.py:121
+#: main.py:139
 msgid "Aiuto"
 msgstr "Help"
 
-#: main.py:122
+#: main.py:140
 msgid "Guida"
 msgstr "Guide"
 
-#: main.py:150
+#: main.py:168
 msgid "ORARIO"
 msgstr "TIMETABLE"
 
-#: main.py:153
+#: main.py:171
 msgid "MATERIE"
 msgstr "SUBJECTS"
 
-#: main.py:156
+#: main.py:174
 msgid "VOTI"
 msgstr "MARKS"
 
-#: main.py:158
+#: main.py:176
 msgid "NOTE"
 msgstr "NOTES"
 
-#: main.py:160
+#: main.py:178
 msgid "AGENDA"
 msgstr "AGENDA"
 
-#: main.py:162
+#: main.py:180
 msgid "IMPOSTAZIONI"
 msgstr "SETTINGS"
 
-#: main.py:165
+#: main.py:183
 msgid "ESCI"
 msgstr "EXIT"
