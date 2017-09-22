@@ -50,6 +50,7 @@ import tkinter.messagebox
 import settings
 import subjects
 import timetable
+import note
 
 #Funzioni
 def info():
@@ -80,13 +81,6 @@ def info():
     bt=Button(f1, text=_("CLICCA QUI!"), command=lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc/wiki/Vuoi-diventare-traduttore-di-School-Life-Diary%3F"))
     l4.pack(padx=10,pady=15)
     bt.pack(padx=10)
-def b3():
-    tkinter.messagebox.showwarning(title=_("Funzione non disponibile"),
-                                   message=_("LA FUNZIONE NON È ANCORA DISPONIBILE!"))
-def b2():
-    webbrowser.open('https://apps.maicol07.tk/app/sld/voti/')
-def b4():
-    webbrowser.open('https://calendar.google.com')
 
 #Creazione della finestra, del frame e dei widget
 global w
@@ -94,6 +88,11 @@ w=Tk()
 w.title("School Life Diary")
 w.iconbitmap("sld_icon_beta.ico")
 w.geometry("335x325+200+100")
+s=Style()
+try:
+    s.theme_use("vista")
+except:
+    s.theme_use()
 mb=Menu(w)
 w.config(menu=mb)
 fm=Menu(mb,tearoff=0)
@@ -123,12 +122,29 @@ hm.add_command(label=_("Guida"), image=pguida,
                command= lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc/wiki"))
 hm.add_command(label=_("Informazioni"), image=pinfo,
                compound="left",command=info)
-
-s=Style()
+#Verifica se esistono degli aggiornamenti per il programma
+v="0.2.1"
+import feedparser
+from subprocess import check_output
+feed_name="School Life Diary Releases"
+url=r"https://github.com/maicol07/school_life_diary_pc/releases.atom"
+feed=feedparser.parse(url)
 try:
-    s.theme_use("vista")
-except:
-    s.theme_use()
+    post=feed.entries[0]
+    title=post.title
+    lp=title.split(" ")
+    if (lp[0][1:].isdecimal()==True):
+        lp[0]==lp[0][1:]
+    if (v!=lp[0][1:]):
+        agg=tkinter.messagebox.askyesno(title=_("Nuova versione disponibile!"),
+                                       message=_("È disponibile una nuova versione di School Life Diary.")+_("""
+Ti consigliamo di aggiornare il prima possibile per non perdere le novità, i miglioramenti e le correzioni di problemi.
+Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione""")+" "+lp[0]+"?")
+        if (agg==True):
+            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases/")
+except IndexError:
+    tkinter.messagebox.showwarning(title=_("Nessuna connessione ad internet"),
+                                   message=_("Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."))
 f=Frame(w)
 logo=PhotoImage(file=r"school_life_diary_splash.png")
 title=Label(f,image=logo)
@@ -153,11 +169,11 @@ b1=Button(f2,text=_("MATERIE"), background="#FFBD45", width=100, height=25, imag
           compound="left",
           command=subjects.creaFinestra)
 b2=Button(f2,text=_("VOTI"), background="#ADD8E6", width=100, height=25, image=pvoti,
-          compound="left", command=b2)
-b3=Button(f2,text=_("NOTE"), background="#C389C3", width=100, height=25, image=pnote,
-          compound="left", command=b3)
+          compound="left", command=lambda: webbrowser.open('https://apps.maicol07.tk/app/sld/voti/'))
+b3=Button(f2,text=_("ANNOTAZIONI"), background="#C389C3", width=100, height=25, image=pnote,
+          compound="left", command=note.creaFinestra)
 b4=Button(f2,text=_("AGENDA"), background="#7DFB7D", width=100, height=25, image=pagenda,
-          compound="left", command=b4)
+          compound="left", command=lambda: webbrowser.open('https://calendar.google.com'))
 bs=Button(f2,text=_("IMPOSTAZIONI"), background="light grey", width=100, height=25, image=psettings,
           compound="left",
           command=settings.creaFinestra)
@@ -171,5 +187,6 @@ b3.grid(row=1, column=0)
 b4.grid(row=1, column=1)
 bs.grid(row=1, column=2)
 be.grid(row=2, column=1)
+
 #Avvia il programma
 w.mainloop()
