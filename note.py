@@ -21,15 +21,30 @@ if not(os.path.exists(os.path.join(path,fn_sub))):
     # write the file in the new directory
     nt={}
     np.save(os.path.join(path, fn_sub), nt)
+import gettext
+import ctypes
+import locale
+if not(os.path.exists(os.path.join(path,"language.txt"))):
+    windll = ctypes.windll.kernel32
+    lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
+    lgl=["en","it"]
+    lg = gettext.translation("note", localedir=os.path.join(path,'locale'), languages=[lgcode[0:2]])
+else:
+    fl=open(os.path.join(path,"language.txt"),"r")
+    lgcode=fl.readline()
+    lg = gettext.translation('note', localedir=os.path.join(path,'locale'), languages=[lgcode])
+lg.install()
 from tkinter import *
 from tkinter.scrolledtext import *
 from tkinter import filedialog
-import tkinter.messagebox
+import tkinter.messagebox as tkmb
 from tkinter.ttk import *
+import PIL.Image, PIL.ImageTk
+
 def Salvataggio(mode,titolo,descrizione):
     #try:
         if mode=="add":
-            ID=len(nt)
+            ID=len(nt)+1
             nt[ID]={}
             nt[ID]["titolo"]=titolo.get()
             nt[ID]["descrizione"]=descrizione.get(1.0, END)
@@ -54,22 +69,22 @@ def Salvataggio(mode,titolo,descrizione):
             ID=selItem["text"]
             del nt[ID]
         np.save(os.path.join(path, fn_sub), nt)
-        tkinter.messagebox.showinfo(title="Successo!",
-                                    message="Salvataggio effettuato con successo!")
+        tkmb.showinfo(title=_("Successo!"),
+                                    message=_("Salvataggio effettuato con successo!"))
         wn.destroy()
         creaFinestra()
     #except:
-        #tkinter.messagebox.showerror(title="Errore!", message="Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
+        #tkmb.showerror(title=_("Errore!"), message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore"))
 def delete():
     global selItem
     selItem = t.item(t.focus())
     print(selItem)
     if selItem=="":
-        tkinter.messagebox.showwarning(title="Nessuna annotazione selezionata",
-                                       messaggio="Non è stata selezionata nessuna annotazione. Si prega di selezionarne una per apportarne le modifiche.")
+        tkmb.showwarning(title=_("Nessuna annotazione selezionata"),
+                                       messaggio=_("Non è stata selezionata nessuna annotazione. Si prega di selezionarne una per apportarne le modifiche."))
         return ""
-    scelta=tkinter.messagebox.askyesno(title="Conferma eliminazione",
-                                message="Si è sicuri di voler eliminare la annotazione con titolo"+" "+selItem["values"][0]+"?")
+    scelta=tkmb.askyesno(title=_("Conferma eliminazione"),
+                                message=_("Si è sicuri di voler eliminare la annotazione con titolo")+" "+selItem["values"][0]+"?")
     if scelta==True:
         Salvataggio("del","","")
     else:
@@ -86,65 +101,65 @@ def edit():
     selItem = t.item(t.focus())
     print(selItem)
     if selItem=="":
-        tkinter.messagebox.showwarning(title="Nessuna annotazione selezionata",
-                                       messaggio="Non è stata selezionata nessuna annotazione. Si prega di selezionarne una per apportarne le modifiche.")
+        tkmb.showwarning(title=_("Nessuna annotazione selezionata"),
+                         messaggio=_("Non è stata selezionata nessuna annotazione. Si prega di selezionarne una per apportarne le modifiche."))
         return ""
     global we
     we=Toplevel()
-    we.title("Modifica annotazione"+" - School Life Diary")
+    we.title(_("Modifica annotazione")+" - School Life Diary")
     we.iconbitmap("sld_icon_beta.ico")
     we.geometry("%dx%d+%d+%d" % (450, 200, 600, 200))
-    l=Label(we, text="Modificare il titolo dell\'annotazione")
+    l=Label(we, text=_("Modificare il titolo dell\'annotazione"))
     l.pack(padx=10,pady=5)
     vart=StringVar(value=selItem["values"][0])
     et=Entry(we, textvariable=vart)
     et.pack(padx=10,pady=2)
-    l1=Label(we,text="Modificare il contenuto dell'annotazione")
+    l1=Label(we,text=_("Modificare il contenuto dell'annotazione"))
     l1.pack(padx=10,pady=5)
     varc=StringVar(value="")
     ec=ScrolledText(wa, width=50, height=10)
     ec.pack(padx=10,pady=2)
     ec["text"]=selItem["values"][1]
-    l2=Label(we,text="Modificare l'allegato (opzionale)")
+    l2=Label(we,text=_("Modificare l'allegato (opzionale)"))
     l2.pack(padx=10,pady=5)
     fa=Frame(we)
     fa.pack()
     global lfe
-    lfe=Label(fa,text="Nessun file selezionato")
+    lfe=Label(fa,text=_("Nessun file selezionato"))
     if selItem["values"][4]!="":
         lfe["text"]=selItem["values"][4]
-    btn=Button(fa,text="SCEGLI FILE", command=lambda: file(lfe))
+    btn=Button(fa,text=_("SCEGLI FILE"), command=lambda: file(lfe))
     btn.grid(row=0,column=0,padx=10,pady=2)
     lf.grid(row=0,column=1,padx=10,pady=2)
-    b=Button(wa, text="SALVA", command=lambda: Salvataggio("edit",vart,ec))
+    b=Button(wa, text=_("SALVA"), command=lambda: Salvataggio("edit",vart,ec))
     b.pack(padx=10,pady=10)
     we.mainloop()
 
 def add():
     global wa
     wa=Toplevel()
-    wa.title("Inserisci annotazione"+" - School Life Diary")
+    wa.title(_("Inserisci annotazione")+" - School Life Diary")
     wa.iconbitmap("sld_icon_beta.ico")
     wa.geometry("510x360+600+200")
-    l=Label(wa, text="Inserire il titolo della nuova annotazione")
+    l=Label(wa, text=_("Inserire il titolo della nuova annotazione"))
     l.pack(padx=10,pady=5)
     vart=StringVar(value="")
     et=Entry(wa, textvariable=vart)
     et.pack(padx=10,pady=2)
-    l1=Label(wa,text="Inserire il contenuto della nuova annotazione")
+    l1=Label(wa,text=_("Inserire il contenuto della nuova annotazione"))
     l1.pack(padx=10,pady=5)
     varc=StringVar(value="")
     ec=ScrolledText(wa, width=50, height=10)
     ec.pack(padx=10,pady=2)
-    l2=Label(wa,text="Inserisci un allegato (opzionale)")
+    l2=Label(wa,text=_("Inserisci un allegato (opzionale)"))
     l2.pack(padx=10,pady=5)
     fa=Frame(wa)
     fa.pack()
-    lf=Label(fa,text="Nessun file selezionato")
-    btn=Button(fa,text="SCEGLI FILE", command=lambda: file(lf))
+    lf=Label(fa,text=_("Nessun file selezionato"))
+    btn=Button(fa,text=_("SCEGLI FILE"), command=lambda: file(lf))
     btn.grid(row=0,column=0,padx=10,pady=2)
     lf.grid(row=0,column=1,padx=10,pady=2)
-    b=Button(wa, text="SALVA", command=lambda: Salvataggio("add",vart,ec))
+    b=Button(wa, text=_("SALVA"), command=lambda: Salvataggio("add",vart,ec))
     b.pack(padx=10,pady=10)
     wa.mainloop()
 
@@ -155,11 +170,12 @@ def inizializza():
     except ValueError:
         nt={}
 
+
 def creaFinestra():
     global wn
     wn=Toplevel()
     inizializza()
-    wn.title("Annotazioni"+" - School Life Diary")
+    wn.title(_("Annotazioni")+" - School Life Diary")
     wn.iconbitmap("sld_icon_beta.ico")
     wn.geometry("850x350+600+200")
     s=Style()
@@ -172,27 +188,35 @@ def creaFinestra():
     global t
     t=Treeview(f)
     t["columns"]=("titolo","descrizione","data1","data2","allegati")
-    t.heading("#0",text="ID")
-    t.column("#0",width=30)
-    t.heading("titolo",text="Titolo")
-    t.heading("descrizione",text="Descrizione")
-    t.heading("data1",text="Data Creazione")
+    t.heading("#0",text=_("ID"))
+    t.column("#0",width=50)
+    t.heading("titolo",text=_("Titolo"))
+    t.heading("descrizione",text=_("Descrizione"))
+    t.heading("data1",text=_("Data Creazione"))
     t.column("data1",width=100)
-    t.heading("data2",text="Data Ultima Modifica")
+    t.heading("data2",text=_("Data Ultima Modifica"))
     t.column("data2",width=150)
-    t.heading("allegati",text="Allegati")
+    t.heading("allegati",text=_("Allegati"))
     t.column("allegati",width=125)
     t.pack(padx=10,pady=10)
     print(nt)
     for x in list(nt.keys()):
-        t.insert("",x,text=x,values=[nt[x]["titolo"],
-                                     nt[x]["descrizione"],
-                                     nt[x]["data_creazione"],
-                                     nt[x]["data_modifica"],
-                                     nt[x]["allegati"]])
-        if nt[x]["allegati"]!="":
-            t.bind("<Double-1>",
-                   lambda f=nt[x]["URIallegato"]: os.startfile(str(f)))
+        if ("allegati" in list(nt[x].keys())) and (nt[x]["allegati"]!=""):
+            patt = PIL.Image.open(r"icons/paper-clip.png")
+            iatt = PIL.ImageTk.PhotoImage(patt)
+            t.insert("",x,text=x,values=[nt[x]["titolo"],
+                                         nt[x]["descrizione"],
+                                         nt[x]["data_creazione"],
+                                         nt[x]["data_modifica"],
+                                         nt[x]["allegati"]], image=iatt)
+        else:
+            ia=None
+            t.insert("",x,text=x,values=[nt[x]["titolo"],
+                                         nt[x]["descrizione"],
+                                         nt[x]["data_creazione"],
+                                         nt[x]["data_modifica"]])
+        if ("allegati" in list(nt[x].keys())) and (nt[x]["allegati"]!=""):
+            t.bind("<Double-1>",lambda event, f=nt[x]["URIallegato"]: os.startfile(f))
     f2=Frame(wn)
     f2.pack()
     imageAdd=PhotoImage(file=r"images/add_FAB.png")

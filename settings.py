@@ -1,4 +1,7 @@
 #Importazione di Tkinter e librerie utili
+from transifex.api import TransifexAPI
+global tr
+tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com')
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import filedialog
@@ -15,42 +18,65 @@ path = os.path.expanduser(r'~\Documents\School Life Diary')
 import gettext
 import ctypes
 import locale
+import polib
 if not(os.path.exists(os.path.join(path,"language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
     lgl=["en","it"]
-    lg = gettext.translation("settings", localedir='locale', languages=[lgcode[0:2]])
+    lg = gettext.translation("settings", localedir=os.path.join(path,'locale'), languages=[lgcode[0:2]])
 else:
     fl=open(os.path.join(path,"language.txt"),"r")
     lgcode=fl.readline()
-    lg = gettext.translation('settings', localedir='locale', languages=[lgcode])
+    lg = gettext.translation('settings', localedir=os.path.join(path,'locale'), languages=[lgcode])
+    fl.close()
 lg.install()
 
-def salvaLingua(cb,lgl,wl):
-    try:
-        f=open(os.path.join(path,"language.txt"),"w")
-        f.write(lgl[cb.get()])
-        f.close()
-        wl.destroy()
-        tkinter.messagebox.showinfo(title=_("Salvataggio effettuato"),
-                                    message=_("La lingua scelta è stata salvata. RIAVVIA PER RENDERE EFFETTIVE LE MODIFICHE!"))
-    except:
-        tkinter.messagebox.showerror(title=_("Salvataggio non riuscito"),
-                                     message=_("Il salvataggio non è andato a buon fine, riprova o contatta lo sviluppatore per ricevere maggiore aiuto.")+_(" Errore: ")+Exception)
+def salvaLingua(cb,lgl,wl,mode):
+    # NO TRY - MOTIVO: UN ERRORE NON RILEVANTE PER IL FUNZIONAMENTO C'ERA SEMPRE (ERRORE 404 NOT FOUND)
+    if mode=="download":
+        l=["main","settings","note","timetable","subject"]
+        for i in l:
+            lang=tr.list_languages('school-life-diary-pc', i+"pot")
+            for y in lang:
+                pathdl=os.path.join(path,'locale',y[:2],"LC_MESSAGES")
+                if not(os.path.exists(os.path.join(pathdl,(i+'.po')))):
+                    if not(os.path.exists(os.path.join(pathdl))):
+                        os.makedirs(os.path.join(pathdl))
+                    filecreation=open(os.path.join(pathdl,(i+'.po')), "w")
+                    filecreation.close()
+                tr.get_translation('school-life-diary-pc', i+"pot", 'pt-br', os.path.join(pathdl,(i+'.po')))
+                po = polib.pofile(os.path.join(pathdl,(i+'.po')))
+                po.save_as_mofile(os.path.join(pathdl,(i+'.mo')))
+    f=open(os.path.join(path,"language.txt"),"w")
+    f.write(lgl[cb.get()])
+    f.close()
+    wl.destroy()
+    tkinter.messagebox.showinfo(title=_("Salvataggio effettuato"),
+                                message=_("La lingua scelta è stata salvata. RIAVVIA L'APPLICAZIONE PER RENDERE EFFETTIVE LE MODIFICHE!"))
+def updatecb1(cb):
+    cb["values"]=tr.list_languages('school-life-diary-pc', 'mainpot')
 def updatecb(cb,lgl):
-    cb["values"]=list(lgl.keys())
+    cb["values"]=lgl
 def cambiaLingua():
     wl=Toplevel()
     wl.title(_("Cambia lingua")+" - School Life Diary")
     wl.iconbitmap("sld_icon_beta.ico")
-    wl.geometry("200x200+100+100")
+    wl.geometry("500x250+100+100")
     lgl={_("Italiano"):"it",_("Inglese"):"en"}
     e1=Label(wl,text=_("Scegliere la propria lingua: "))
     cb=Combobox(wl,postcommand=lambda: updatecb(cb,lgl))
     e1.pack(padx=10,pady=10)
     cb.pack(padx=10,pady=10)
-    btn=Button(wl,text=_("CAMBIA"),command=lambda: salvaLingua(cb,lgl,wl))
+    btn=Button(wl,text=_("CAMBIA"),command=lambda: salvaLingua(cb,lgl,wl,"change"))
     btn.pack(padx=10,pady=10)
+    l=Label(wl,text=_("Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti dalla nostra piattaforma di traduzione.\nQuesta azione RICHIEDE I PERMESSI DI AMMINISTRATORE!!"))
+    l.pack(padx=10,pady=2)
+    f=Frame(wl)
+    f.pack(padx=10,pady=2)
+    cb1=Combobox(f,postcommand=lambda: updatecb1(cb1))
+    cb1.grid(row=0,column=2,padx=5,pady=10)
+    btn1=Button(f,text=_("SCARICA O AGGIORNA LINGUA"), command=lambda: salvaLingua(cb1, lgl, wl, "download"))
+    btn1.grid(row=0,column=3,padx=5,pady=10)
 def backup():
     fn_bk="backups"
     bfoldpath=os.path.join(path,fn_bk)
@@ -82,9 +108,9 @@ def ripristino():
                                     message=_("Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"))
     except FileNotFoundError:
         return
-    else:
+    except Exception as ex:
         tkinter.messagebox.showerror(title=_("Ripristino non riuscito"),
-                                     message=_("Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, oppure contattare lo sviluppatore."))
+                                     message=_("Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, oppure contattare lo sviluppatore.")+"\n"+ex)
 def cancellatutto():
     for i in range(3):
         sc=tkinter.messagebox.askyesno(title=_("Conferma n.")+str(i),

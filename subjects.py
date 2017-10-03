@@ -20,11 +20,11 @@ if not(os.path.exists(os.path.join(path,"language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
     lgl=["en","it"]
-    lg = gettext.translation("settings", localedir='locale', languages=[lgcode[0:2]])
+    lg = gettext.translation("subjects", localedir=os.path.join(path,'locale'), languages=[lgcode[0:2]])
 else:
     fl=open(os.path.join(path,"language.txt"),"r")
     lgcode=fl.readline()
-    lg = gettext.translation('settings', localedir='locale', languages=[lgcode])
+    lg = gettext.translation('subjects', localedir=os.path.join(path,'locale'), languages=[lgcode])
 lg.install()
 from tkinter import *
 import tkinter.messagebox
@@ -53,9 +53,9 @@ def Salvataggio(mode,var):
                                     message=_("Salvataggio effettuato con successo!"))
         wim.destroy()
         creaFinestra()
-    except:
+    except Exception as ex:
         tkinter.messagebox.showerror(title=_("Errore!"),
-                                     message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore"))
+                                     message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore")+"\n"+str(ex))
 
 def delete():
     if lb.get(lb.curselection())=="":

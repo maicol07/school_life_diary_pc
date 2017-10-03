@@ -13,10 +13,10 @@ import os
 import ctypes
 import locale
 import PIL.Image, PIL.ImageTk
-
 import os.path
 import numpy as np
 global pathset
+import tkinter.messagebox
 # filename for the file you want to save
 output_filename = "settings.npy"
 
@@ -35,18 +35,21 @@ if not(os.path.exists(os.path.join(path,output_filename))):
 if not(os.path.exists(os.path.join(path,"language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
-    lg = gettext.translation("main", localedir='locale', languages=[lgcode[0:2]])
+    lg = gettext.translation("main", localedir=os.path.join(path,'locale'), languages=[lgcode[0:2]])
 else:
-    fl=open(os.path.join(path,"language.txt"),"r")
-    lgcode=fl.readline()
-    lg = gettext.translation('main', localedir='locale', languages=[lgcode])
+    try:
+        fl=open(os.path.join(path,"language.txt"),"r")
+        lgcode=fl.readline()
+        lg = gettext.translation('main', localedir=os.path.join(path,'locale'), languages=[lgcode])
+    except Exception as ex:
+        tkinter.messagebox.showerror(title=_("Lingua non impostata!"),
+                                     message=_(r"La lingua impostata non è stata riconosciuta. Per risolvere prova a eliminare il file in Documenti/School Life Diary/language.txt . Se il problema non si risolve, contattare lo sviluppatore. Errore: ")+str(ex))
 lg.install()
 
 # Importazione tkinter e funzioni utili
 import webbrowser
 from tkinter import *
-from tkinter.ttk import Style
-import tkinter.messagebox
+from tkinter.ttk import Style, Progressbar
 import settings
 import subjects
 import timetable
@@ -60,7 +63,9 @@ def info():
     wi.geometry("750x500+250+50")
     f1=Frame(wi)
     f1.pack()
-    title=Label(f1,text="School Life Diary",font="Brush-MT")
+    isplash = PIL.Image.open("images\school_life_diary_splash.png")
+    psplash = PIL.ImageTk.PhotoImage(isplash)
+    title=Label(f1,image=psplash)
     title.pack(padx=10,pady=5)
     subtitle=Label(f1, text=_("sviluppato e mantenuto da maicol07"))
     l1=Label(f1,text=_("Sito web: "))
@@ -84,15 +89,54 @@ def info():
 
 #Creazione della finestra, del frame e dei widget
 global w
-w=Tk()
-w.title("School Life Diary")
-w.iconbitmap("sld_icon_beta.ico")
-w.geometry("335x325+200+100")
+#Verifica se esistono degli aggiornamenti per il programma
+v="0.3"
+import feedparser
+from subprocess import check_output
+feed_name="School Life Diary Releases"
+url=r"https://github.com/maicol07/school_life_diary_pc/releases.atom"
+feed=feedparser.parse(url)
+wp=Tk()
+wp.iconbitmap("images\sld_icon_beta.ico")
 s=Style()
 try:
     s.theme_use("vista")
 except:
     s.theme_use()
+pbv=0
+le=Label(wp,text=_("Ricerca aggiornamenti..."))
+le.pack(padx=10,pady=10)
+pb=Progressbar(wp, mode="determinate",variable=pbv)
+pb.pack(padx=10,pady=10)
+def checknewversion(pb,wp):
+    try:
+        post=feed.entries[0]
+        pb.step(20)
+        title=post.title
+        pb.step(20)
+        lp=title.split(" ")
+        pb.step(20)
+        if (lp[0][1:].isdecimal()==True):
+            lp[0]==lp[0][1:]
+        pb.step(20)
+        if (v!=lp[0][1:]):
+            agg=tkinter.messagebox.askyesno(title=_("Nuova versione disponibile!"),
+                                           message=_("È disponibile una nuova versione di School Life Diary.")+_("""
+    Ti consigliamo di aggiornare il prima possibile per non perdere le novità, i miglioramenti e le correzioni di problemi.
+    Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione""")+" "+lp[0][1:]+"?")
+            if (agg==True):
+                webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases/")
+        pb.step(20)
+    except IndexError:
+        tkinter.messagebox.showwarning(title=_("Nessuna connessione ad internet"),
+                                       message=_("Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."))
+    wp.destroy()
+wp.after(1,checknewversion(pb,wp))
+wp.mainloop()
+w=Tk()
+w.title("School Life Diary")
+w.iconbitmap(r"images/sld_icon_beta.ico")
+w.geometry("335x325+200+100")
 mb=Menu(w)
 w.config(menu=mb)
 fm=Menu(mb,tearoff=0)
@@ -122,31 +166,8 @@ hm.add_command(label=_("Guida"), image=pguida,
                command= lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc/wiki"))
 hm.add_command(label=_("Informazioni"), image=pinfo,
                compound="left",command=info)
-#Verifica se esistono degli aggiornamenti per il programma
-v="0.2.1"
-import feedparser
-from subprocess import check_output
-feed_name="School Life Diary Releases"
-url=r"https://github.com/maicol07/school_life_diary_pc/releases.atom"
-feed=feedparser.parse(url)
-try:
-    post=feed.entries[0]
-    title=post.title
-    lp=title.split(" ")
-    if (lp[0][1:].isdecimal()==True):
-        lp[0]==lp[0][1:]
-    if (v!=lp[0][1:]):
-        agg=tkinter.messagebox.askyesno(title=_("Nuova versione disponibile!"),
-                                       message=_("È disponibile una nuova versione di School Life Diary.")+_("""
-Ti consigliamo di aggiornare il prima possibile per non perdere le novità, i miglioramenti e le correzioni di problemi.
-Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione""")+" "+lp[0]+"?")
-        if (agg==True):
-            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases/")
-except IndexError:
-    tkinter.messagebox.showwarning(title=_("Nessuna connessione ad internet"),
-                                   message=_("Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."))
 f=Frame(w)
-logo=PhotoImage(file=r"school_life_diary_splash.png")
+logo=PhotoImage(file=r"images/school_life_diary_splash.png")
 title=Label(f,image=logo)
 f.pack()
 title.pack(padx=10,pady=10)

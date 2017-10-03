@@ -24,11 +24,11 @@ if not(os.path.exists(os.path.join(path,"language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
     lgl=["en","it"]
-    lg = gettext.translation("settings", localedir='locale', languages=[lgcode[0:2]])
+    lg = gettext.translation("timetable", localedir=os.path.join(path,'locale'), languages=[lgcode[0:2]])
 else:
     fl=open(os.path.join(path,"language.txt"),"r")
     lgcode=fl.readline()
-    lg = gettext.translation('settings', localedir='locale', languages=[lgcode])
+    lg = gettext.translation('timetable', localedir=os.path.join(path,'locale'), languages=[lgcode])
 lg.install()
 
 def Salvataggio(p,var):
@@ -100,9 +100,9 @@ def creaFinestra():
     ft.pack()
     global dg
     dg={1:_("Lunedì"),2:_("Martedì"),3:_("Mercoledì"),4:_("Giovedì"),5:_("Venerdì"),6:_("Sabato")}
-    for i in len(dg):
+    for i in range(1,len(dg)+1):
         l=Label(ft,text=dg[i])
-    l.grid(row=0, column=i, pady=10, padx=5)
+        l.grid(row=0, column=i, pady=10, padx=5)
     i=1
     x=ds["ORE_MAX_GIORNATA"]
     for i in range(1,x+1):
