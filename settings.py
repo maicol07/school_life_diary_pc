@@ -32,29 +32,36 @@ else:
 lg.install()
 
 def salvaLingua(cb,lgl,wl,mode):
-    # NO TRY - MOTIVO: UN ERRORE NON RILEVANTE PER IL FUNZIONAMENTO C'ERA SEMPRE (ERRORE 404 NOT FOUND)
-    if mode=="download":
-        l=["main","settings","note","timetable","subject"]
-        for i in l:
-            lang=tr.list_languages('school-life-diary-pc', i+"pot")
-            for y in lang:
-                pathdl=os.path.join(path,'locale',y[:2],"LC_MESSAGES")
-                if not(os.path.exists(os.path.join(pathdl,(i+'.po')))):
-                    if not(os.path.exists(os.path.join(pathdl))):
-                        os.makedirs(os.path.join(pathdl))
-                    filecreation=open(os.path.join(pathdl,(i+'.po')), "w")
-                    filecreation.close()
-                tr.get_translation('school-life-diary-pc', i+"pot", 'pt-br', os.path.join(pathdl,(i+'.po')))
-                po = polib.pofile(os.path.join(pathdl,(i+'.po')))
-                po.save_as_mofile(os.path.join(pathdl,(i+'.mo')))
-    f=open(os.path.join(path,"language.txt"),"w")
-    f.write(lgl[cb.get()])
-    f.close()
-    wl.destroy()
-    tkinter.messagebox.showinfo(title=_("Salvataggio effettuato"),
+    try:
+        if mode=="download":
+            l=["main","settings","note","timetable","subject"]
+            for i in l:
+                lang=tr.list_languages('school-life-diary-pc', i+"pot")
+                for y in lang:
+                    pathdl=os.path.join(path,'locale',y[:2],"LC_MESSAGES")
+                    if not(os.path.exists(os.path.join(pathdl,(i+'.po')))):
+                        if not(os.path.exists(os.path.join(pathdl))):
+                            os.makedirs(os.path.join(pathdl))
+                        filecreation=open(os.path.join(pathdl,(i+'.po')), "w")
+                        filecreation.close()
+                    tr.get_translation('school-life-diary-pc', i+"pot", 'pt-br', os.path.join(pathdl,(i+'.po')))
+                    po = polib.pofile(os.path.join(pathdl,(i+'.po')))
+                    po.save_as_mofile(os.path.join(pathdl,(i+'.mo')))
+        else:
+            f=open(os.path.join(path,"language.txt"),"w")
+            f.write(lgl[cb.get()])
+            f.close()
+        tkinter.messagebox.showinfo(title=_("Salvataggio effettuato"),
                                 message=_("La lingua scelta è stata salvata. RIAVVIA L'APPLICAZIONE PER RENDERE EFFETTIVE LE MODIFICHE!"))
-def updatecb1(cb):
-    cb["values"]=tr.list_languages('school-life-diary-pc', 'mainpot')
+    except Exception as ex:
+        if str(ex)=="404: b'Not Found'":
+            updatecb(cb,lgl)
+            tkinter.messagebox.showinfo(title=_("Lingue scaricate"),
+                                message=_("La lingue sono state scaricate. Puoi sceglierne una dal menu!"))
+        else:
+            tkinter.messagebox.showerror(title=_("Si è verificato un errore!!"),
+                                        message=_("È stato riscontrato un errore imprevisto. Riprovare o contattare lo sviluppatore.")+"\n"+str(ex))
+    wl.destroy()
 def updatecb(cb,lgl):
     cb["values"]=lgl
 def cambiaLingua():
@@ -62,21 +69,17 @@ def cambiaLingua():
     wl.title(_("Cambia lingua")+" - School Life Diary")
     wl.iconbitmap("sld_icon_beta.ico")
     wl.geometry("500x250+100+100")
-    lgl={_("Italiano"):"it",_("Inglese"):"en"}
+    lgl=os.listdir(os.path.join(path, "locale"))
     e1=Label(wl,text=_("Scegliere la propria lingua: "))
     cb=Combobox(wl,postcommand=lambda: updatecb(cb,lgl))
     e1.pack(padx=10,pady=10)
     cb.pack(padx=10,pady=10)
     btn=Button(wl,text=_("CAMBIA"),command=lambda: salvaLingua(cb,lgl,wl,"change"))
     btn.pack(padx=10,pady=10)
-    l=Label(wl,text=_("Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti dalla nostra piattaforma di traduzione.\nQuesta azione RICHIEDE I PERMESSI DI AMMINISTRATORE!!"))
+    l=Label(wl,text=_("Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti dalla nostra piattaforma di traduzione."))
     l.pack(padx=10,pady=2)
-    f=Frame(wl)
-    f.pack(padx=10,pady=2)
-    cb1=Combobox(f,postcommand=lambda: updatecb1(cb1))
-    cb1.grid(row=0,column=2,padx=5,pady=10)
-    btn1=Button(f,text=_("SCARICA O AGGIORNA LINGUA"), command=lambda: salvaLingua(cb1, lgl, wl, "download"))
-    btn1.grid(row=0,column=3,padx=5,pady=10)
+    btn1=Button(wl,text=_("SCARICA O AGGIORNA LINGUE"), command=lambda: salvaLingua(cb, lgl, wl, "download"))
+    btn1.pack(padx=5,pady=10)
 def backup():
     fn_bk="backups"
     bfoldpath=os.path.join(path,fn_bk)

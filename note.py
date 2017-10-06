@@ -51,7 +51,6 @@ def Salvataggio(mode,titolo,descrizione):
             nt[ID]["data_creazione"]=time.strftime("%d/%m/%Y")
             nt[ID]["data_modifica"]=time.strftime("%d/%m/%Y")
             if "fs" in globals():
-                print(sf)
                 nt[ID]["allegati"]=fs[len(fs)-1]
                 nt[ID]["URIallegato"]=sf
             wa.destroy()
@@ -61,7 +60,6 @@ def Salvataggio(mode,titolo,descrizione):
             nt[ID]["descrizione"]=descrizione.get(1.0, END)
             nt[ID]["data_modifica"]=time.strftime("%d/%m/%Y")
             if "fs" in globals() and "lfe" in globals():
-                print(sf)
                 nt[ID]["allegati"]=fs[len(fs)-1]
                 nt[ID]["URIallegato"]=sf
             we.destroy()
@@ -78,7 +76,6 @@ def Salvataggio(mode,titolo,descrizione):
 def delete():
     global selItem
     selItem = t.item(t.focus())
-    print(selItem)
     if selItem=="":
         tkmb.showwarning(title=_("Nessuna annotazione selezionata"),
                                        messaggio=_("Non è stata selezionata nessuna annotazione. Si prega di selezionarne una per apportarne le modifiche."))
@@ -99,7 +96,6 @@ def file(lf):
 def edit():
     global selItem
     selItem = t.item(t.focus())
-    print(selItem)
     if selItem=="":
         tkmb.showwarning(title=_("Nessuna annotazione selezionata"),
                          messaggio=_("Non è stata selezionata nessuna annotazione. Si prega di selezionarne una per apportarne le modifiche."))
@@ -117,9 +113,9 @@ def edit():
     l1=Label(we,text=_("Modificare il contenuto dell'annotazione"))
     l1.pack(padx=10,pady=5)
     varc=StringVar(value="")
-    ec=ScrolledText(wa, width=50, height=10)
+    ec=ScrolledText(we, width=50, height=10)
     ec.pack(padx=10,pady=2)
-    ec["text"]=selItem["values"][1]
+    ec.insert(INSERT, selItem["values"][1])
     l2=Label(we,text=_("Modificare l'allegato (opzionale)"))
     l2.pack(padx=10,pady=5)
     fa=Frame(we)
@@ -130,7 +126,7 @@ def edit():
         lfe["text"]=selItem["values"][4]
     btn=Button(fa,text=_("SCEGLI FILE"), command=lambda: file(lfe))
     btn.grid(row=0,column=0,padx=10,pady=2)
-    lf.grid(row=0,column=1,padx=10,pady=2)
+    lfe.grid(row=0,column=1,padx=10,pady=2)
     b=Button(wa, text=_("SALVA"), command=lambda: Salvataggio("edit",vart,ec))
     b.pack(padx=10,pady=10)
     we.mainloop()
@@ -170,6 +166,12 @@ def inizializza():
     except ValueError:
         nt={}
 
+def on_double_click(event):
+    item_id = event.widget.focus()
+    item = event.widget.item(item_id)
+    idn = item['text']
+    url = nt[idn]["URIallegato"]
+    os.startfile(url)
 
 def creaFinestra():
     global wn
@@ -199,11 +201,11 @@ def creaFinestra():
     t.heading("allegati",text=_("Allegati"))
     t.column("allegati",width=125)
     t.pack(padx=10,pady=10)
-    print(nt)
+    patt = PIL.Image.open(r"icons/paper-clip.png")
+    iatt = PIL.ImageTk.PhotoImage(patt)
+    t.bind("<Double-Button-1>", on_double_click)
     for x in list(nt.keys()):
         if ("allegati" in list(nt[x].keys())) and (nt[x]["allegati"]!=""):
-            patt = PIL.Image.open(r"icons/paper-clip.png")
-            iatt = PIL.ImageTk.PhotoImage(patt)
             t.insert("",x,text=x,values=[nt[x]["titolo"],
                                          nt[x]["descrizione"],
                                          nt[x]["data_creazione"],
@@ -215,8 +217,6 @@ def creaFinestra():
                                          nt[x]["descrizione"],
                                          nt[x]["data_creazione"],
                                          nt[x]["data_modifica"]])
-        if ("allegati" in list(nt[x].keys())) and (nt[x]["allegati"]!=""):
-            t.bind("<Double-1>",lambda event, f=nt[x]["URIallegato"]: os.startfile(f))
     f2=Frame(wn)
     f2.pack()
     imageAdd=PhotoImage(file=r"images/add_FAB.png")
