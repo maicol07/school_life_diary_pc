@@ -91,7 +91,7 @@ def info():
 #Creazione della finestra, del frame e dei widget
 global w
 #Verifica se esistono degli aggiornamenti per il programma
-v="0.3"
+v="0.3.0.1"
 import feedparser
 from subprocess import check_output
 feed_name="School Life Diary Releases"
