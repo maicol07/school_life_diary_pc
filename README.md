@@ -42,7 +42,7 @@ Port of School Life Diary Android App for PC.
 - School Timetable
 - Subjects
 - Marks (to develop)
-- Notes (annotations, developing...)
+- Notes (annotations)
 - Agenda (homeworks, tests, etc...; integration with Google Calendar; to develop)
 ### Credits
 Developed by maicol07. Copyright © 2017 - maicol07
