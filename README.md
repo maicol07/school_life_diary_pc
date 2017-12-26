@@ -7,7 +7,7 @@ Porting dell'app android School Life Diary per PC.
 - Gestione dell'orario scolastico
 - Gestione delle materie
 - Gestione dei voti (da sviluppare)
-- Gestione delle note (annotazioni, in sviluppo)
+- Gestione delle note
 - Agenda (compiti, verifiche, ecc...; integrazione con Google Calendar; da sviluppare)
 ### Schermate
 
@@ -44,6 +44,8 @@ Port of School Life Diary Android App for PC.
 - Marks (to develop)
 - Notes (annotations)
 - Agenda (homeworks, tests, etc...; integration with Google Calendar; to develop)
+### Screenshots
+Please see above the Italian ones.
 ### Credits
 Developed by maicol07. Copyright © 2017 - maicol07
 
