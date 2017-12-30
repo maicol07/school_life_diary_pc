@@ -1,2 +1,2 @@
-feedburner
+feedparser
 python-transifex
