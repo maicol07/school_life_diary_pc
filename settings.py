@@ -1,24 +1,25 @@
-#Importazione di Tkinter e librerie utili
+#IMPORTAZIONE LIBRERIE E IMPOSTAZIONE CLIENT TRADUZIONI
 from transifex.api import TransifexAPI
 global tr
 tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com')
 from tkinter import *
 from tkinter.ttk import *
-from tkinter import filedialog
-import tkinter.messagebox
+from tkinter import filedialog, Tk, Toplevel
+import tkinter.messagebox as tkmb
 import os.path #serve per verificare se un file è presente o no
-import numpy as np #utility per il salvataggio delle impostazioni in un file .npy
 from zipfile import *
-import subprocess
-import time
+import subprocess, time, gettext, ctypes, locale, polib
+import sqlite3 as sql
 global path
 global fn_set
-fn_set = "settings.npy"
+
+# VARIABILI D'AMBIENTE
+fn_set = "settings.db"
 path = os.path.expanduser(r'~\Documents\School Life Diary')
-import gettext
-import ctypes
-import locale
-import polib
+conn=sql.connect(os.path.join(path, fn_set), isolation_level=None)
+c=conn.cursor()
+
+# INSTALLAZIONE LINGUA
 if not(os.path.exists(os.path.join(path,"language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -31,6 +32,9 @@ else:
     fl.close()
 lg.install()
 
+
+
+# SALVATAGGIO LINGUA
 def salvaLingua(cb,lgl,wl,mode):
     try:
         if mode=="download":
@@ -51,21 +55,28 @@ def salvaLingua(cb,lgl,wl,mode):
             f=open(os.path.join(path,"language.txt"),"w")
             f.write(lgl[cb.get()])
             f.close()
-        tkinter.messagebox.showinfo(title=_("Salvataggio effettuato"),
+        tkmb.showinfo(title=_("Salvataggio effettuato"),
                                 message=_("La lingua scelta è stata salvata. RIAVVIA L'APPLICAZIONE PER RENDERE EFFETTIVE LE MODIFICHE!"))
     except Exception as ex:
         if str(ex)=="404: b'Not Found'":
             updatecb(cb,lgl)
-            tkinter.messagebox.showinfo(title=_("Lingue scaricate"),
+            tkmb.showinfo(title=_("Lingue scaricate"),
                                 message=_("La lingue sono state scaricate. Puoi sceglierne una dal menu!"))
         else:
-            tkinter.messagebox.showerror(title=_("Si è verificato un errore!!"),
+            tkmb.showerror(title=_("Si è verificato un errore!!"),
                                         message=_("È stato riscontrato un errore imprevisto. Riprovare o contattare lo sviluppatore.")+"\n"+str(ex))
     wl.destroy()
+
+
+# AGGIORNAMENTO LISTA LINGUE
 def updatecb(cb,lgl):
     cb["values"]=lgl
+
+
+# CAMBIO LINGUA
 def cambiaLingua():
     wl=Toplevel()
+    wl.configure(background="white")
     wl.title(_("Cambia lingua")+" - School Life Diary")
     wl.iconbitmap("sld_icon_beta.ico")
     wl.geometry("500x250+100+100")
@@ -80,6 +91,8 @@ def cambiaLingua():
     l.pack(padx=10,pady=2)
     btn1=Button(wl,text=_("SCARICA O AGGIORNA LINGUE"), command=lambda: salvaLingua(cb, lgl, wl, "download"))
     btn1.pack(padx=5,pady=10)
+
+# BACKUP DEI DATABASE
 def backup():
     fn_bk="backups"
     bfoldpath=os.path.join(path,fn_bk)
@@ -89,34 +102,40 @@ def backup():
                               fn_bk,
                               "backup-"+time.strftime("%d-%m-%Y")+"-"+time.strftime("%H-%M-%S")+".zip"),
                  "w",ZIP_DEFLATED)
-    filelist = [ f for f in os.listdir(".") if f.endswith(".npy") ]
+    filelist = [ f for f in os.listdir(".") if f.endswith(".db") ]
     for f in filelist:
         bzip.write(f, os.path.basename(f))
     bzip.close()
     subprocess.Popen(r'explorer /select,"'+os.path.join(path,
                               fn_bk,
                               "backup-"+time.strftime("%d-%m-%Y")+"-"+time.strftime("%H-%M-%S")+".zip")+'"')
-    tkinter.messagebox.showinfo(title=_("Backup effettuato!"),
+    tkmb.showinfo(title=_("Backup effettuato!"),
                                 message=_("""Backup creato con successo!
 Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: """)+os.path.join(path,
                               fn_bk,
                               "backup-"+time.strftime("%d-%m-%Y")+"-"+time.strftime("%H-%M-%S")+".zip"))
+
+
+# RIPRISTINO DEI DATI DA BACKUP
 def ripristino():
     try:
         bkpath=filedialog.askopenfilename()
         bk=ZipFile(bkpath,"r")
         bk.extractall(path)
         bk.close()
-        tkinter.messagebox.showinfo(title=_("Ripristino effettuato!"),
+        tkmb.showinfo(title=_("Ripristino effettuato!"),
                                     message=_("Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"))
     except FileNotFoundError:
         return
     except Exception as ex:
-        tkinter.messagebox.showerror(title=_("Ripristino non riuscito"),
+        tkmb.showerror(title=_("Ripristino non riuscito"),
                                      message=_("Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, oppure contattare lo sviluppatore.")+"\n"+ex)
+
+
+# ELIMINAZIONE DI TUTTI I DATI
 def cancellatutto():
     for i in range(3):
-        sc=tkinter.messagebox.askyesno(title=_("Conferma n.")+str(i),
+        sc=tkmb.askyesno(title=_("Conferma n.")+str(i),
                                     message=_("""Sei sicuro di voler eliminare TUTTI i dati presenti nell'applicazione?
 Questo include:
 - Orario
@@ -129,84 +148,118 @@ NON potrai più recuperare i tuoi dati se vai avanti a meno che non abbia effett
 Conferme rimaste prima dell'eliminazione: """)+str(3-i))
         if sc==False:
             return
-    filelist = [ f for f in os.listdir(".") if f.endswith(".npy") ]
+    filelist = [ f for f in os.listdir(".") if f.endswith(".db") ]
     for f in filelist:
         os.remove(f)
     ws.destroy()
-    tkinter.messagebox.showinfo(title=_("Dati cancellati correttamente"),
+    tkmb.showinfo(title=_("Dati cancellati correttamente"),
                                 message=_("Tutti i tuoi dati sono stati cancellati con successo! Riavvia l'applicazione per non riscontrare errori!"))
-def salvataggio0():
+
+# Salvataggio impostazioni
+def salvaImpostazioni(par,val):
     try:
-        ds["ORE_MAX_GIORNATA"]=int(sv.get())
-        np.save(os.path.join(path, fn_set), ds) 
-        tkinter.messagebox.showinfo(title=_("Successo!"),
-                                    message=_("Parametro modificato con successo! RICORDATI DI RIAVVIARE L'APPLICAZIONE PER RENDERE EFFETTIVE LE MODIFICHE!!"))
+        if par=="ORE_MAX_GIORNATA":
+            c.execute("""UPDATE settings SET value = {} WHERE setting='{}';""".format(str(int(val.get())),par))
+        else:
+            c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(val.get(),par))            
+        tkmb.showinfo(title=_("Successo!"),
+                                    message=_("Parametro modificato con successo!\n\nRICORDATI DI RIAVVIARE L'APPLICAZIONE PER RENDERE EFFETTIVE LE MODIFICHE!!"))
         wcv.destroy()
-        v0["text"]=ds["ORE_MAX_GIORNATA"]
+        ws.destroy()
         global new_set0
         new_set0=True
-    except:
-        tkinter.messagebox.showerror(title=_("ERRORE!"),
-                                     message=_("Si è verificato un errore durante la modifica del parametro. Riprovare o contattare lo sviluppatore!"))
-def accept_whole_number_only(e=None):
+        creaFinestra()
+    except Exception as ex:
+        tkmb.showerror(title=_("ERRORE!"),
+                                     message=_("Si è verificato un errore durante la modifica del parametro. Riprovare o contattare lo sviluppatore! Errore riscontrato:\n")+str(ex))
+
+# ACCETTAZIONE SOLO VALORI INTERI NELLO SLIDER
+def accept_whole_number_only(sv,e=None):
     value = sv.get()
     if int(value) != value:
-        sv.set(round(value))
-        
-def cambiaValore0():
+        sv.set(int(round(value)))
+
+
+# INIZIALIZZAZIONE IMPOSTAZIONI
+def inizializza():
+    global ds
+    ds={}
+    c.execute("SELECT * FROM settings")
+    sr=c.fetchall()
+    for row in sr:
+        ds[row[0]]=(row[1],row[2])
+
+    
+# MODIFICA VALORE DEL PARAMETRO
+def modifica_valore(event):
+    item_id = event.widget.focus()
+    item = event.widget.item(item_id)
+    par = item['values'][0]
     global wcv
     wcv=Toplevel()
+    wcv.configure(background="white")
     wcv.title(_("Cambia valore - Impostazioni")+" - School Life Diary")
     wcv.iconbitmap("sld_icon_beta.ico")
     wcv.geometry("400x200+600+250")
-    etichetta1=Label(wcv, text=_("Sceglere il valore da attribuire al parametro:"))
-    var=IntVar()
-    global sv
-    sv=Scale(wcv, variable=var, from_=4, to=8, orient=HORIZONTAL, command=accept_whole_number_only)
-    lvar=Label(wcv, textvariable=var)
-    bt1=Button(wcv,text=_("SALVA"), command=salvataggio0)
+    etichetta1=Label(wcv, text=_("Scegliere il valore da attribuire al parametro:"))
     etichetta1.pack(padx=10, pady=10)
-    lvar.pack(padx=10, pady=2)
-    sv.pack(padx=10, pady=10)
-    bt1.pack(padx=10, pady=10)
+    if par=="ORE_MAX_GIORNATA":
+        var=IntVar()
+        var.set(4)
+        sv=Scale(wcv, variable=var, from_=4, to=8, orient=HORIZONTAL, command=lambda e: accept_whole_number_only(sv))
+        lvar=Label(wcv, textvariable=var)
+        lvar.pack(padx=10, pady=2)
+        sv.pack(padx=10, pady=10)
+        bts=Button(wcv,text=_("SALVA"), command=lambda: salvaImpostazioni(par,sv))
+    if par=="PC_THEME":
+        menut=Combobox(wcv,postcommand=lambda: updateList(menut,Style().theme_names()))
+        menut.pack(padx=10,pady=10)
+        bts=Button(wcv,text=_("SALVA"), command=lambda: salvaImpostazioni(par,menut))
+    bts.pack(padx=10, pady=10)
+    wcv.focus()
     wcv.mainloop()
     
-def inizializza():
-    global ds
-    ds=np.load(os.path.join(path, fn_set)).item()
-    v0["text"]=ds["ORE_MAX_GIORNATA"]
-#Creazione finestra
+# IMPOSTAZIONE ELEMENTI MENU A TENDINA
+def updateList(menut,l):
+    menut["values"]=l
+
+
+# CREAZIONE FINESTRA
 def creaFinestra():
+    inizializza()
     s=Style()
-    try:
-        s.theme_use("vista")
-    except:
-        s.theme_use()
+    s.theme_use(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone())
+    s.configure("TFrame",background="white")
+    s.configure("TLabelframe",background="white")
+    s.configure("TLabel",background="white")
+    s.configure("TLabelframe.Label",background="white")
+    s.configure("TScale",background="white")
     global ws
     ws=Toplevel()
+    ws.configure(bg="white")
     ws.title(_("Impostazioni")+" - School Life Diary")
     ws.iconbitmap("sld_icon_beta.ico")
     ws.geometry("900x400+600+250")
-    fs=Frame(ws)
+    fs=Labelframe(ws,text=_("Parametri"))
     fs.pack()
-    la1=Label(fs,text=_("Parametro"))
-    la2=Label(fs,text=_("Valore attuale"))
-    la3=Label(fs,text=_("Descrizione"))
-    la4=Label(fs,text=_("Azioni"))
-    la1.grid(row=0, column=0, padx=10, pady=10)
-    la2.grid(row=0, column=1, padx=10, pady=10)
-    la3.grid(row=0, column=2, padx=10, pady=10)
-    la4.grid(row=0, column=3, padx=10, pady=10)
-    p0=Label(fs,text="ORE_MAX_GIORNATA")
-    global v0
-    v0=Label(fs,text="5")
-    d0=Label(fs,text=_("Imposta il numero di ore massime per giornate da visualizzare nell'orario"))
-    a0=Button(fs,text=_("Cambia"), command=cambiaValore0)
-    p0.grid(row=1, column=0, padx=10, pady=10)
-    v0.grid(row=1, column=1, padx=10, pady=10)
-    d0.grid(row=1, column=2, padx=10, pady=10)
-    a0.grid(row=1, column=3, padx=10, pady=10)
-    fbr=Frame(ws)
+    ts=Treeview(fs)
+    ts["columns"]=("par","val_att","descr")
+    ts.heading("#0",text=_("ID"))
+    ts.column("#0",width=30)
+    ts.heading("par",text=_("Parametro"),anchor=CENTER)
+    ts.column("par",anchor=CENTER)
+    ts.heading("val_att",text=_("Valore attuale"))
+    ts.column("val_att",anchor=CENTER)
+    ts.heading("descr",text=_("Descrizione"))
+    ts.column("descr",width=450,anchor=CENTER)
+    ts.bind("<Double-Button-1>", modifica_valore)
+    ts.pack()
+    for x in range(len(list(ds))):
+        e=ds[list(ds.keys())[x]]
+        ts.insert("","end",text=x,values=[list(ds.keys())[x],e[0],e[1]])
+    li=Label(ws,text=_("Per modificare un parametro, fai doppio click sulla riga corrispondente."))
+    li.pack()
+    fbr=Labelframe(ws,text=_("Backup & Ripristino"))
     bb=Button(fbr,text=_("ESEGUI BACKUP"),command=backup)
     br=Button(fbr,text=_("ESEGUI RIPRISTINO"),command=ripristino)
     bc=Button(fbr,text=_("CANCELLA TUTTO"),command=cancellatutto)
@@ -214,5 +267,6 @@ def creaFinestra():
     bb.grid(row=0,column=0,padx=10,pady=10)
     br.grid(row=0,column=1,padx=10,pady=10)
     bc.grid(row=0,column=2,padx=10,pady=10)
-    inizializza()
+    ws.focus()
     ws.mainloop()
+    c.close()

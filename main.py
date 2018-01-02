@@ -7,41 +7,9 @@
 #                   #
 #####################
 
-#Inizializzazione impostazioni e creazione database
-
 import gettext, os, ctypes, locale, PIL.Image, PIL.ImageTk, webbrowser, time
-import sqlite3 as sql
-global pathset
-# Importazione tkinter e funzioni utili
-from tkinter import *
-from tkinter.ttk import *
-from tkinter import Tk, Toplevel # per usare lo sfondo bianco
-import tkinter.messagebox as tkmb
-
-# CREAZIONE FILE (PRIMO AVVIO)
-
-output_filename = "settings.db"
 
 path = os.path.expanduser(r'~\Documents\School Life Diary')
-if not(os.path.exists(path)):
-    os.mkdir(path)
-if not(os.path.exists(os.path.join(path,output_filename))):
-    if os.path.exists(os.path.join(path,"settings.npy")):
-        tkmb.showwarning(title=_("Attenzione! Database non presente!"),
-                                       message=_("Non hai effettuato la migrazione del database. Il programma si avvierà, ma non saranno visualizzati i tuoi dati fino a che non effettuerai la migrazione."))
-        rd=tkmb.askokcancel(title=_("Conferma download strumento migrazione database"),
-                                       message=_("Vuoi scaricare lo strumento di migrazione del database?"))
-        if rd==True:
-            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases")
-    fs=open(os.path.join(path, output_filename), "w")
-    fs.close()
-    conn=sql.connect(os.path.join(path, output_filename))
-    c=conn.cursor()
-    c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
-                                                   `value` TEXT );""")
-    c.execute("INSERT INTO settings (setting,value) VALUES ('ORE_MAX_GIORNATA','5'); ")
-
-
 # INSTALLAZIONE LINGUA
 
 if not(os.path.exists(os.path.join(path,"language.txt"))):
@@ -58,6 +26,39 @@ else:
                                      message=_(r"La lingua impostata non è stata riconosciuta. Per risolvere prova a eliminare il file in Documenti/School Life Diary/language.txt . Se il problema non si risolve, contattare lo sviluppatore. Errore: ")+str(ex))
 lg.install()
 
+# IMPORTAZIONE MODULI ESTERNI
+import sqlite3 as sql
+global pathset
+from tkinter import *
+from tkinter.ttk import *
+from tkinter import Tk, Toplevel # per usare lo sfondo bianco
+import tkinter.messagebox as tkmb
+
+# CREAZIONE FILE (PRIMO AVVIO)
+
+output_filename = "settings.db"
+
+if not(os.path.exists(path)):
+    os.mkdir(path)
+if not(os.path.exists(os.path.join(path,output_filename))):
+    if os.path.exists(os.path.join(path,"settings.npy")):
+        tkmb.showwarning(title=_("Attenzione! Database non presente!"),
+                                       message=_("Non hai effettuato la migrazione del database. Il programma si avvierà, ma non saranno visualizzati i tuoi dati fino a che non effettuerai la migrazione."))
+        rd=tkmb.askokcancel(title=_("Conferma download strumento migrazione database"),
+                                       message=_("Vuoi scaricare lo strumento di migrazione del database?"))
+        if rd==True:
+            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases")
+    fs=open(os.path.join(path, output_filename), "w")
+    fs.close()
+    conn=sql.connect(os.path.join(path, output_filename),isolation_level=None)
+    c=conn.cursor()
+    c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
+                                                   `value` TEXT,
+                                                   `descr` TEXT);""")
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(_("Numero di ore massime per giornate da visualizzare nell'orario")))
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","vista", "{}"); """.format(_("Tema visivo dell'applicazione")))
+
+
 # IMPORTAZIONE FILE ESTERNI
 import settings, subjects, timetable, note
 
@@ -70,29 +71,24 @@ def info():
     wi.iconbitmap("sld_icon_beta.ico")
     wi.geometry("750x450+250+50")
     f1=Frame(wi)
-    f1.configure(bg="white")
     f1.pack()
-    title=Label(f1,bg="white",text="School Life Diary", font=("Comic Sans MS",25,"bold italic"))
+    title=Label(f1,text="School Life Diary", font=("Comic Sans MS",25,"bold italic"))
     title.pack(padx=10,pady=5)
-    subtitle=Label(f1, text=_("sviluppato e mantenuto da maicol07"), bg="white")
-    l1=Label(f1,text=_("Sito web: "), bg="white")
-    bws=Button(f1, bg="white", text="https://apps.maicol07.tk",borderwidth=0,command=lambda: webbrowser.open("https://apps.maicol07.tk"))
+    subtitle=Label(f1, text=_("sviluppato e mantenuto da maicol07"))
+    bws=Button(f1, text=_("Sito web"),command=lambda: webbrowser.open("https://apps.maicol07.tk"))
     subtitle.pack(padx=10,pady=2)
-    l1.pack(padx=10,pady=5)
-    bws.pack(padx=10)
-    l2=Label(f1,text=_("GitHub School Life Diary: "), bg="white")
-    bgit=Button(f1, bg="white",text="https://github.com/maicol07/school_life_diary_pc",borderwidth=0, command=lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc"))
-    l2.pack(padx=10,pady=5)
-    bgit.pack(padx=10)
-    l25=Label(f1, bg="white",text=_("Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza Creative Commons 3.0"))
+    bws.pack(padx=10,pady=5)
+    bgit=Button(f1, text=_("Pagina del progetto su GitHub"), command=lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc"))
+    bgit.pack(padx=10,pady=5)
+    l25=Label(f1, text=_("Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza Creative Commons 3.0"))
     l25.pack(padx=10,pady=5)
-    l3=Label(f1,text=_("Traduttori: "), bg="white")
+    l3=Label(f1,text=_("Traduttori: "))
     l3.pack(padx=10,pady=15)
-    traduttori=Label(f1,text="maicol07", bg="white")
+    traduttori=Label(f1,text="maicol07")
     traduttori.pack(padx=10,pady=10)
-    l4=Label(f1,text=_("Vuoi diventare anche tu un traduttore?"), bg="white")
+    l4=Label(f1,text=_("Vuoi diventare anche tu un traduttore?"))
     bt=Button(f1, text=_("CLICCA QUI!"), command=lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc/wiki/Vuoi-diventare-traduttore-di-School-Life-Diary%3F"))
-    l4.pack(padx=10,pady=15)
+    l4.pack(padx=10,pady=5)
     bt.pack(padx=10)
 
 
@@ -127,10 +123,10 @@ w.title("School Life Diary")
 w.iconbitmap(r"images/sld_icon_beta.ico")
 #w.geometry("335x325+200+100")
 s=Style()
-try:
-    s.theme_use("vista")
-except:
-    s.theme_use()
+conn=sql.connect(os.path.join(path, output_filename),isolation_level=None)
+c=conn.cursor()
+s.theme_use(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone())
+c.close()
 s.configure("TFrame",background="white")
 s.configure("TButton",height=100)
 s.configure("TLabel",background="white")
@@ -139,7 +135,7 @@ w.config(menu=mb)
 fm=Menu(mb,tearoff=0)
 om=Menu(mb,tearoff=0)
 hm=Menu(mb,tearoff=0)
-iexit = PIL.Image.open("icons\exit.png")
+iexit = PIL.Image.open(r"icons\exit.png")
 pexit = PIL.ImageTk.PhotoImage(iexit)
 isettings = PIL.Image.open("icons\settings.png")
 psettings = PIL.ImageTk.PhotoImage(isettings)
@@ -203,6 +199,6 @@ b1.grid(row=0, column=1)
 b2.grid(row=0, column=2)
 b3.grid(row=0, column=3)
 b4.grid(row=0, column=4)
-
-#Avvia il programma
 w.mainloop()
+
+c.close()
