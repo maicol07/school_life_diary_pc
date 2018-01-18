@@ -6,8 +6,3 @@
   - "nightly"
   install:
   - pip install -r requirements.txt
-  script:
-    - main.py
-    - settings.py
-    - note.py
-    - subjects.py
