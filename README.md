@@ -1,6 +1,11 @@
 <img src="https://apps.maicol07.tk/app/sld/img/ic_launcher.png" align="right" />
 
-# School Life Diary PC Version [![Build Status](https://travis-ci.org/maicol07/school_life_diary_pc.svg?branch=master)](https://travis-ci.org/maicol07/school_life_diary_pc)
+# School Life Diary PC Version
+[![Build Status](https://travis-ci.org/maicol07/school_life_diary_pc.svg?branch=master)](https://travis-ci.org/maicol07/school_life_diary_pc)
+[![Inline docs](http://inch-ci.org/github/maicol07/school_life_diary_pc.svg?branch=master)](http://inch-ci.org/github/maicol07/school_life_diary_pc)
+[![Maintainability](https://api.codeclimate.com/v1/badges/036e4db030eddca22df9/maintainability)](https://codeclimate.com/github/maicol07/school_life_diary_pc/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/036e4db030eddca22df9/test_coverage)](https://codeclimate.com/github/maicol07/school_life_diary_pc/test_coverage)
+
 ## Italian version
 Porting dell'app android School Life Diary per PC.
 ### Funzionalità
