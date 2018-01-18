@@ -4,7 +4,8 @@
 [![Build Status](https://travis-ci.org/maicol07/school_life_diary_pc.svg?branch=master)](https://travis-ci.org/maicol07/school_life_diary_pc)
 [![Inline docs](http://inch-ci.org/github/maicol07/school_life_diary_pc.svg?branch=master)](http://inch-ci.org/github/maicol07/school_life_diary_pc)
 [![Maintainability](https://api.codeclimate.com/v1/badges/036e4db030eddca22df9/maintainability)](https://codeclimate.com/github/maicol07/school_life_diary_pc/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/036e4db030eddca22df9/test_coverage)](https://codeclimate.com/github/maicol07/school_life_diary_pc/test_coverage)
+[![HitCount](http://hits.dwyl.io/maicol07/school_life_diary_pc.svg)](http://hits.dwyl.io/maicol07/school_life_diary_pc)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
 
 ## Italian version
 Porting dell'app android School Life Diary per PC.
@@ -39,7 +40,9 @@ Sito web: https://www.maicol07.tk
 
 Sito web app: https://apps.maicol07.tk
 ### Segnalazione bug
-È possibile segnalare bug a partire dalla data di uscita della prima beta del programma nella sezione issues
+È possibile segnalare bug nella sezione issues
+### Contribusci! [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
+Puoi contribuire al progetto scrivendo articoli nella [wiki](https://github.com/maicol07/school_life_diary_pc/wiki), riportando un [bug](https://github.com/maicol07/school_life_diary_pc/issues) o aiutandomi a sviluppare il software aprendo una [pull request](https://github.com/maicol07/school_life_diary_pc/pulls), dopo aver effettuato il fork del repo.
 
 ## English version
 Port of School Life Diary Android App for PC.
@@ -58,4 +61,6 @@ Website: https://www.maicol07.tk
 
 App website: https://apps.maicol07.tk
 ### Bug report
-You can report bug from the release date of the first beta version in the issues tab.
+You can report bug in the [issues](https://github.com/maicol07/school_life_diary_pc/issues) tab.
+### Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
+You can contribute to the project writing articles in the [wiki](https://github.com/maicol07/school_life_diary_pc/wiki), reporting a [issue](https://github.com/maicol07/school_life_diary_pc/issues) or help me developing the app by opening a [pull request](https://github.com/maicol07/school_life_diary_pc/pulls), after a repository forking.
