@@ -134,6 +134,8 @@ def ripristino():
 
 # ELIMINAZIONE DI TUTTI I DATI
 def cancellatutto():
+    conn.close()
+    ws.destroy()
     for i in range(3):
         sc=tkmb.askyesno(title=_("Conferma n.")+str(i),
                                     message=_("""Sei sicuro di voler eliminare TUTTI i dati presenti nell'applicazione?
@@ -148,10 +150,9 @@ NON potrai più recuperare i tuoi dati se vai avanti a meno che non abbia effett
 Conferme rimaste prima dell'eliminazione: """)+str(3-i))
         if sc==False:
             return
-    filelist = [ f for f in os.listdir(".") if f.endswith(".db") ]
+    filelist = [ f for f in os.listdir(path) if f.endswith(".db") ]
     for f in filelist:
-        os.remove(f)
-    ws.destroy()
+        os.remove(os.path.join(path,f))
     tkmb.showinfo(title=_("Dati cancellati correttamente"),
                                 message=_("Tutti i tuoi dati sono stati cancellati con successo! Riavvia l'applicazione per non riscontrare errori!"))
 
@@ -256,7 +257,7 @@ def creaFinestra():
     ts.pack()
     for x in range(len(list(ds))):
         e=ds[list(ds.keys())[x]]
-        ts.insert("","end",text=x,values=[list(ds.keys())[x],e[0],e[1]])
+        ts.insert("","end",text=x+1,values=[list(ds.keys())[x],e[0],e[1]])
     li=Label(ws,text=_("Per modificare un parametro, fai doppio click sulla riga corrispondente."))
     li.pack()
     fbr=Labelframe(ws,text=_("Backup & Ripristino"))

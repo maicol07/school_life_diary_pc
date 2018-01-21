@@ -96,9 +96,9 @@ def file(lf):
 def edit():
     global selItem
     selItem = t.item(t.focus())
-    if selItem=="":
+    if selItem["text"]=="":
         tkmb.showwarning(title=_("Nessuna annotazione selezionata"),
-                         messaggio=_("Non è stata selezionata nessuna annotazione. Si prega di selezionarne una per apportarne le modifiche."))
+                         message=_("Non è stata selezionata nessuna annotazione. Si prega di selezionarne una per apportarne le modifiche."))
         return ""
     global we
     we=Toplevel()
@@ -229,4 +229,5 @@ def creaFinestra():
     bAdd.grid(row=0,column=0,padx=10,pady=10)
     bMod.grid(row=0,column=1,padx=10,pady=10)
     bDel.grid(row=0,column=2,padx=10,pady=10)
+    print(nt)
     wn.mainloop()

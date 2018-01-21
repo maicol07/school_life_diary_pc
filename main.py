@@ -8,6 +8,15 @@
 #####################
 
 import gettext, os, ctypes, locale, PIL.Image, PIL.ImageTk, webbrowser, time
+# IMPORTAZIONE MODULI ESTERNI
+import sqlite3 as sql
+global pathset
+from tkinter import *
+from tkinter.ttk import *
+from tkinter import Tk, Toplevel # per usare lo sfondo bianco
+import tkinter.messagebox as tkmb
+root=Tk()
+root.withdraw()
 
 path = os.path.expanduser(r'~\Documents\School Life Diary')
 # INSTALLAZIONE LINGUA
@@ -26,13 +35,6 @@ else:
                                      message=_(r"La lingua impostata non è stata riconosciuta. Per risolvere prova a eliminare il file in Documenti/School Life Diary/language.txt . Se il problema non si risolve, contattare lo sviluppatore. Errore: ")+str(ex))
 lg.install()
 
-# IMPORTAZIONE MODULI ESTERNI
-import sqlite3 as sql
-global pathset
-from tkinter import *
-from tkinter.ttk import *
-from tkinter import Tk, Toplevel # per usare lo sfondo bianco
-import tkinter.messagebox as tkmb
 
 # CREAZIONE FILE (PRIMO AVVIO)
 
@@ -60,7 +62,7 @@ if not(os.path.exists(os.path.join(path,output_filename))):
 
 
 # IMPORTAZIONE FILE ESTERNI
-import settings, subjects, timetable, note
+import settings, subjects, timetable, note, prof
 
 
 # FINESTRA INFORMAZIONI
@@ -117,6 +119,7 @@ Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione""")+" "
 except IndexError:
     tkmb.showwarning(title=_("Nessuna connessione ad internet"),
                                    message=_("Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."))
+root.destroy()
 w=Tk()
 w.configure(bg="white")
 w.title("School Life Diary")
@@ -176,29 +179,33 @@ inote = PIL.Image.open(r"icons\notes.png")
 pnote = PIL.ImageTk.PhotoImage(inote)
 iagenda = PIL.Image.open(r"icons\agenda.png")
 pagenda = PIL.ImageTk.PhotoImage(iagenda)
-b0=Button(f2,text=_("ORARIO"), #background="#FF6C6C",
+bo=Button(f2,text=_("ORARIO"), #background="#FF6C6C",
           style="TButton",
           image=ptime,
           compound="left",
           command=timetable.creaFinestra)
-b1=Button(f2,text=_("MATERIE"), #background="#FFBD45",
+bm=Button(f2,text=_("MATERIE"), #background="#FFBD45",
           image=pmaterie,
           compound="left",
           command=subjects.creaFinestra)
-b2=Button(f2,text=_("VOTI"), #background="#ADD8E6",
+bp=Button(f2,text=_("PROFESSORI"), #background="#7DFB7D",
+          #image=pagenda,
+          compound="left", command=prof.creaFinestra)
+bv=Button(f2,text=_("VOTI"), #background="#ADD8E6",
           image=pvoti,
           compound="left", command=lambda: webbrowser.open('https://apps.maicol07.tk/app/sld/voti/'))
-b3=Button(f2,text=_("ANNOTAZIONI"), #background="#C389C3",
+ban=Button(f2,text=_("ANNOTAZIONI"), #background="#C389C3",
           image=pnote,
           compound="left", command=note.creaFinestra)
-b4=Button(f2,text=_("AGENDA"), #background="#7DFB7D",
+bag=Button(f2,text=_("AGENDA"), #background="#7DFB7D",
           image=pagenda,
           compound="left", command=lambda: webbrowser.open('https://calendar.google.com'))
-b0.grid(row=0, column=0)
-b1.grid(row=0, column=1)
-b2.grid(row=0, column=2)
-b3.grid(row=0, column=3)
-b4.grid(row=0, column=4)
+bo.grid(row=0, column=0)
+bm.grid(row=0, column=1)
+bp.grid(row=0, column=2)
+bv.grid(row=0, column=3)
+ban.grid(row=0, column=4)
+bag.grid(row=0, column=5)
 w.mainloop()
 
 c.close()
