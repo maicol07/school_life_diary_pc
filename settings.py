@@ -1,4 +1,7 @@
-#IMPORTAZIONE LIBRERIE E IMPOSTAZIONE CLIENT TRADUZIONI
+### SETTINGS.PY ###
+
+
+## IMPORTAZIONE LIBRERIE E IMPOSTAZIONE CLIENT TRADUZIONI ##
 from transifex.api import TransifexAPI
 global tr
 tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com')
@@ -13,13 +16,13 @@ import sqlite3 as sql
 global path
 global fn_set
 
-# VARIABILI D'AMBIENTE
+## VARIABILI D'AMBIENTE ##
 fn_set = "settings.db"
 path = os.path.expanduser(r'~\Documents\School Life Diary')
 conn=sql.connect(os.path.join(path, fn_set), isolation_level=None)
 c=conn.cursor()
 
-# INSTALLAZIONE LINGUA
+## INSTALLAZIONE LINGUA ##
 if not(os.path.exists(os.path.join(path,"language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -34,7 +37,7 @@ lg.install()
 
 
 
-# SALVATAGGIO LINGUA
+## SALVATAGGIO LINGUA ##
 def salvaLingua(cb,lgl,wl,mode):
     try:
         if mode=="download":
@@ -68,12 +71,12 @@ def salvaLingua(cb,lgl,wl,mode):
     wl.destroy()
 
 
-# AGGIORNAMENTO LISTA LINGUE
+## AGGIORNAMENTO LISTA LINGUE ##
 def updatecb(cb,lgl):
     cb["values"]=lgl
 
 
-# CAMBIO LINGUA
+## CAMBIO LINGUA ##
 def cambiaLingua():
     wl=Toplevel()
     wl.configure(background="white")
@@ -92,7 +95,7 @@ def cambiaLingua():
     btn1=Button(wl,text=_("SCARICA O AGGIORNA LINGUE"), command=lambda: salvaLingua(cb, lgl, wl, "download"))
     btn1.pack(padx=5,pady=10)
 
-# BACKUP DEI DATABASE
+## BACKUP DEI DATABASE ##
 def backup():
     fn_bk="backups"
     bfoldpath=os.path.join(path,fn_bk)
@@ -102,9 +105,9 @@ def backup():
                               fn_bk,
                               "backup-"+time.strftime("%d-%m-%Y")+"-"+time.strftime("%H-%M-%S")+".zip"),
                  "w",ZIP_DEFLATED)
-    filelist = [ f for f in os.listdir(".") if f.endswith(".db") ]
+    filelist = [ f for f in os.listdir(path) if f.endswith(".db") ]
     for f in filelist:
-        bzip.write(f, os.path.basename(f))
+        bzip.write(os.path.join(path,f), os.path.basename(os.path.join(path,f)))
     bzip.close()
     subprocess.Popen(r'explorer /select,"'+os.path.join(path,
                               fn_bk,
@@ -134,6 +137,7 @@ def ripristino():
 
 # ELIMINAZIONE DI TUTTI I DATI
 def cancellatutto():
+    c.close()
     conn.close()
     ws.destroy()
     for i in range(3):

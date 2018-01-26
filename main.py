@@ -7,20 +7,27 @@
 #                   #
 #####################
 
+
+### START MAIN ###
+
+## IMPORTAZIONE MODULI ESTERNI ##
 import gettext, os, ctypes, locale, PIL.Image, PIL.ImageTk, webbrowser, time
-# IMPORTAZIONE MODULI ESTERNI
 import sqlite3 as sql
 global pathset
 from tkinter import *
 from tkinter.ttk import *
-from tkinter import Tk, Toplevel # per usare lo sfondo bianco
+from tkinter import Tk, Toplevel # Serve per impostare lo sfondo bianco nelle finestre
 import tkinter.messagebox as tkmb
+
+## IMPORTAZIONE FILE ESTERNI ##
+import settings, subjects, timetable, note, prof
 root=Tk()
 root.withdraw()
 
+## IMPOSTAZIONE PERCORSO ##
 path = os.path.expanduser(r'~\Documents\School Life Diary')
-# INSTALLAZIONE LINGUA
 
+## INSTALLAZIONE LINGUA ##
 if not(os.path.exists(os.path.join(path,"language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -36,7 +43,7 @@ else:
 lg.install()
 
 
-# CREAZIONE FILE (PRIMO AVVIO)
+## CREAZIONE DATABASE (PRIMO AVVIO) ##
 
 output_filename = "settings.db"
 
@@ -61,28 +68,27 @@ if not(os.path.exists(os.path.join(path,output_filename))):
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","vista", "{}"); """.format(_("Tema visivo dell'applicazione")))
 
 
-# IMPORTAZIONE FILE ESTERNI
-import settings, subjects, timetable, note, prof
 
-
-# FINESTRA INFORMAZIONI
-def info():
+## FINESTRA INFORMAZIONI ##
+def info(): 
     wi=Toplevel()
     wi.configure(bg="white")
     wi.title(_("Informazioni")+" - School Life Diary")
     wi.iconbitmap("sld_icon_beta.ico")
-    wi.geometry("750x450+250+50")
+    wi.geometry("850x750+250+50")
     f1=Frame(wi)
     f1.pack()
     title=Label(f1,text="School Life Diary", font=("Comic Sans MS",25,"bold italic"))
     title.pack(padx=10,pady=5)
     subtitle=Label(f1, text=_("sviluppato e mantenuto da maicol07"))
-    bws=Button(f1, text=_("Sito web"),command=lambda: webbrowser.open("https://apps.maicol07.tk"))
+    fl=Labelframe(f1,text=_("Link"))
+    fl.pack()
+    bws=Button(fl, text=_("Sito web"),command=lambda: webbrowser.open("https://apps.maicol07.tk"))
     subtitle.pack(padx=10,pady=2)
-    bws.pack(padx=10,pady=5)
-    bgit=Button(f1, text=_("Pagina del progetto su GitHub"), command=lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc"))
-    bgit.pack(padx=10,pady=5)
-    l25=Label(f1, text=_("Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza Creative Commons 3.0"))
+    bws.grid(row=0,column=0,padx=10,pady=5)
+    bgit=Button(fl, text=_("Pagina del progetto su GitHub"), command=lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc"))
+    bgit.grid(row=0,column=1,padx=10,pady=5)
+    l25=Label(f1, text=_("Alcune icone fatte da Pixel Buddha, Freepik e Smash Icons di www.flaticon.com hanno licenza Creative Commons 3.0"))
     l25.pack(padx=10,pady=5)
     l3=Label(f1,text=_("Traduttori: "))
     l3.pack(padx=10,pady=15)
@@ -92,9 +98,16 @@ def info():
     bt=Button(f1, text=_("CLICCA QUI!"), command=lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc/wiki/Vuoi-diventare-traduttore-di-School-Life-Diary%3F"))
     l4.pack(padx=10,pady=5)
     bt.pack(padx=10)
+    cl=Labelframe(wi,text=_("Registro delle modifiche"))
+    cl.pack()
+    changel=Text(cl,font="Courier 10",width=100,height=25)
+    changel.pack()
+    clf=open("changelog.txt","r")
+    for r in clf.readlines():
+        changel.insert(INSERT, r)
+    changel.config(state=DISABLED)
 
-
-# CREAZIONE FINESTRA MENU PRINCIPALE
+## CREAZIONE FINESTRA MENU PRINCIPALE
 global w
 # Verifica se esistono degli aggiornamenti per il programma
 v="0.3.0.1"
@@ -133,6 +146,8 @@ c.close()
 s.configure("TFrame",background="white")
 s.configure("TButton",height=100)
 s.configure("TLabel",background="white")
+s.configure("TLabelframe",background="white")
+s.configure("TLabelframe.Label",background="white")
 mb=Menu(w)
 w.config(menu=mb)
 fm=Menu(mb,tearoff=0)
@@ -144,9 +159,9 @@ isettings = PIL.Image.open("icons\settings.png")
 psettings = PIL.ImageTk.PhotoImage(isettings)
 ilanguage = PIL.Image.open("icons\language.png")
 planguage = PIL.ImageTk.PhotoImage(ilanguage)
-iguida = PIL.Image.open("icons\help1.png")
+iguida = PIL.Image.open("icons\help.png")
 pguida = PIL.ImageTk.PhotoImage(iguida)
-iinfo = PIL.Image.open("icons\help.png")
+iinfo = PIL.Image.open("icons\info.png")
 pinfo = PIL.ImageTk.PhotoImage(iinfo)
 mb.add_cascade(label=_("File"),menu=fm)
 fm.add_command(label=_("Esci"), image=pexit,
@@ -173,6 +188,8 @@ itime = PIL.Image.open(r"icons\timetable.png")
 ptime = PIL.ImageTk.PhotoImage(itime)
 imaterie = PIL.Image.open(r"icons\subjects.png")
 pmaterie = PIL.ImageTk.PhotoImage(imaterie)
+iprof = PIL.Image.open(r"icons\educator.png")
+pprof = PIL.ImageTk.PhotoImage(iprof)
 ivoti = PIL.Image.open(r"icons\medal.png")
 pvoti = PIL.ImageTk.PhotoImage(ivoti)
 inote = PIL.Image.open(r"icons\notes.png")
@@ -189,7 +206,7 @@ bm=Button(f2,text=_("MATERIE"), #background="#FFBD45",
           compound="left",
           command=subjects.creaFinestra)
 bp=Button(f2,text=_("PROFESSORI"), #background="#7DFB7D",
-          #image=pagenda,
+          image=pprof,
           compound="left", command=prof.creaFinestra)
 bv=Button(f2,text=_("VOTI"), #background="#ADD8E6",
           image=pvoti,
@@ -200,12 +217,12 @@ ban=Button(f2,text=_("ANNOTAZIONI"), #background="#C389C3",
 bag=Button(f2,text=_("AGENDA"), #background="#7DFB7D",
           image=pagenda,
           compound="left", command=lambda: webbrowser.open('https://calendar.google.com'))
-bo.grid(row=0, column=0)
-bm.grid(row=0, column=1)
-bp.grid(row=0, column=2)
-bv.grid(row=0, column=3)
-ban.grid(row=0, column=4)
-bag.grid(row=0, column=5)
+bo.grid(row=0, column=0,padx=5)
+bm.grid(row=0, column=1,padx=5)
+bp.grid(row=0, column=2,padx=5)
+bv.grid(row=0, column=3,padx=5)
+ban.grid(row=0, column=4,padx=5)
+bag.grid(row=0, column=5,padx=5)
 w.mainloop()
 
 c.close()
