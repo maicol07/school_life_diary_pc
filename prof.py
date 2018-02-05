@@ -1,5 +1,5 @@
 # IMPORTAZIONE MODULI E LIBRERIE
-import os.path, gettext, ctypes, locale, PIL.Image, PIL.ImageTk
+import os.path, gettext, ctypes, locale, PIL.Image, PIL.ImageTk, webbrowser
 import sqlite3 as sql
 from tkinter.colorchooser import askcolor
 from tkinter.filedialog import askopenfilename
@@ -22,6 +22,20 @@ if not(os.path.exists(os.path.join(path,fn_prof))):
 	`web`	TEXT,
 	`email`	TEXT
 );""")
+else:
+    conn=sql.connect(os.path.join(path, fn_prof),isolation_level=None)
+    c=conn.cursor()
+    c.execute("SELECT * from prof")
+    ris=c.fetchone()
+    if ris[0]=="":
+        c.execute("""CREATE TABLE `prof` (
+            `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+            `nome`	TEXT,
+            `cognome`	TEXT NOT NULL,
+            `imageURI`	TEXT,
+            `web`	TEXT,
+            `email`	TEXT
+    );""")
 
     
 # INSTALLAZIONE LINGUA
@@ -66,7 +80,6 @@ def Salvataggio(mode,nome,cognome,sitoweb,email,idx):
         if mode=="add":
             if "fImage" in globals() and not(fImage==None):
                 c.execute("INSERT INTO prof VALUES ('{}','{}','{}','{}','{}','{}')".format(len(prof.keys())+1,nome.get(),cognome.get(),fImage,sitoweb.get(),email.get()))
-                del fImage
             else:                
                 c.execute("INSERT INTO prof VALUES ('{}','{}','{}','{}','{}','{}')".format(len(prof.keys())+1,nome.get(),cognome.get(),"",sitoweb.get(),email.get()))
             wa.destroy()
@@ -75,7 +88,6 @@ def Salvataggio(mode,nome,cognome,sitoweb,email,idx):
                 c.execute("""UPDATE prof
                           SET nome = '{}', cognome = '{}', imageURI='{}', web='{}', email='{}'
                           WHERE ID={}; """.format(nome.get(),cognome.get(),fImage,sitoweb.get(),email.get(),idx))
-                del fImage
             else:                
                 c.execute("""UPDATE prof
                           SET nome = '{}', cognome = '{}', imageURI='', web='{}', email='{}'
@@ -91,11 +103,10 @@ def Salvataggio(mode,nome,cognome,sitoweb,email,idx):
         tkmb.showerror(title=_("Errore!"),
                                      message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore. Errore riscontrato:")+"\n"*2+str(ex))
 
-
+## MASCHERA DI ELIMINAZIONE ##
 def delete():
     global selProf
     selProf = tp.item(tp.focus())
-    print(selProf)
     if selProf["text"]=="":
         tkmb.showwarning(title=_("Nessun professore selezionato!"),
                          message=_("Non è stato selezionato nessun professore. Si prega di selezionarne uno per eliminarlo."))
@@ -108,7 +119,8 @@ def delete():
         return ""
 
 
-def selImmagine(bi):
+## SELEZIONE IMMAGINE ##
+def selImmagine(bi,window):
     if not("fImage" in globals()):
         global fImage
     fImage=askopenfilename(filetypes=[(_("File Immagini"),"*.jpg *.jpeg *.png *.bmp *.gif *.psd *.tif *.tiff *.xbm *.xpm *.pgm *.ppm")])
@@ -122,8 +134,15 @@ def selImmagine(bi):
     photo = PIL.ImageTk.PhotoImage(img)
     bi["image"]=photo
     bi.image=photo
+    if window=="wa":
+        wa.geometry("350x{}+600+200".format(300+hsize))
+    elif window=="we":
+        we.geometry("350x{}+600+200".format(300+hsize))
 
-# MASCHERA DI AGGIUNTA
+
+
+
+## MASCHERA DI AGGIUNTA ##
 def add():
     global wa
     wa=Toplevel()
@@ -145,7 +164,7 @@ def add():
     ec.grid(row=1,column=1,padx=10,pady=10)
     li=Label(fap,text=_("Immagine:"))
     li.grid(row=2,column=0,padx=10,pady=10)
-    bi=Button(fap,text=_("Seleziona immagine"),command=lambda: selImmagine(bi))
+    bi=Button(fap,text=_("Seleziona immagine"),command=lambda: selImmagine(bi,"wa"))
     bi.grid(row=2,column=1,padx=10,pady=10)
     varw=StringVar(value="")
     lw=Label(fap,text=_("Sito web:"))
@@ -162,11 +181,10 @@ def add():
     wa.mainloop()
 
 
-# MASCHERA DI MODIFICA
+## MASCHERA DI MODIFICA ##
 def edit():
     global selProf
     selProf = tp.item(tp.focus())
-    print(selProf)
     if selProf["text"]=="":
         tkmb.showwarning(title=_("Nessun professore selezionato!"),
                          message=_("Non è stato selezionato nessun professore. Si prega di selezionarne uno per apportare modifiche."))
@@ -176,7 +194,7 @@ def edit():
     we.configure(background="white")
     we.title(_("Modifica professore")+" - School Life Diary")
     we.iconbitmap("sld_icon_beta.ico")
-    we.geometry("350x300+600+200")
+    we.geometry("350x350+600+200")
     fap=Labelframe(we,text=_("Maschera di modifica"))
     fap.pack(padx=10,pady=10)
     ln=Label(fap, text=_("Nome:"))
@@ -202,21 +220,35 @@ def edit():
                 hsize = int((float(iprof.size[1]) * float(wpercent)))
                 iprof = iprof.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
                 pprof=PIL.ImageTk.PhotoImage(iprof)
-                bi["image"]=iprof
-                bi.image(iprof)
+                bi["image"]=pprof
+                we.geometry("350x{}+600+200".format(300+hsize))
             except FileNotFoundError:
                 continue
     bi.grid(row=2,column=1,padx=10,pady=10)
     varw=StringVar(value=selProf["values"][2])
     lw=Label(fap,text=_("Sito web:"))
     lw.grid(row=3,column=0,padx=10,pady=10)
-    ew=Entry(fap, textvariable=varw)
-    ew.grid(row=3,column=1,padx=10,pady=10)
+    fwww=Frame(fap)
+    fwww.grid(row=3,column=1,padx=10,pady=10)
+    ew=Entry(fwww, textvariable=varw)
+    ew.grid(row=0,column=0,padx=10,pady=10)
+    iwww=PIL.Image.open(r"icons/www.png")
+    pwww=PIL.ImageTk.PhotoImage(iwww)
+    bw=Button(fwww,image=pwww,compound=LEFT, width=0.5,
+              command=lambda: webbrowser.open(varw.get()))
+    bw.grid(row=0,column=1,padx=10)
     vare=StringVar(value=selProf["values"][3])
     le=Label(fap,text=_("Email:"))
-    le.grid(row=4,column=0,padx=10,pady=10)
-    ee=Entry(fap, textvariable=vare)
-    ee.grid(row=4,column=1,padx=10,pady=10)
+    le.grid(row=4,column=0,padx=10)
+    fmail=Frame(fap)
+    fmail.grid(row=4,column=1,padx=10)
+    em=Entry(fmail, textvariable=vare)
+    em.grid(row=0,column=0,padx=10)
+    imail=PIL.Image.open(r"icons/mail.png")
+    pmail=PIL.ImageTk.PhotoImage(imail)
+    bm=Button(fmail,image=pmail,compound=LEFT, width=1,
+              command=lambda: webbrowser.open("mailto:{}".format(vare.get())))
+    bm.grid(row=0,column=1,padx=10,pady=10)
     b=Button(we, text=_("SALVA"), command=lambda: Salvataggio("edit",varn,varc,varw,vare,selProf["text"]))
     b.pack(padx=10,pady=10)
     we.mainloop()
@@ -260,7 +292,6 @@ def creaFinestra():
     s.configure("TLabelframe",background="white")
     s.configure("TLabelframe.Label",background="white")
     s.configure("TLabel",background="white")
-    print(prof)
     iAdd=PhotoImage(file=r"icons/add.png")
     iEdit=PhotoImage(file=r"icons/edit.png")
     iDel=PhotoImage(file=r"icons/delete.png")
