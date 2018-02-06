@@ -1,7 +1,7 @@
 # Registro delle modifiche
 Tutti i cambiamenti notabili verranno documentati in questo file
 
-Questo formato Ë basato sul formato [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) e questo progetto aderisce al [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+Questo formato √® basato sul formato [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) e questo progetto aderisce al [Versionamento Semantico 2.0.0](https://semver.org/lang/it/).
 
 
 ## Non ancora rilasciato - Versione 1.0 (??/??/2018)
@@ -10,7 +10,7 @@ Questo formato Ë basato sul formato [Keep a Changelog](http://keepachangelog.com
 
 - Nuova sezione professori! Inserisci le info personali quali nome, cognome, immagine, sito web e email. Potrai poi collegarli alle loro materie!
 - Aggiunte nuovi campi nelle materie.
-- Temi! Possibilit‡ di cambiare il tema visivo per l'app
+- Temi! Possibilit√† di cambiare il tema visivo per l'app
 
 ### Cambiato
 
@@ -25,7 +25,7 @@ Questo formato Ë basato sul formato [Keep a Changelog](http://keepachangelog.com
 
 ### Rimosso
 
-- Rimossa la funzionalit‡ integrata di eliminazione dei dati direttamente dall'applicazione. Sar‡ necessario aprire manualmente la cartella dell'applicazione in Documenti\School Life Diary. Questo passaggio sar‡ ricordato anche quando si clicca sul pulsante CANCELLA TUTTO nelle Impostazioni.
+- Rimossa la funzionalit√† integrata di eliminazione dei dati direttamente dall'applicazione. Sar√† necessario aprire manualmente la cartella dell'applicazione in Documenti\School Life Diary. Questo passaggio sar√† ricordato anche quando si clicca sul pulsante CANCELLA TUTTO nelle Impostazioni.
 
 
 ## Versione 0.3.0.1 (30/11/2017)
@@ -38,7 +38,7 @@ Questo formato Ë basato sul formato [Keep a Changelog](http://keepachangelog.com
 ### Aggiunto
 
 - Gestione delle note (titolo, descrizione, file allegato (con apertura con doppio click)). Le note che contengono allegati se cliccate due volte visualizzeranno l'allegato.
-- Nuova gestione delle traduzioni: oltre alle traduzioni locali, che vengono aggiornate ad ogni nuova versione del software, sar‡ possibile scaricarne delle nuove o aggiornare quelle esistenti manualmente mediante la finestra di cambio della lingua.
+- Nuova gestione delle traduzioni: oltre alle traduzioni locali, che vengono aggiornate ad ogni nuova versione del software, sar√† possibile scaricarne delle nuove o aggiornare quelle esistenti manualmente mediante la finestra di cambio della lingua.
 
 ### Cambiato
 
@@ -47,7 +47,7 @@ Questo formato Ë basato sul formato [Keep a Changelog](http://keepachangelog.com
 
 ### Risolto
 
-- Corretto il problema che causava l'errore all'avvio del programma quando si tenta di aprirlo senza internet. Il programma effettuava la ricerca degli aggiornamenti ma non avendo la connessione termina l'esecuzione. Ora il software verr‡ eseguito normalmente, ma mostrer‡ un avviso riguardante la mancanza della connessione.
+- Corretto il problema che causava l'errore all'avvio del programma quando si tenta di aprirlo senza internet. Il programma effettuava la ricerca degli aggiornamenti ma non avendo la connessione termina l'esecuzione. Ora il software verr√† eseguito normalmente, ma mostrer√† un avviso riguardante la mancanza della connessione.
 
 
 ## Versione 0.2.1 (02/09/2017)
@@ -64,13 +64,13 @@ Questo formato Ë basato sul formato [Keep a Changelog](http://keepachangelog.com
 
 ### Aggiunto
 - Gestione delle materie con implementazione nell'orario
-- Aggiunta possibilit‡ di eseguire backup dei dati con relativo ripristino
-- Aggiunta possibilit‡ di cancellare tutto il database dell'applicazione (tutti i file che contengono dati dell'applicazione verranno cancellati, eccetto i backup). Questa funzione richiede 3 conferme per essere eseguita.
-- Link all'agenda (in futuro verr‡ integrata nel software)
-- Link alla sezione voti mobile (in futuro verr‡ integrata nel software)
+- Aggiunta possibilit√† di eseguire backup dei dati con relativo ripristino
+- Aggiunta possibilit√† di cancellare tutto il database dell'applicazione (tutti i file che contengono dati dell'applicazione verranno cancellati, eccetto i backup). Questa funzione richiede 3 conferme per essere eseguita.
+- Link all'agenda (in futuro verr√† integrata nel software)
+- Link alla sezione voti mobile (in futuro verr√† integrata nel software)
 
 ### Cambiato
-- Miglioramenti grafici: ora per gli utenti Windows verr‡ utilizzato il tema base della propria versione di Windows invece che il tema di Windows XP/2000; mentre per gli utenti MAC e Linux si utilizza il tema predefinito (aqua per i MAC)
+- Miglioramenti grafici: ora per gli utenti Windows verr√† utilizzato il tema base della propria versione di Windows invece che il tema di Windows XP/2000; mentre per gli utenti MAC e Linux si utilizza il tema predefinito (aqua per i MAC)
 
 
 ## Versione 0.1 (11/08/2017)
