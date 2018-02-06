@@ -19,8 +19,6 @@ from tkinter.ttk import *
 from tkinter import Tk, Toplevel # Serve per impostare lo sfondo bianco nelle finestre
 import tkinter.messagebox as tkmb
 
-## IMPORTAZIONE FILE ESTERNI ##
-import settings, subjects, timetable, note, prof
 root=Tk()
 root.withdraw()
 
@@ -66,7 +64,21 @@ if not(os.path.exists(os.path.join(path,output_filename))):
                                                    `descr` TEXT);""")
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(_("Numero di ore massime per giornate da visualizzare nell'orario")))
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","vista", "{}"); """.format(_("Tema visivo dell'applicazione")))
+else:
+    conn=sql.connect(os.path.join(path, output_filename),isolation_level=None)
+    c=conn.cursor()
+    c.execute("SELECT * from settings")
+    ris=c.fetchone()
+    if ris[0]=="":
+       c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
+                                                   `value` TEXT,
+                                                   `descr` TEXT);""")
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(_("Numero di ore massime per giornate da visualizzare nell'orario")))
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","vista", "{}"); """.format(_("Tema visivo dell'applicazione")))
 
+    
+## IMPORTAZIONE FILE ESTERNI ##
+import settings, subjects, timetable, note, prof
 
 
 ## FINESTRA INFORMAZIONI ##
@@ -88,7 +100,7 @@ def info():
     bws.grid(row=0,column=0,padx=10,pady=5)
     bgit=Button(fl, text=_("Pagina del progetto su GitHub"), command=lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc"))
     bgit.grid(row=0,column=1,padx=10,pady=5)
-    l25=Label(f1, text=_("Alcune icone fatte da Pixel Buddha, Freepik e Smash Icons di www.flaticon.com hanno licenza Creative Commons 3.0"))
+    l25=Label(f1, text=_("Alcune icone fatte da Pixel Buddha, Freepik, Roundicons e Smash Icons di www.flaticon.com hanno licenza Creative Commons 3.0"))
     l25.pack(padx=10,pady=5)
     l3=Label(f1,text=_("Traduttori: "))
     l3.pack(padx=10,pady=15)
@@ -142,10 +154,10 @@ s=Style()
 conn=sql.connect(os.path.join(path, output_filename),isolation_level=None)
 c=conn.cursor()
 s.theme_use(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone())
-c.close()
 s.configure("TFrame",background="white")
 s.configure("TButton",height=100)
 s.configure("TLabel",background="white")
+s.configure("TPhotoimage",background="white")
 s.configure("TLabelframe",background="white")
 s.configure("TLabelframe.Label",background="white")
 mb=Menu(w)
@@ -224,5 +236,7 @@ bv.grid(row=0, column=3,padx=5)
 ban.grid(row=0, column=4,padx=5)
 bag.grid(row=0, column=5,padx=5)
 w.mainloop()
-
 c.close()
+conn.close()
+if "rFile" in globals():
+    os.remove(rFile)
