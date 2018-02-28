@@ -26,6 +26,7 @@ root.withdraw()
 path = os.path.expanduser(r'~\Documents\School Life Diary')
 
 ## INSTALLAZIONE LINGUA ##
+global lgcode
 if not(os.path.exists(os.path.join(path,"language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -36,8 +37,14 @@ else:
         lgcode=fl.readline()
         lg = gettext.translation('main', localedir=os.path.join(path,'locale'), languages=[lgcode])
     except Exception as ex:
-        tkmb.showerror(title=_("Lingua non impostata!"),
+        try:
+            tkmb.showerror(title=_("Lingua non impostata!"),
                                      message=_(r"La lingua impostata non è stata riconosciuta. Per risolvere prova a eliminare il file in Documenti/School Life Diary/language.txt . Se il problema non si risolve, contattare lo sviluppatore. Errore: ")+str(ex))
+        except NameError:
+            tkmb.showerror(title="Can't install the language!",
+                           message=r"Can't recognize the set language. To fix this try to delete the file in Documents/School Life Diary/language.txt . If the problem still occurs, contact the developer. Error: ") + str(
+                               ex)
+
 lg.install()
 
 
@@ -67,9 +74,9 @@ if not(os.path.exists(os.path.join(path,output_filename))):
 else:
     conn=sql.connect(os.path.join(path, output_filename),isolation_level=None)
     c=conn.cursor()
-    c.execute("SELECT * from settings")
-    ris=c.fetchone()
-    if ris[0]=="":
+    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='settings';")
+    ris=c.fetchall()
+    if not(len(ris)==1):
        c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
                                                    `value` TEXT,
                                                    `descr` TEXT);""")
@@ -114,7 +121,7 @@ def info():
     cl.pack()
     changel=Text(cl,font="Courier 10",width=100,height=25)
     changel.pack()
-    clf=open("changelog.txt","r")
+    clf=open("CHANGELOG_{}.md".format(lgcode.upper()[:2]),"r")
     for r in clf.readlines():
         changel.insert(INSERT, r)
     changel.config(state=DISABLED)
@@ -133,7 +140,7 @@ try:
     title=post.title
     lp=title.split(" ")
     if (lp[0][1:].isdecimal()==True):
-        lp[0]==lp[0][1:]
+        lp[0]=lp[0][1:]
     if (v!=lp[0][1:]):
         agg=tkmb.askyesno(title=_("Nuova versione disponibile!"),
                                        message=_("È disponibile una nuova versione di School Life Diary.")+_("""

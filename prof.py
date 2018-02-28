@@ -25,9 +25,9 @@ if not(os.path.exists(os.path.join(path,fn_prof))):
 else:
     conn=sql.connect(os.path.join(path, fn_prof),isolation_level=None)
     c=conn.cursor()
-    c.execute("SELECT * from prof")
-    ris=c.fetchone()
-    if ris[0]=="":
+    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='prof';")
+    ris=c.fetchall()
+    if not(len(ris)==1):
         c.execute("""CREATE TABLE `prof` (
             `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
             `nome`	TEXT,
@@ -73,11 +73,26 @@ def inizializza():
                 prof[r][i]=""
     c.close()
 
-def Salvataggio(mode,nome,cognome,sitoweb,email,idx):
+def sistemaIndici(conn,c):
+    c.execute("SELECT * FROM prof")
+    r=c.fetchall()
+    for i in range(len(r)):
+        if i in r[i]:
+            continue
+        else:
+            c.execute("""UPDATE prof SET ID={} WHERE nome='{}' AND cognome='{}'
+            AND imageURI='{}' AND web='{}' AND email='{}'""".format(i+1,r[i][1],r[i][2],r[i][3],r[i][4],r[i][5]))
+
+
+def Salvataggio(mode,nome=None,cognome=None,sitoweb=None,email=None,idx=0):
     try:
         conn=sql.connect(os.path.join(path, fn_prof),isolation_level=None)
         c=conn.cursor()
+        sistemaIndici(conn,c)
         if mode=="add":
+            c.execute("SELECT * FROM prof")
+            r=c.fetchall()
+            print(r)
             if "fImage" in globals() and not(fImage==None):
                 c.execute("INSERT INTO prof VALUES ('{}','{}','{}','{}','{}','{}')".format(len(prof.keys())+1,nome.get(),cognome.get(),fImage,sitoweb.get(),email.get()))
             else:                
@@ -95,13 +110,15 @@ def Salvataggio(mode,nome,cognome,sitoweb,email,idx):
             we.destroy()
         elif mode=="del":
             c.execute("""DELETE FROM prof WHERE ID={};""".format(idx))
-        tkmb.showinfo(title=_("Successo!"),
-                                    message=_("Salvataggio effettuato con successo!"))
-        wip.destroy()
-        creaFinestra()
+            c.execute("SELECT * FROM prof")
+            l=c.fetchall()
+        sistemaIndici(conn,c)
+        tkmb.showinfo(title=_("Successo!"), message=_("Salvataggio effettuato con successo!"))
     except Exception as ex:
         tkmb.showerror(title=_("Errore!"),
                                      message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore. Errore riscontrato:")+"\n"*2+str(ex))
+    wip.destroy()
+    creaFinestra()
 
 ## MASCHERA DI ELIMINAZIONE ##
 def delete():
@@ -112,9 +129,9 @@ def delete():
                          message=_("Non è stato selezionato nessun professore. Si prega di selezionarne uno per eliminarlo."))
         return ""
     scelta=tkmb.askyesno(title=_("Conferma eliminazione"),
-                                message=_("Si è sicuri di voler eliminare il professore {} ?".format(selProf["values"][0]+" "+selProf["values"][1])))
+                                message=_("Si è sicuri di voler eliminare il professore {} ?".format(selProf["values"][1]+" "+selProf["values"][2])))
     if (scelta==True):
-        Salvataggio("del","","","","",selProf["text"])
+        Salvataggio("del",idx=selProf["text"])
     else:
         return ""
 
@@ -124,7 +141,10 @@ def selImmagine(bi,window):
     if not("fImage" in globals()):
         global fImage
     fImage=askopenfilename(filetypes=[(_("File Immagini"),"*.jpg *.jpeg *.png *.bmp *.gif *.psd *.tif *.tiff *.xbm *.xpm *.pgm *.ppm")])
-    bi["text"]=""
+    if not(fImage==""):
+        bi["text"]=""
+    else:
+        bi["text"]=_("Seleziona immagine")
     img = PIL.Image.open(fImage)
     # Ridimensionamento immagine a 100 px per larghezza, altezza variabile e scalata in base a quella vecchia e alla larghezza di 100 px
     basewidth = 100
@@ -176,8 +196,10 @@ def add():
     le.grid(row=4,column=0,padx=10,pady=10)
     ee=Entry(fap, textvariable=vare)
     ee.grid(row=4,column=1,padx=10,pady=10)
-    b=Button(wa, text=_("SALVA"), command=lambda: Salvataggio("add",varn,varc,varw,vare,""))
+    b=Button(wa, text=_("SALVA"), command=lambda: Salvataggio("add",varn,varc,varw,vare,None))
     b.pack(padx=10,pady=10)
+    global fImage
+    fImage=""
     wa.mainloop()
 
 
@@ -209,7 +231,7 @@ def edit():
     ec.grid(row=1,column=1,padx=10,pady=10)
     li=Label(fap,text=_("Immagine:"))
     li.grid(row=2,column=0,padx=10,pady=10)
-    bi=Button(fap,text=_("Seleziona immagine"),command=lambda: selImmagine(bi))
+    bi=Button(fap,text=_("Seleziona immagine"),command=lambda: selImmagine(bi,"we"))
     for i in prof:
         if prof[i]["nome"]==selProf["values"][0] and prof[i]["cognome"]==selProf["values"][1] and prof[i]["web"]==selProf["values"][2] and prof[i]["email"]==selProf["values"][3] and not(selProf["image"]==""):
             try:
@@ -251,6 +273,8 @@ def edit():
     bm.grid(row=0,column=1,padx=10,pady=10)
     b=Button(we, text=_("SALVA"), command=lambda: Salvataggio("edit",varn,varc,varw,vare,selProf["text"]))
     b.pack(padx=10,pady=10)
+    global fImage
+    fImage=""
     we.mainloop()
 
 
@@ -324,6 +348,9 @@ def creaFinestra():
     tp.pack(padx=10,pady=10)
     tp.bind("<Double-Button-1>", lambda e: edit())
     tp.bind("<Button-3>",popup)
+    iprof=PIL.Image.open(r"icons\picture.png")
+    pprof=PIL.ImageTk.PhotoImage(iprof)
+    print(prof)
     for x in list(prof.keys()):
         if prof[x]["imageURI"]=="":
             tp.insert("",x,text=x,values=[prof[x]["nome"],
@@ -332,8 +359,6 @@ def creaFinestra():
                                       prof[x]["email"]])
         else:
             if os.path.exists(prof[x]["imageURI"]):
-                iprof=PIL.Image.open(prof[x]["imageURI"]).resize((16,16),PIL.Image.ANTIALIAS)
-                pprof=PIL.ImageTk.PhotoImage(iprof)
                 tp.insert("",x,text=x,values=[prof[x]["nome"],
                                               prof[x]["cognome"],
                                               prof[x]["web"],
