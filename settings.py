@@ -14,6 +14,7 @@ import os.path  # serve per verificare se un file è presente o no
 from zipfile import *
 import subprocess, time, gettext, ctypes, locale, polib, PIL.Image, PIL.ImageTk
 import sqlite3 as sql
+import wckToolTips
 
 global path
 global fn_set
@@ -50,9 +51,9 @@ def salvaLingua(cb, lgl, wl, mode):
                     if not (os.path.exists(os.path.join(pathdl, (i + '.po')))):
                         if not (os.path.exists(os.path.join(pathdl))):
                             os.makedirs(os.path.join(pathdl))
-                        filecreation = open(os.path.join(pathdl, (i + '.po')), "w")
-                        filecreation.close()
-                    tr.get_translation('school-life-diary-pc', i + "pot", 'pt-br', os.path.join(pathdl, (i + '.po')))
+                        '''filecreation = open(os.path.join(pathdl, (i + '.po')), "w")
+                        filecreation.close()'''
+                    tr.get_translation('school-life-diary-pc', i + "pot", y, os.path.join(pathdl, (i + '.po')))
                     po = polib.pofile(os.path.join(pathdl, (i + '.po')))
                     po.save_as_mofile(os.path.join(pathdl, (i + '.mo')))
         else:
@@ -315,6 +316,7 @@ def creaFinestra():
     br.grid(row=0, column=1, padx=10, pady=10)
     bc.grid(row=0, column=2, padx=10, pady=10)
     bf.grid(row=0, column=3, padx=10, pady=10)
+    wckToolTips.register(bf, _("Apri la cartella dei dati di School Life Diary (con tutti i file dei database)"))
     ws.focus()
     ws.mainloop()
     c.close()
