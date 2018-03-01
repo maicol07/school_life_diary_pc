@@ -92,7 +92,6 @@ def Salvataggio(mode,nome=None,cognome=None,sitoweb=None,email=None,idx=0):
         if mode=="add":
             c.execute("SELECT * FROM prof")
             r=c.fetchall()
-            print(r)
             if "fImage" in globals() and not(fImage==None):
                 c.execute("INSERT INTO prof VALUES ('{}','{}','{}','{}','{}','{}')".format(len(prof.keys())+1,nome.get(),cognome.get(),fImage,sitoweb.get(),email.get()))
             else:                
@@ -110,15 +109,14 @@ def Salvataggio(mode,nome=None,cognome=None,sitoweb=None,email=None,idx=0):
             we.destroy()
         elif mode=="del":
             c.execute("""DELETE FROM prof WHERE ID={};""".format(idx))
-            c.execute("SELECT * FROM prof")
-            l=c.fetchall()
         sistemaIndici(conn,c)
         tkmb.showinfo(title=_("Successo!"), message=_("Salvataggio effettuato con successo!"))
+        wip.destroy()
+        creaFinestra()
     except Exception as ex:
         tkmb.showerror(title=_("Errore!"),
                                      message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore. Errore riscontrato:")+"\n"*2+str(ex))
-    wip.destroy()
-    creaFinestra()
+
 
 ## MASCHERA DI ELIMINAZIONE ##
 def delete():
@@ -350,7 +348,6 @@ def creaFinestra():
     tp.bind("<Button-3>",popup)
     iprof=PIL.Image.open(r"icons\picture.png")
     pprof=PIL.ImageTk.PhotoImage(iprof)
-    print(prof)
     for x in list(prof.keys()):
         if prof[x]["imageURI"]=="":
             tp.insert("",x,text=x,values=[prof[x]["nome"],
