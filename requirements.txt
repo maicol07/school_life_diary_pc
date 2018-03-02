@@ -1,2 +1,2 @@
 feedparser
-python-transifex
+transifex-client
