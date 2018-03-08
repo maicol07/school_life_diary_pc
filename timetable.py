@@ -1,25 +1,34 @@
 import numpy as np
-import os.path
+import sqlite3 as sql
+import os.path, gettext, ctypes, locale
 global path
 global fn_set
 global fn_time
-fn_set = "settings.npy"
-fn_time = "timetable.npy"
+fn_set = "settings.db"
+fn_time = "timetable.db"
 path = os.path.expanduser(r'~\Documents\School Life Diary')
-global ds
-global dt
-ds=np.load(os.path.join(path, fn_set)).item()
-try:
-    dt=np.load(os.path.join(path, fn_time)).item()
-except:
-    dt={"ORE_MAX_GIORNATA":ds["ORE_MAX_GIORNATA"]}
+if not(os.path.exists(os.path.join(path,fn_time))):
+    fm=open(os.path.join(path, fn_time), "w")
+    fm.close()
+    conn=sql.connect(os.path.join(path, fn_time),isolation_level=None)
+    c=conn.cursor()
+    c.execute("""CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
+else:
+    conn=sql.connect(os.path.join(path, fn_time),isolation_level=None)
+    c=conn.cursor()
+    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='timetable';")
+    ris=c.fetchall()
+    if not(len(ris)==1):
+        c.execute("""CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
+
+
 #Importazione di Tkinter
 from tkinter import *
 from tkinter.ttk import *
-import tkinter.messagebox
-import gettext
-import ctypes
-import locale
+from tkinter import Tk, Toplevel
+import tkinter.messagebox as tkmb
+
+
 if not(os.path.exists(os.path.join(path,"language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode=locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -35,13 +44,13 @@ def Salvataggio(p,var):
     try:
         dt[p]=var.get()
         np.save(os.path.join(path, fn_time), dt)
-        tkinter.messagebox.showinfo(title=_("Successo!"),
+        tkmb.showinfo(title=_("Successo!"),
                                     message=_("Salvataggio effettuato con successo!"))
         wtc.destroy()
         wt.destroy()
         creaFinestra()
     except:
-        tkinter.messagebox.showerror(title=_("Errore!"), message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore"))
+        tkmb.showerror(title=_("Errore!"), message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore"))
 
 def updtcblist(e,m):
         e["values"]=list(m.keys())
@@ -49,14 +58,14 @@ def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante
     global wtc
     wtc=Toplevel()
     wtc.title(_("Modifica Orario - Orario scolastico")+" - School Life Diary")
-    wtc.iconbitmap("sld_icon_beta.ico")
+    wtc.iconbitmap(r"images/sld_icon_beta.ico")
     wtc.geometry("450x200+600+250")
-    l=Label(wtc, text=_("Inserire la materia da visualizzare nell'orario la")+" "+str(p[1])+_("° ora del")+" "+dg[p[0]]+".")
+    l=Label(wtc, text=_("Inserire la materia da visualizzare nell'orario la {}° ora del {}.".format(str(p[1]),dg[p[0]])))
     l.pack(padx=10,pady=10)
     try:
         m=np.load(os.path.join(path, "subjects.npy")).item()
     except:
-        tkinter.messagebox.showerror(title=_("Nessuna materia inserita!"),
+        tkmb.showerror(title=_("Nessuna materia inserita!"),
                                      message=_("Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!"))
     e=Combobox(wtc, postcommand = lambda: updtcblist(e,m))
     e.pack(padx=10,pady=10)
@@ -64,32 +73,41 @@ def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante
     b.pack(padx=10,pady=10)
     wtc.mainloop()
 
-def inizializza(dt):
-    try:
-        dt=np.load(os.path.join(path, fn_time)).item()
-    except:
-        dt={"ORE_MAX_GIORNATA":ds["ORE_MAX_GIORNATA"]}
-    if not(os.path.exists(os.path.join(path, fn_time))):
-        dt={}
-        dt["ORE_MAX_GIORNATA"]=ds["ORE_MAX_GIORNATA"]
-        for r in range(1,ds["ORE_MAX_GIORNATA"]+1):
-            for c in range (1,7):
-                dt[(c,r)]=""
-        np.save(os.path.join(path, fn_time), dt)
-    if dt["ORE_MAX_GIORNATA"]!=ds["ORE_MAX_GIORNATA"]:
-        dt["ORE_MAX_GIORNATA"]=ds["ORE_MAX_GIORNATA"]
-        for r in range(1,ds["ORE_MAX_GIORNATA"]+1):
-            for c in range (1,7):
-                dt[(c,r)]=""
-        np.save(os.path.join(path, fn_time), dt)
-    dt=np.load(os.path.join(path, fn_time)).item()
+def inizializza(conn,c):
+    global ds
+    ds = {}
+    sconn=sql.connect(os.path.join(path,fn_set),isolation_level=None)
+    sc=sconn.cursor()
+    sc.execute("SELECT * FROM settings")
+    sr = sc.fetchall()
+    for row in sr:
+        ds[row[0]] = (row[1], row[2])
+    c.execute("SELECT * FROM timetable")
+    r=c.fetchall()
+    dt={}
+    print(r)
+    if not(r==[]):
+        for i in r:
+            l=[]
+            print(i)
+            print(l)
+            for k in i:
+                print(k)
+                if i.index(k)==0:
+                    continue
+                else:
+                    l.append(k)
+            dt[i[0]]=l
+    print(dt)
 #Creazione finestra
 def creaFinestra():
-    inizializza(dt)
+    conn = sql.connect(os.path.join(path, fn_time), isolation_level=None)
+    c = conn.cursor()
+    inizializza(conn,c)
     global wt
     wt=Toplevel()
     wt.title(_("Orario scolastico")+" - School Life Diary")
-    wt.iconbitmap("sld_icon_beta.ico")
+    wt.iconbitmap(r"images/sld_icon_beta.ico")
     wt.geometry("600x300+600+250")
     s=Style()
     try:
