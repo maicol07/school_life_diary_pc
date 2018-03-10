@@ -255,7 +255,7 @@ def creaFinestra():
     tm.heading("prof",text=_("Professore"))
     tm.column("prof",anchor=CENTER)
     tm.pack(padx=10,pady=10)
-    tm.bind("<Double-Button-1>", edit)
+    tm.bind("<Double-Button-1>", lambda e: edit())
     tm.bind("<Button-3>",popup)
     for x in list(m.keys()):
         tm.insert("",x,text=x,values=[m[x]["nome"],
@@ -265,4 +265,6 @@ def creaFinestra():
     li.pack()
     wim.bind("<Button-3>",popup2)
     wim.focus()
+    conn.close()
+    sconn.close()
     wim.mainloop()

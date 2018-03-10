@@ -19,8 +19,7 @@ from tkinter.ttk import *
 from tkinter import Tk, Toplevel # Serve per impostare lo sfondo bianco nelle finestre
 import tkinter.messagebox as tkmb
 
-root=Tk()
-root.withdraw()
+
 
 ## IMPOSTAZIONE PERCORSO ##
 path = os.path.expanduser(r'~\Documents\School Life Diary')
@@ -89,7 +88,8 @@ import settings, subjects, timetable, note, prof
 
 
 ## FINESTRA INFORMAZIONI ##
-def info(): 
+def info():
+    '''Crea la finestra delle informazioni'''
     wi=Toplevel()
     wi.configure(bg="white")
     wi.title(_("Informazioni")+" - School Life Diary")
@@ -128,31 +128,8 @@ def info():
 
 ## CREAZIONE FINESTRA MENU PRINCIPALE
 global w
-# Verifica se esistono degli aggiornamenti per il programma
-v="0.3.0.1"
-import feedparser
-from subprocess import check_output
-feed_name="School Life Diary Releases"
-url=r"https://github.com/maicol07/school_life_diary_pc/releases.atom"
-feed=feedparser.parse(url)
-try:
-    post=feed.entries[0]
-    title=post.title
-    lp=title.split(" ")
-    if (lp[0][1:].isdecimal()==True):
-        lp[0]=lp[0][1:]
-    if (v!=lp[0][1:]):
-        agg=tkmb.askyesno(title=_("Nuova versione disponibile!"),
-                                       message=_("È disponibile una nuova versione di School Life Diary.")+_("""
-Ti consigliamo di aggiornare il prima possibile per non perdere le novità, i miglioramenti e le correzioni di problemi.
-Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione""")+" "+lp[0][1:]+"?")
-        if (agg==True):
-            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases/")
-except IndexError:
-    tkmb.showwarning(title=_("Nessuna connessione ad internet"),
-                                   message=_("Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."))
-root.destroy()
 w=Tk()
+w.withdraw()
 w.configure(bg="white")
 w.title("School Life Diary")
 w.iconbitmap(r"images/sld_icon_beta.ico")
@@ -167,6 +144,31 @@ s.configure("TLabel",background="white")
 s.configure("TPhotoimage",background="white")
 s.configure("TLabelframe",background="white")
 s.configure("TLabelframe.Label",background="white")
+
+### Verifica se esistono degli aggiornamenti per il programma ###
+v="1"
+import feedparser
+from subprocess import check_output
+feed_name="School Life Diary Releases"
+url=r"https://github.com/maicol07/school_life_diary_pc/releases.atom"
+feed=feedparser.parse(url)
+try:
+    post=feed.entries[0]
+    title=post.title
+    lp=title.split(" ")
+    if (lp[0][1:].isdecimal()==True):
+        lp[0]=lp[0][1:]
+    if (v!=lp[0][1:]):
+        agg=tkmb.askyesno(title=_("Nuova versione disponibile!"),
+                                       message=_("""È disponibile una nuova versione di School Life Diary.
+Ti consigliamo di aggiornare il prima possibile per non perdere le nuove funzionalità, i miglioramenti e le correzioni di problemi.
+Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione {}?""").format(lp[0][1:]))
+        if (agg==True):
+            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases/")
+except IndexError:
+    tkmb.showwarning(title=_("Nessuna connessione ad internet"),
+                                   message=_("Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."))
+
 mb=Menu(w)
 w.config(menu=mb)
 fm=Menu(mb,tearoff=0)
@@ -242,6 +244,7 @@ bp.grid(row=0, column=2,padx=5)
 bv.grid(row=0, column=3,padx=5)
 ban.grid(row=0, column=4,padx=5)
 bag.grid(row=0, column=5,padx=5)
+w.deiconify()
 w.mainloop()
 c.close()
 conn.close()
