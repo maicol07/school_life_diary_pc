@@ -52,8 +52,11 @@ def Salvataggio(p,var):
     except:
         tkmb.showerror(title=_("Errore!"), message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore"))
 
+
+
 def updtcblist(e,m):
         e["values"]=list(m.keys())
+
 def CambiaOrario(p): #p è la posizione in coordinate y e x (tupla) del pulsante cliccato 
     global wtc
     wtc=Toplevel()
@@ -85,7 +88,10 @@ def inizializza(conn,c):
     c.execute("SELECT * FROM timetable")
     r=c.fetchall()
     dt={}
+    '''Struttura dizionario:
+    {0:[MatLun,MatMar,MatMer,...],1:[...]}'''
     print(r)
+    print(ds)
     if not(r==[]):
         for i in r:
             l=[]
@@ -98,22 +104,40 @@ def inizializza(conn,c):
                 else:
                     l.append(k)
             dt[i[0]]=l
+    else:
+        for i in range(6):
+            for a in range(int(ds["ORE_MAX_GIORNATA"][0])+1):
+                l=[]
+                for x in range(int(ds["ORE_MAX_GIORNATA"][0])+1):
+                    l.append("")
+                dt[i]=l
     print(dt)
-#Creazione finestra
+    sc.close()
+    sconn.close()
+    return dt
+
+
+
 def creaFinestra():
+    '''Creazione finestra principale'''
     conn = sql.connect(os.path.join(path, fn_time), isolation_level=None)
-    c = conn.cursor()
-    inizializza(conn,c)
+    cur = conn.cursor()
+    dt=inizializza(conn,cur)
     global wt
     wt=Toplevel()
+    wt.configure(bg="white")
     wt.title(_("Orario scolastico")+" - School Life Diary")
     wt.iconbitmap(r"images/sld_icon_beta.ico")
     wt.geometry("600x300+600+250")
-    s=Style()
-    try:
-        s.theme_use("vista")
-    except:
-        s.theme_use()
+    s = Style()
+    setconn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
+    sc = setconn.cursor()
+    s.theme_use(sc.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone())
+    s.configure("TFrame", background="white")
+    s.configure("TLabel", background="white")
+    s.configure("TPhotoimage", background="white")
+    s.configure("TLabelframe", background="white")
+    s.configure("TLabelframe.Label", background="white")
     ft=Frame(wt)
     ft.pack()
     global dg
@@ -122,13 +146,16 @@ def creaFinestra():
         l=Label(ft,text=dg[i])
         l.grid(row=0, column=i, pady=10, padx=5)
     i=1
-    x=ds["ORE_MAX_GIORNATA"]
-    for i in range(1,x+1):
+    x=ds["ORE_MAX_GIORNATA"][0]
+    for i in range(1,int(x)+1):
         h=Label(ft, text=str(i)+_("° ora"))
         h.grid(row=i, column=0, padx=5, pady=5)
         i+=1
-    for r in range(1,x+1):
+    for r in range(1,int(x)+2):
         for c in range(1,7):
-            bh=Button(ft, text=dt[(c,r)], width=10, command=lambda c=c,r=r: CambiaOrario((c,r)))
+            print(r,c,end="\t")
+            bh=Button(ft, text=dt[r-1][c-1], width=10, command=lambda c=c,r=r: CambiaOrario((c,r)))
             bh.grid(row=r, column=c)
+    cur.close()
+    conn.close()
     wt.mainloop()
