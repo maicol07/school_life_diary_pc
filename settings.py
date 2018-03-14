@@ -61,7 +61,8 @@ def salvaLingua(cb, lgl, wl, mode):
             f.write(cb.get())
             f.close()
         tkmb.showinfo(title=_("Salvataggio effettuato"),
-                      message=_("La lingua scelta è stata salvata. L'applicazione ora si chiuderà, ricordati di RIAVVIARE per RENDERE EFFETTIVE le modifiche!!"))
+                      message=_(
+                          "La lingua scelta è stata salvata. L'applicazione ora si chiuderà, ricordati di RIAVVIARE per RENDERE EFFETTIVE le modifiche!!"))
         exit()
     except Exception as ex:
         if str(ex) == "404: b'Not Found'":
@@ -87,19 +88,25 @@ def cambiaLingua():
     wl = Toplevel()
     wl.configure(background="white")
     wl.title(_("Cambia lingua") + " - School Life Diary")
-    wl.iconbitmap("sld_icon_beta.ico")
+    wl.iconbitmap(r"images/sld_icon_beta.ico")
     wl.geometry("500x250+100+100")
     lgl = os.listdir(os.path.join(path, "locale"))
     e1 = Label(wl, text=_("Scegliere la propria lingua: "))
     cb = Combobox(wl, postcommand=lambda: updatecb(cb, lgl))
     e1.pack(padx=10, pady=10)
     cb.pack(padx=10, pady=10)
-    btn = Button(wl, text=_("CAMBIA"), command=lambda: salvaLingua(cb, lgl, wl, "change"))
+    global ichange, idown
+    pchange = PIL.Image.open(r"icons/restore.png")
+    ichange = PIL.ImageTk.PhotoImage(pchange)
+    pdown = PIL.Image.open(r"icons/download.png")
+    idown = PIL.ImageTk.PhotoImage(pdown)
+    btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: salvaLingua(cb, lgl, wl, "change"))
     btn.pack(padx=10, pady=10)
     l = Label(wl, text=_(
         "Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti dalla nostra piattaforma di traduzione."))
     l.pack(padx=10, pady=2)
-    btn1 = Button(wl, text=_("SCARICA O AGGIORNA LINGUE"), command=lambda: salvaLingua(cb, lgl, wl, "download"))
+    btn1 = Button(wl, text=_("SCARICA O AGGIORNA LINGUE"), image=idown, compound=LEFT,
+                  command=lambda: salvaLingua(cb, lgl, wl, "download"))
     btn1.pack(padx=5, pady=10)
 
 
@@ -210,7 +217,7 @@ def modifica_valore(event):
         tkmb.showwarning(_("Nessun parametro selezionato!"),
                          _("Non hai selezionato nessun parametro!! Selezionane uno e poi ripeti l'operazione!"))
         return ""
-    global wcv
+    global wcv, bts
     wcv = Toplevel()
     wcv.configure(background="white")
     wcv.title(_("Cambia valore - Impostazioni") + " - School Life Diary")
@@ -218,6 +225,8 @@ def modifica_valore(event):
     wcv.geometry("400x200+600+250")
     etichetta1 = Label(wcv, text=_("Scegliere il valore da attribuire al parametro:"))
     etichetta1.pack(padx=10, pady=10)
+    psave = PIL.Image.open(r"icons/save.png")
+    isave = PIL.ImageTk.PhotoImage(psave)
     if par == "ORE_MAX_GIORNATA":
         var = IntVar()
         var.set(4)
@@ -225,11 +234,11 @@ def modifica_valore(event):
         lvar = Label(wcv, textvariable=var)
         lvar.pack(padx=10, pady=2)
         sv.pack(padx=10, pady=10)
-        bts = Button(wcv, text=_("SALVA"), command=lambda: salvaImpostazioni(par, sv))
+        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, sv))
     if par == "PC_THEME":
         menut = Combobox(wcv, postcommand=lambda: updateList(menut, Style().theme_names()))
         menut.pack(padx=10, pady=10)
-        bts = Button(wcv, text=_("SALVA"), command=lambda: salvaImpostazioni(par, menut))
+        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, menut))
     bts.pack(padx=10, pady=10)
     wcv.focus()
     wcv.mainloop()
@@ -295,7 +304,7 @@ def creaFinestra():
         "Per modificare un parametro, fai doppio click sulla riga corrispondente o tasto destro con il mouse."))
     li.pack()
     fbr = Labelframe(ws, text=_("Backup & Ripristino"))
-    ibackup = PIL.Image.open(r"icons\backup.png")
+    ibackup = PIL.Image.open(r"icons\download.png")
     pbackup = PIL.ImageTk.PhotoImage(ibackup)
     irestore = PIL.Image.open(r"icons\restore.png")
     prestore = PIL.ImageTk.PhotoImage(irestore)
@@ -309,7 +318,7 @@ def creaFinestra():
                 command=ripristino)
     bc = Button(fbr, text=_("CANCELLA TUTTO"), image=pdeleteall, compound=LEFT,
                 command=cancellatutto)
-    bf = Button(fbr, text=_("APRI CARTELLA LOCALE"), image=pfolder,
+    bf = Button(fbr, text=_("APRI CARTELLA LOCALE"), image=pfolder, compound=LEFT,
                 command=lambda: subprocess.Popen(r'explorer "{}"'.format(path)))
     fbr.pack()
     bb.grid(row=0, column=0, padx=10, pady=10)
@@ -320,3 +329,4 @@ def creaFinestra():
     ws.focus()
     ws.mainloop()
     c.close()
+    conn.close()
