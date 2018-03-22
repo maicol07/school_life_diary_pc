@@ -14,16 +14,16 @@
 [![forthebadge](http://forthebadge.com/images/badges/made-with-python.svg)](http://forthebadge.com)
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 
-## Italian
+# <img src="https://i.imgur.com/ji5wfIj.png" alt="ITA" weight=24 height=24></img>Italian
 Porting dell'app android School Life Diary su PC.
-### Funzionalità
+## Funzionalità
 <b>Nota: Alcune funzionalità potrebbero non essere ancora state sviluppate, si prega di controllare la scheda [Projects](https://github.com/maicol07/school_life_diary_pc/projects) per lo stato dello sviluppo</b>
 - Gestione dell'orario scolastico
 - Gestione delle materie
 - Gestione dei voti
 - Gestione delle note
 - Agenda (compiti, verifiche, ecc...; integrazione con Google Calendar)
-### Schermate
+## Schermate
 
 <img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_1-1.png" />
 
@@ -41,7 +41,7 @@ Schermata materie
 
 Schermata impostazioni
 
-### Crediti
+## Crediti
 Sviluppato da maicol07. Copyright © 2017-2018 - maicol07
 
 Riconoscimenti all'interno dell'applicazione.
@@ -49,23 +49,23 @@ Riconoscimenti all'interno dell'applicazione.
 Sito web: https://www.maicol07.tk
 
 Sito web app: https://apps.maicol07.tk
-### Segnalazione bug
+## Segnalazione bug
 È possibile segnalare bug nella sezione issues
-### Contribusci! [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
+## Contribusci al progetto! [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
 Puoi contribuire al progetto scrivendo articoli nella [wiki](https://github.com/maicol07/school_life_diary_pc/wiki), riportando un [bug](https://github.com/maicol07/school_life_diary_pc/issues) o aiutandomi a sviluppare il software aprendo una [pull request](https://github.com/maicol07/school_life_diary_pc/pulls), dopo aver effettuato il fork del repo.
 
-## English
+# <img src="http://www.myiconfinder.com/uploads/iconsets/24-24-5a4e6b31d441c44062c0fa1b34035a27.png" alt="ENG"></img>English
 Port of School Life Diary Android App for PC.
-### Functions
+## Functions
 <b>Note: Some features might haven't been developed, please check the [Projects](https://github.com/maicol07/school_life_diary_pc/projects) tab for developing status.</b>
 - School Timetable
 - Subjects
 - Marks
 - Notes (annotations)
 - Agenda (homeworks, tests, etc...; integration with Google Calendar)
-### Screenshots
+## Screenshots
 Please see above the Italian ones.
-### Credits
+## Credits
 Developed by maicol07. Copyright © 2017-2018 - maicol07
 
 Other credits are inside the app.
@@ -73,7 +73,7 @@ Other credits are inside the app.
 Website: https://www.maicol07.tk
 
 App website: https://apps.maicol07.tk
-### Bug report
+## Bug report
 You can report bug in the [issues](https://github.com/maicol07/school_life_diary_pc/issues) tab.
-### Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
+## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
 You can contribute to the project writing articles in the [wiki](https://github.com/maicol07/school_life_diary_pc/wiki), reporting a [issue](https://github.com/maicol07/school_life_diary_pc/issues) or help me developing the app by opening a [pull request](https://github.com/maicol07/school_life_diary_pc/pulls), after a repository forking.
