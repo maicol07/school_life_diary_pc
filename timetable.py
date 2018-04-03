@@ -1,5 +1,5 @@
 import sqlite3 as sql
-import os.path, gettext, ctypes, locale, PIL.Image, PIL.ImageTk, tk_tools
+import os.path, gettext, ctypes, locale, PIL.Image, PIL.ImageTk
 
 global path
 global fn_set
@@ -26,6 +26,7 @@ else:
 
 # Importazione di Tkinter
 from tkinter import *
+from ttkthemes.themed_style import *
 from tkinter.ttk import *
 from tkinter import Tk, Toplevel
 import tkinter.messagebox as tkmb
@@ -156,10 +157,10 @@ def inizializza(c):
                     l.append(k)
             dt[i[0]] = l
     else:
-        for i in range(int(ds["ORE_MAX_GIORNATA"][0]) + 1):
+        for i in range(9):
             c.execute("""INSERT INTO timetable (Lun, Mar, Mer, Gio, Ven, Sab)
             VALUES ("", "", "", "", "", ""); """)
-            for a in range(int(ds["ORE_MAX_GIORNATA"][0])):
+            for a in range(9):
                 l = []
                 for x in range(6):
                     l.append("")
@@ -193,13 +194,6 @@ def creaFinestra():
     wt.title(_("Orario scolastico") + " - School Life Diary")
     wt.iconbitmap(r"images/sld_icon_beta.ico")
     wt.geometry("700x300+600+250")
-    s = Style()
-    s.theme_use(ds["PC_THEME"][0])
-    s.configure("TFrame", background="white")
-    s.configure("TLabel", background="white")
-    s.configure("tthotoimage", background="white")
-    s.configure("TLabelframe", background="white")
-    s.configure("TLabelframe.Label", background="white")
     ft = Frame(wt)
     ft.pack()
     try:

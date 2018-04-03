@@ -15,14 +15,25 @@ import gettext, os, ctypes, locale, PIL.Image, PIL.ImageTk, webbrowser, time
 import sqlite3 as sql
 global pathset
 from tkinter import *
+from ttkthemes.themed_style import *
 from tkinter.ttk import *
 from tkinter import Tk, Toplevel # Serve per impostare lo sfondo bianco nelle finestre
 import tkinter.messagebox as tkmb
-
+import style
 
 
 ## IMPOSTAZIONE PERCORSO ##
 path = os.path.expanduser(r'~\Documents\School Life Diary')
+
+## CREAZIONE FINESTRA MENU PRINCIPALE
+global w
+w=Tk()
+w.withdraw()
+w.configure(bg="white")
+w.title("School Life Diary")
+w.iconbitmap(r"images/sld_icon_beta.ico")
+#w.geometry("335x325+200+100")
+
 
 ## INSTALLAZIONE LINGUA ##
 global lgcode
@@ -36,6 +47,7 @@ else:
         lgcode=fl.readline()
         lg = gettext.translation('main', localedir=os.path.join(path,'locale'), languages=[lgcode])
     except Exception as ex:
+        w.deiconify()
         try:
             tkmb.showerror(title=_("Lingua non impostata!"),
                                      message=_(r"La lingua impostata non è stata riconosciuta. Per risolvere prova a eliminare il file in Documenti/School Life Diary/language.txt . Se il problema non si risolve, contattare lo sviluppatore. Errore: ")+str(ex))
@@ -43,6 +55,7 @@ else:
             tkmb.showerror(title="Can't install the language!",
                            message=r"Can't recognize the set language. To fix this try to delete the file in Documents/School Life Diary/language.txt . If the problem still occurs, contact the developer. Error: ") + str(
                                ex)
+        w.iconify()
 
 lg.install()
 
@@ -55,10 +68,12 @@ if not(os.path.exists(path)):
     os.mkdir(path)
 if not(os.path.exists(os.path.join(path,output_filename))):
     if os.path.exists(os.path.join(path,"settings.npy")):
+        w.deiconify()
         tkmb.showwarning(title=_("Attenzione! Database non presente!"),
                                        message=_("Non hai effettuato la migrazione del database. Il programma si avvierà, ma non saranno visualizzati i tuoi dati fino a che non effettuerai la migrazione."))
         rd=tkmb.askokcancel(title=_("Conferma download strumento migrazione database"),
                                        message=_("Vuoi scaricare lo strumento di migrazione del database?"))
+        w.iconify()
         if rd==True:
             webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases")
     fs=open(os.path.join(path, output_filename), "w")
@@ -70,6 +85,10 @@ if not(os.path.exists(os.path.join(path,output_filename))):
                                                    `descr` TEXT);""")
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(_("Numero di ore massime per giornate da visualizzare nell'orario")))
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","vista", "{}"); """.format(_("Tema visivo dell'applicazione")))
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(0, _(
+                                                                    "Consenso a ricevere notifiche di versioni alpha")))
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
+                                                                    "Consenso a ricevere notifiche di versioni beta")))
 else:
     conn=sql.connect(os.path.join(path, output_filename),isolation_level=None)
     c=conn.cursor()
@@ -79,8 +98,15 @@ else:
        c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
                                                    `value` TEXT,
                                                    `descr` TEXT);""")
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(_("Numero di ore massime per giornate da visualizzare nell'orario")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","vista", "{}"); """.format(_("Tema visivo dell'applicazione")))
+    c.execute("SELECT * FROM settings")
+    r=c.fetchall()
+    if len(ris) == 0:
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(_("Numero di ore massime per giornate da visualizzare nell'orario")))
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","vista", "{}"); """.format(_("Tema visivo dell'applicazione")))
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(_("No"),
+            _("Consenso a ricevere notifiche di versioni alpha")))
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"),
+            _("Consenso a ricevere notifiche di versioni beta")))
 
     
 ## IMPORTAZIONE FILE ESTERNI ##
@@ -129,27 +155,27 @@ def info():
         changel.insert(INSERT, r)
     changel.config(state=DISABLED)
 
-## CREAZIONE FINESTRA MENU PRINCIPALE
-global w
-w=Tk()
-w.withdraw()
-w.configure(bg="white")
-w.title("School Life Diary")
-w.iconbitmap(r"images/sld_icon_beta.ico")
-#w.geometry("335x325+200+100")
-s=Style()
+### INSTALLAZIONE STILE ###
+
+style.init()
+s=style.s
 conn=sql.connect(os.path.join(path, output_filename),isolation_level=None)
 c=conn.cursor()
-s.theme_use(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone())
-s.configure("TFrame",background="white")
-s.configure("TButton",height=100)
-s.configure("TLabel",background="white")
-s.configure("TPhotoimage",background="white")
-s.configure("TLabelframe",background="white")
-s.configure("TLabelframe.Label",background="white")
+s.set_theme(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone())
 
 ### Verifica se esistono degli aggiornamenti per il programma ###
-v="1"
+v="1.0.0"
+if not(os.path.exists(os.path.join(path, "version.txt"))):
+    fv=open(os.path.join(path, "version.txt"), "w")
+    fv.write(v)
+    fv.close()
+else:
+    fv = open(os.path.join(path, "version.txt"), "r")
+    if fv.readline()<v:
+        # aggiornamento(fv.readline())
+        fv.close()
+        fv = open(os.path.join(path, "version.txt"), "w")
+        fv.write(v)
 import feedparser
 from subprocess import check_output
 feed_name="School Life Diary Releases"
@@ -159,19 +185,37 @@ try:
     post=feed.entries[0]
     title=post.title
     lp=title.split(" ")
+    ac=c.execute("SELECT value FROM settings WHERE setting='ALPHA_VERS'").fetchone()
+    bc=c.execute("SELECT value FROM settings WHERE setting='BETA_VERS'").fetchone()
     if (lp[0][1:].isdecimal()==True):
         lp[0]=lp[0][1:]
     if (v!=lp[0][1:]):
-        agg=tkmb.askyesno(title=_("Nuova versione disponibile!"),
-                                       message=_("""È disponibile una nuova versione di School Life Diary.
+        w.deiconify()
+        if lp[0][0].lower() == "v":
+            agg=tkmb.askyesno(title=_("Nuova versione disponibile!"),
+                                       message=_("""È disponibile una nuova versione stabile di School Life Diary.
 Ti consigliamo di aggiornare il prima possibile per non perdere le nuove funzionalità, i miglioramenti e le correzioni di problemi.
-Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione {}?""").format(lp[0][1:]))
+Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione stabile {}?""").format(lp[0][1:]))
+        elif lp[0][0].lower() == "b" and bc == _("Sì"):
+            agg = tkmb.askyesno(title=_("Nuova versione BETA disponibile!"),
+                                    message=_("""È disponibile una nuova versione BETA di School Life Diary.
+        Queste versioni non sono del tutto stabili e possono contenere alcuni problemi, ma includono nuove funzionalità. Ricevi questo avviso poichè
+        hai dato il tuo consenso a ricevere le notifiche di versioni BETA
+        Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione BETA {}?""").format(lp[0][1:]))
+        elif lp[0][0].lower() == "a" and ac == _("Sì"):
+            agg = tkmb.askyesno(title=_("Nuova versione ALPHA disponibile!"),
+                                        message=_("""È disponibile una nuova versione ALPHA di School Life Diary.
+        Queste versioni non sono stabili e possono contenere parecchi problemi, ma includono nuove funzionalità. Ricevi questo avviso poichè
+        hai dato il tuo consenso a ricevere le notifiche di nuove versioni ALPHA.
+        Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione ALPHA {}?""").format(lp[0][1:]))
         if (agg==True):
             webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases/")
+        w.iconify()
 except IndexError:
+    w.deiconify()
     tkmb.showwarning(title=_("Nessuna connessione ad internet"),
                                    message=_("Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."))
-
+    w.iconify()
 mb=Menu(w)
 w.config(menu=mb)
 fm=Menu(mb,tearoff=0)

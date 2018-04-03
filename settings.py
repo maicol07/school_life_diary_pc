@@ -7,6 +7,7 @@ from transifex.api import TransifexAPI
 global tr
 tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com')
 from tkinter import *
+from ttkthemes.themed_style import *
 from tkinter.ttk import *
 from tkinter import filedialog, Tk, Toplevel
 import tkinter.messagebox as tkmb
@@ -15,6 +16,7 @@ from zipfile import *
 import subprocess, time, gettext, ctypes, locale, polib, PIL.Image, PIL.ImageTk
 import sqlite3 as sql
 import wckToolTips
+import style
 
 global path
 global fn_set
@@ -168,20 +170,31 @@ Il software si chiuderà automaticamente dopo che la cartella si è aperta, per 
 # Salvataggio impostazioni
 def salvaImpostazioni(par, val):
     try:
-        if par == "ORE_MAX_GIORNATA":
-            c.execute("""UPDATE settings SET value = {} WHERE setting='{}';""".format(str(int(val.get())), par))
-        else:
-            c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(val.get(), par))
-        if par == "pc_theme":
-            tkmb.showinfo(title=_("Successo!"),
-                          message=_("Parametro modificato con successo!"))
+        conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
+        c = conn.cursor()
+        print(val)
+        #if par == "ORE_MAX_GIORNATA":
+        #c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(str(int(val)), par))
+        #else:
+        c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(val, par))
         tkmb.showinfo(title=_("Successo!"),
                       message=_(
                           "Parametro modificato con successo!\n\nRICORDATI DI RIAVVIARE L'APPLICAZIONE PER RENDERE EFFETTIVE LE MODIFICHE!!"))
         wcv.destroy()
         ws.destroy()
-        global new_set0
-        new_set0 = True
+        if par == "PC_THEME":
+            s = style.s
+            s.set_theme(val)
+            s.configure("TFrame", background="white")
+            s.configure("TButton", height=100)
+            s.configure("TLabel", background="white")
+            s.configure("TPhotoimage", background="white")
+            s.configure("TLabelframe", background="white")
+            s.configure("TLabelframe.Label", background="white")
+            s.configure("TScale", background="white")
+            s.configure("TCheckbutton", background="white")
+        c.close()
+        conn.close()
         creaFinestra()
     except Exception as ex:
         tkmb.showerror(title=_("ERRORE!"),
@@ -198,13 +211,21 @@ def accept_whole_number_only(sv, e=None):
 
 
 # INIZIALIZZAZIONE IMPOSTAZIONI
-def inizializza():
+def inizializza(c):
     global ds
     ds = {}
     c.execute("SELECT * FROM settings")
     sr = c.fetchall()
     for row in sr:
-        ds[row[0]] = (row[1], row[2])
+        if row[0] == "ALPHA_VERS" or row[0] == "BETA_VERS":
+            if row[1] == "1":
+                print(1)
+                ds[row[0]] = (_("Sì"), row[2])
+            else:
+                print(0)
+                ds[row[0]] = (_("No"), row[2])
+        else:
+            ds[row[0]] = (row[1], row[2])
 
 
 # MODIFICA VALORE DEL PARAMETRO
@@ -221,24 +242,48 @@ def modifica_valore(event):
     wcv = Toplevel()
     wcv.configure(background="white")
     wcv.title(_("Cambia valore - Impostazioni") + " - School Life Diary")
-    wcv.iconbitmap("sld_icon_beta.ico")
+    wcv.iconbitmap(r"images/sld_icon_beta.ico")
     wcv.geometry("400x200+600+250")
-    etichetta1 = Label(wcv, text=_("Scegliere il valore da attribuire al parametro:"))
-    etichetta1.pack(padx=10, pady=10)
     psave = PIL.Image.open(r"icons/save.png")
     isave = PIL.ImageTk.PhotoImage(psave)
     if par == "ORE_MAX_GIORNATA":
+        etichetta1 = Label(wcv, text=_("Scegliere il valore da attribuire al parametro:"))
+        etichetta1.pack(padx=10, pady=10)
         var = IntVar()
-        var.set(4)
+        var.set(item["values"][1])
         sv = Scale(wcv, variable=var, from_=4, to=8, orient=HORIZONTAL, command=lambda e: accept_whole_number_only(sv))
         lvar = Label(wcv, textvariable=var)
         lvar.pack(padx=10, pady=2)
         sv.pack(padx=10, pady=10)
-        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, sv))
+        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, int(sv.get())))
     if par == "PC_THEME":
-        menut = Combobox(wcv, postcommand=lambda: updateList(menut, Style().theme_names()))
+        etichetta1 = Label(wcv, text=_("Scegliere il valore da attribuire al parametro:"))
+        etichetta1.pack(padx=10, pady=10)
+        menut = Combobox(wcv, postcommand=lambda: updateList(menut, style.s.theme_names()))
+        menut.set(item["values"][1])
         menut.pack(padx=10, pady=10)
-        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, menut))
+        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, menut.get()))
+    if par == "ALPHA_VERS" or par == "BETA_VERS":
+        etichetta1 = Label(wcv, text=_("Modifica il consenso per ricevere versioni non stabili:"))
+        etichetta1.pack(padx=10, pady=10)
+        var=IntVar()
+        if item["values"][1] == _("Sì"):
+            var.set(1)
+        else:
+            var.set(0)
+        if par=="ALPHA_VERS":
+            etwar = Label(wcv, text=_("Le versioni Alpha sono poco stabili e non adatte all'uso\n"
+                                                "quotidiano. Possono contenere parecchi problemi, ma vengono\n"
+                                                "aggiornate più frequentemente rispetto alle versioni beta e stabili."))
+            c = Checkbutton(wcv, text=_("Ricevi versioni alpha"), variable=var)
+        elif par == "BETA_VERS":
+            etwar = Label(wcv, text=_("Le versioni Beta sono abbastanza stabili e abbastanza adatte all'uso\n"
+                                                    "quotidiano. Possono contenere alcuni problemi, ma vengono\n"
+                                                    "aggiornate più frequentemente rispetto alle versioni stabili."))
+            c = Checkbutton(wcv, text=_("Ricevi versioni beta"), variable=var)
+        etwar.pack(padx=10,pady=10)
+        c.pack(padx=10,pady=3)
+        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, var.get()))
     bts.pack(padx=10, pady=10)
     wcv.focus()
     wcv.mainloop()
@@ -246,7 +291,7 @@ def modifica_valore(event):
 
 # IMPOSTAZIONE ELEMENTI MENU A TENDINA
 def updateList(menut, l):
-    menut["values"] = l
+    menut["values"] = sorted(l)
 
 
 # MENU TASTO DESTRO
@@ -267,19 +312,14 @@ def popup(event):
 
 # CREAZIONE FINESTRA
 def creaFinestra():
-    inizializza()
-    s = Style()
-    s.theme_use(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone())
-    s.configure("TFrame", background="white")
-    s.configure("TLabelframe", background="white")
-    s.configure("TLabel", background="white")
-    s.configure("TLabelframe.Label", background="white")
-    s.configure("TScale", background="white")
+    conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
+    c = conn.cursor()
+    inizializza(c)
     global ws
     ws = Toplevel()
     ws.configure(bg="white")
     ws.title(_("Impostazioni") + " - School Life Diary")
-    ws.iconbitmap("sld_icon_beta.ico")
+    ws.iconbitmap(r"images/sld_icon_beta.ico")
     ws.geometry("900x400+600+250")
     fs = Labelframe(ws, text=_("Parametri"))
     fs.pack()
@@ -327,6 +367,9 @@ def creaFinestra():
     bf.grid(row=0, column=3, padx=10, pady=10)
     wckToolTips.register(bf, _("Apri la cartella dei dati di School Life Diary (con tutti i file dei database)"))
     ws.focus()
-    ws.mainloop()
     c.close()
     conn.close()
+    ws.mainloop()
+
+c.close()
+conn.close()

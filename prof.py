@@ -58,6 +58,7 @@ lg.install()
 # IMPORTAZIONE LIBRERIE PER LA GRAFICA
 from tkinter import *
 import tkinter.messagebox as tkmb
+from ttkthemes.themed_style import *
 from tkinter.ttk import *
 from tkinter import Toplevel
 
@@ -331,15 +332,6 @@ def creaFinestra():
     wip.title(_("Professori") + " - School Life Diary")
     wip.iconbitmap(r"images/sld_icon_beta.ico")
     wip.geometry("1000x375+600+200")
-    s = Style()
-    sconn = sql.connect(os.path.join(path, "settings.db"), isolation_level=None)
-    sc = sconn.cursor()
-    s.theme_use(sc.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone())
-    sc.close()
-    s.configure("TFrame", background="white")
-    s.configure("TLabelframe", background="white")
-    s.configure("TLabelframe.Label", background="white")
-    s.configure("TLabel", background="white")
     iAdd = PhotoImage(file=r"icons/add.png")
     iEdit = PhotoImage(file=r"icons/edit.png")
     iDel = PhotoImage(file=r"icons/delete.png")
