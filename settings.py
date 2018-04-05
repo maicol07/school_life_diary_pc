@@ -17,6 +17,7 @@ import subprocess, time, gettext, ctypes, locale, polib, PIL.Image, PIL.ImageTk
 import sqlite3 as sql
 import wckToolTips
 import style
+from tkFontChooser import askfont
 
 global path
 global fn_set
@@ -173,13 +174,12 @@ def salvaImpostazioni(par, val):
         conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
         c = conn.cursor()
         print(val)
-        #if par == "ORE_MAX_GIORNATA":
-        #c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(str(int(val)), par))
-        #else:
+        # if par == "ORE_MAX_GIORNATA":
+        # c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(str(int(val)), par))
+        # else:
         c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(val, par))
         tkmb.showinfo(title=_("Successo!"),
-                      message=_(
-                          "Parametro modificato con successo!\n\nRICORDATI DI RIAVVIARE L'APPLICAZIONE PER RENDERE EFFETTIVE LE MODIFICHE!!"))
+                      message=_("Parametro modificato con successo!"))
         wcv.destroy()
         ws.destroy()
         if par == "PC_THEME":
@@ -193,14 +193,16 @@ def salvaImpostazioni(par, val):
             s.configure("TLabelframe.Label", background="white")
             s.configure("TScale", background="white")
             s.configure("TCheckbutton", background="white")
+        if par == "PC_FONT":
+            s = style.s
+            s.configure(".", font=val)
         c.close()
         conn.close()
         creaFinestra()
     except Exception as ex:
         tkmb.showerror(title=_("ERRORE!"),
-                       message=_(
-                           "Si è verificato un errore durante la modifica del parametro. Riprovare o contattare lo sviluppatore! Errore riscontrato:\n") + str(
-                           ex))
+                       message=_("Si è verificato un errore durante la modifica del parametro. "
+                                 "Riprovare o contattare lo sviluppatore! Errore riscontrato:\n") + str(ex))
 
 
 # ACCETTAZIONE SOLO VALORI INTERI NELLO SLIDER
@@ -227,6 +229,22 @@ def inizializza(c):
         else:
             ds[row[0]] = (row[1], row[2])
 
+
+def fontcallback(fs, var):
+    # chiedi il font all'utente
+    font = askfont(wcv)
+    # la variabile font è "" se l'utente ha annullato
+    print(font)
+    if font:
+        # spaces in the family name need to be escaped
+        font['family'] = font['family'].replace(' ', '\ ')
+        font_str = "%(family)s %(size)i %(weight)s %(slant)s" % font
+        if font['underline']:
+            font_str += ' underline'
+        if font['overstrike']:
+            font_str += ' overstrike'
+        fs.configure(font=font_str, text=_("Carattere selezionato: {}").format(font_str.replace('\ ', ' ')))
+        var.set(font_str)
 
 # MODIFICA VALORE DEL PARAMETRO
 def modifica_valore(event):
@@ -255,35 +273,48 @@ def modifica_valore(event):
         lvar = Label(wcv, textvariable=var)
         lvar.pack(padx=10, pady=2)
         sv.pack(padx=10, pady=10)
-        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, int(sv.get())))
+        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
+                     command=lambda: salvaImpostazioni(par, int(sv.get())))
     if par == "PC_THEME":
         etichetta1 = Label(wcv, text=_("Scegliere il valore da attribuire al parametro:"))
         etichetta1.pack(padx=10, pady=10)
         menut = Combobox(wcv, postcommand=lambda: updateList(menut, style.s.theme_names()))
         menut.set(item["values"][1])
         menut.pack(padx=10, pady=10)
-        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, menut.get()))
+        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
+                     command=lambda: salvaImpostazioni(par, menut.get()))
     if par == "ALPHA_VERS" or par == "BETA_VERS":
         etichetta1 = Label(wcv, text=_("Modifica il consenso per ricevere versioni non stabili:"))
         etichetta1.pack(padx=10, pady=10)
-        var=IntVar()
+        var = IntVar()
         if item["values"][1] == _("Sì"):
             var.set(1)
         else:
             var.set(0)
-        if par=="ALPHA_VERS":
+        if par == "ALPHA_VERS":
             etwar = Label(wcv, text=_("Le versioni Alpha sono poco stabili e non adatte all'uso\n"
-                                                "quotidiano. Possono contenere parecchi problemi, ma vengono\n"
-                                                "aggiornate più frequentemente rispetto alle versioni beta e stabili."))
+                                      "quotidiano. Possono contenere parecchi problemi, ma vengono\n"
+                                      "aggiornate più frequentemente rispetto alle versioni beta e stabili."))
             c = Checkbutton(wcv, text=_("Ricevi versioni alpha"), variable=var)
         elif par == "BETA_VERS":
             etwar = Label(wcv, text=_("Le versioni Beta sono abbastanza stabili e abbastanza adatte all'uso\n"
-                                                    "quotidiano. Possono contenere alcuni problemi, ma vengono\n"
-                                                    "aggiornate più frequentemente rispetto alle versioni stabili."))
+                                      "quotidiano. Possono contenere alcuni problemi, ma vengono\n"
+                                      "aggiornate più frequentemente rispetto alle versioni stabili."))
             c = Checkbutton(wcv, text=_("Ricevi versioni beta"), variable=var)
-        etwar.pack(padx=10,pady=10)
-        c.pack(padx=10,pady=3)
-        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: salvaImpostazioni(par, var.get()))
+        etwar.pack(padx=10, pady=10)
+        c.pack(padx=10, pady=3)
+    if par == "PC_FONT":
+        etichetta1 = Label(wcv, text=_('Scegli il carattere da utilizzare: '))
+        etichetta1.pack(padx=10, pady=10)
+        fc = Label(wcv, text=_("Carattere attuale: {}").format(item["values"][1]))
+        fc.pack(padx=10, pady=10)
+        fs = Label(wcv)
+        fs.pack()
+        var = StringVar(value=item["values"][1])
+        btn = Button(wcv, text=_('Scegli carattere'), command=lambda: fontcallback(fs, var))
+        btn.pack(padx=10, pady=10)
+    bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
+                 command=lambda: salvaImpostazioni(par, var.get()))
     bts.pack(padx=10, pady=10)
     wcv.focus()
     wcv.mainloop()
@@ -302,7 +333,7 @@ def popup(event):
     sMenu = Menu(ws, tearoff=0)
     sMenu.add_command(label=_('Modifica'), image=iEdit, compound="left",
                       command=lambda: modifica_valore(event))
-    # display the popup menu
+    # mostra il menu popup
     try:
         sMenu.tk_popup(event.x_root + 53, event.y_root, 0)
     finally:
@@ -370,6 +401,7 @@ def creaFinestra():
     c.close()
     conn.close()
     ws.mainloop()
+
 
 c.close()
 conn.close()

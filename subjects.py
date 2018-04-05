@@ -105,7 +105,7 @@ def delete():
                              "Non è stata selezionata nessuna materia. Si prega di selezionarne una per apportare modifiche."))
         return ""
     scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
-                           message=_("Si è sicuri di voler eliminare la materia {} ?".format(selMat["values"][0])))
+                           message=_("Si è sicuri di voler eliminare la materia {} ?").format(selMat["values"][0]))
     if scelta == True:
         Salvataggio("del", None, None, None, selMat["text"])
     else:

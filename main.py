@@ -20,6 +20,7 @@ from tkinter.ttk import *
 from tkinter import Tk, Toplevel # Serve per impostare lo sfondo bianco nelle finestre
 import tkinter.messagebox as tkmb
 import style
+from sys import platform
 
 
 ## IMPOSTAZIONE PERCORSO ##
@@ -84,11 +85,19 @@ if not(os.path.exists(os.path.join(path,output_filename))):
                                                    `value` TEXT,
                                                    `descr` TEXT);""")
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(_("Numero di ore massime per giornate da visualizzare nell'orario")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","vista", "{}"); """.format(_("Tema visivo dell'applicazione")))
+    if "win" == platform[:3]:
+       th = 'vista'
+    elif "darwin" in platform:
+        th = 'clam'
+    else:
+        th = 'clam'
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","{}", "{}"); """.format(th, _("Tema visivo dell'applicazione")))
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(0, _(
                                                                     "Consenso a ricevere notifiche di versioni alpha")))
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
                                                                     "Consenso a ricevere notifiche di versioni beta")))
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
+        "Carattere utilizzato in tutti i testi dell'applicazione")))
 else:
     conn=sql.connect(os.path.join(path, output_filename),isolation_level=None)
     c=conn.cursor()
@@ -101,12 +110,23 @@ else:
     c.execute("SELECT * FROM settings")
     r=c.fetchall()
     if len(ris) == 0:
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(_("Numero di ore massime per giornate da visualizzare nell'orario")))
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","vista", "{}"); """.format(_("Tema visivo dell'applicazione")))
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(_("No"),
-            _("Consenso a ricevere notifiche di versioni alpha")))
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"),
-            _("Consenso a ricevere notifiche di versioni beta")))
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(
+            _("Numero di ore massime per giornate da visualizzare nell'orario")))
+        if "win" == platform[:3]:
+            th = 'vista'
+        elif "darwin" in platform:
+            th = 'clam'
+        else:
+            th = 'clam'
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","{}", "{}"); """.format(th, _(
+            "Tema visivo dell'applicazione")))
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(0, _(
+            "Consenso a ricevere notifiche di versioni alpha")))
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
+            "Consenso a ricevere notifiche di versioni beta")))
+        c.execute(
+            """INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
+                "Carattere utilizzato in tutti i testi dell'applicazione")))
 
     
 ## IMPORTAZIONE FILE ESTERNI ##
@@ -136,7 +156,9 @@ def info():
     bwsp = Button(fl, text=_("Sito web sviluppatore"),
                   command=lambda: webbrowser.open("https://www.maicol07.tk"))
     bwsp.grid(row=0, column=2, padx=10, pady=5)
-    l25=Label(f1, text=_("Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale ha licenza Creative Commons 3.0.\nAlcune icone fatte da Pixel Buddha, Freepik, Roundicons e Smash Icons di www.flaticon.com hanno licenza Creative Commons 3.0"))
+    l25=Label(f1, text=_("Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale "
+                         "ha licenza Creative Commons 3.0.\nAlcune icone fatte da Pixel Buddha, Freepik, Roundicons "
+                         "e Smash Icons di www.flaticon.com hanno licenza Creative Commons 3.0"))
     l25.pack(padx=10,pady=5)
     l3=Label(f1,text=_("Traduttori: "))
     l3.pack(padx=10,pady=5)
@@ -155,6 +177,24 @@ def info():
         changel.insert(INSERT, r)
     changel.config(state=DISABLED)
 
+
+def aggiornamento(pv):
+    from bs4 import BeautifulSoup
+    import requests
+
+    url = 'school-life-diary.tk/appupdates/pc'
+    ext = 'txt'
+
+    def listFD(url, ext=''):
+        page = requests.get(url).text
+        print(page)
+        soup = BeautifulSoup(page, 'html.parser')
+        return [url + '/' + node.get('href') for node in soup.find_all('a') if node.get('href').endswith(ext)]
+
+    for file in listFD(url, ext):
+        print(file)
+
+
 ### INSTALLAZIONE STILE ###
 
 style.init()
@@ -172,7 +212,7 @@ if not(os.path.exists(os.path.join(path, "version.txt"))):
 else:
     fv = open(os.path.join(path, "version.txt"), "r")
     if fv.readline()<v:
-        # aggiornamento(fv.readline())
+        aggiornamento(fv.readline())
         fv.close()
         fv = open(os.path.join(path, "version.txt"), "w")
         fv.write(v)
