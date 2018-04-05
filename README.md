@@ -24,22 +24,13 @@ Porting dell'app android School Life Diary su PC.
 - Gestione delle note
 - Agenda (compiti, verifiche, ecc...; integrazione con Google Calendar)
 ## Schermate
+Le schermate seguenti sono riferite alla versione più recente.
 
-<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_1-1.png" />
-
-Menu principale
-
-<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_2-1.png"/>
-
-Schermata orario
-
-<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_3-1.png"/>
-
-Schermata materie
-
-<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_4.png"/>
-
-Schermata impostazioni
+Menu principale            |  Gestione dell'orario
+:-------------------------:|:-------------------------:
+<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_1-1.png" alt="Menu principale"/>  |  <img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_3-1.png" alt="Orario" />  
+**Gestione delle materie**          |  **Impostazioni**
+<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_4.png" alt="Materie" /> | <img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_4-1.png" alt="Impostazioni" />
 
 ## Crediti
 Sviluppato da maicol07. Copyright © 2017-2018 - maicol07
