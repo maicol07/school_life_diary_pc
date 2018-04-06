@@ -280,5 +280,4 @@ def creaFinestra():
     wim.bind("<Button-3>", popup2)
     wim.focus()
     conn.close()
-    sconn.close()
     wim.mainloop()

@@ -173,7 +173,6 @@ def salvaImpostazioni(par, val):
     try:
         conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
         c = conn.cursor()
-        print(val)
         # if par == "ORE_MAX_GIORNATA":
         # c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(str(int(val)), par))
         # else:
@@ -193,6 +192,7 @@ def salvaImpostazioni(par, val):
             s.configure("TLabelframe.Label", background="white")
             s.configure("TScale", background="white")
             s.configure("TCheckbutton", background="white")
+            s.configure(".", font=c.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0])
         if par == "PC_FONT":
             s = style.s
             s.configure(".", font=val)
@@ -221,10 +221,8 @@ def inizializza(c):
     for row in sr:
         if row[0] == "ALPHA_VERS" or row[0] == "BETA_VERS":
             if row[1] == "1":
-                print(1)
                 ds[row[0]] = (_("Sì"), row[2])
             else:
-                print(0)
                 ds[row[0]] = (_("No"), row[2])
         else:
             ds[row[0]] = (row[1], row[2])
@@ -234,7 +232,6 @@ def fontcallback(fs, var):
     # chiedi il font all'utente
     font = askfont(wcv)
     # la variabile font è "" se l'utente ha annullato
-    print(font)
     if font:
         # spaces in the family name need to be escaped
         font['family'] = font['family'].replace(' ', '\ ')
@@ -245,6 +242,7 @@ def fontcallback(fs, var):
             font_str += ' overstrike'
         fs.configure(font=font_str, text=_("Carattere selezionato: {}").format(font_str.replace('\ ', ' ')))
         var.set(font_str)
+
 
 # MODIFICA VALORE DEL PARAMETRO
 def modifica_valore(event):
@@ -303,6 +301,8 @@ def modifica_valore(event):
             c = Checkbutton(wcv, text=_("Ricevi versioni beta"), variable=var)
         etwar.pack(padx=10, pady=10)
         c.pack(padx=10, pady=3)
+        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
+                     command=lambda: salvaImpostazioni(par, var.get()))
     if par == "PC_FONT":
         etichetta1 = Label(wcv, text=_('Scegli il carattere da utilizzare: '))
         etichetta1.pack(padx=10, pady=10)
@@ -313,8 +313,8 @@ def modifica_valore(event):
         var = StringVar(value=item["values"][1])
         btn = Button(wcv, text=_('Scegli carattere'), command=lambda: fontcallback(fs, var))
         btn.pack(padx=10, pady=10)
-    bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
-                 command=lambda: salvaImpostazioni(par, var.get()))
+        bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
+                     command=lambda: salvaImpostazioni(par, var.get()))
     bts.pack(padx=10, pady=10)
     wcv.focus()
     wcv.mainloop()

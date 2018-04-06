@@ -157,8 +157,8 @@ def info():
                   command=lambda: webbrowser.open("https://www.maicol07.tk"))
     bwsp.grid(row=0, column=2, padx=10, pady=5)
     l25=Label(f1, text=_("Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale "
-                         "ha licenza Creative Commons 3.0.\nAlcune icone fatte da Pixel Buddha, Freepik, Roundicons "
-                         "e Smash Icons di www.flaticon.com hanno licenza Creative Commons 3.0"))
+                         "ha licenza Creative Commons BY 3.0.\nAlcune icone fatte da Pixel Buddha, Freepik, Roundicons "
+                         "e Smash Icons di www.flaticon.com hanno licenza Creative Commons BY 3.0"))
     l25.pack(padx=10,pady=5)
     l3=Label(f1,text=_("Traduttori: "))
     l3.pack(padx=10,pady=5)
@@ -178,21 +178,51 @@ def info():
     changel.config(state=DISABLED)
 
 
-def aggiornamento(pv):
+def aggiornamento(pv, tv):
     from bs4 import BeautifulSoup
     import requests
+    import urllib.request
 
-    url = 'school-life-diary.tk/appupdates/pc'
+    url = 'https://www.school-life-diary.tk/appupdates/pc'
     ext = 'txt'
 
     def listFD(url, ext=''):
         page = requests.get(url).text
-        print(page)
         soup = BeautifulSoup(page, 'html.parser')
         return [url + '/' + node.get('href') for node in soup.find_all('a') if node.get('href').endswith(ext)]
 
-    for file in listFD(url, ext):
-        print(file)
+    while pv != tv:
+        for file in listFD(url, ext):
+            lf = file.split("/")
+            lv = lf[-1].split("-")
+            if lv[0] == pv:
+                try:
+                    data = urllib.request.urlopen(file)
+                except TimeoutError:
+                    tkmb.showerror(_("Impossibile stabilire la connessione"),
+                                   message=_("[WinError 10060] Impossibile stabilire la connessione."
+                                             "Risposta non corretta della parte connessa dopo l'intervallo"
+                                             "di tempo oppure mancata risposta dall'host collegato. Riaprire l'app e"
+                                             "riprovare."))
+                    exit()
+                for i in data:
+                    if not(" " in str(i)):
+                        try:
+                            c.close()
+                            conn.close()
+                        except:
+                            pass
+                        conn = sql.connect(os.path.join(path, str(i)[2:-3]))
+                        c = conn.cursor()
+                    else:
+                        c.execute(str(i)[2:-3])
+                try:
+                    c.close()
+                    conn.close()
+                except:
+                    pass
+                pv = lv[1][:-4]
+
 
 
 ### INSTALLAZIONE STILE ###
@@ -201,7 +231,8 @@ style.init()
 s=style.s
 conn=sql.connect(os.path.join(path, output_filename),isolation_level=None)
 c=conn.cursor()
-s.set_theme(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone())
+s.set_theme(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone()[0])
+s.configure('.', font=c.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0])
 
 ### Verifica se esistono degli aggiornamenti per il programma ###
 v="1.0.0"
@@ -211,11 +242,13 @@ if not(os.path.exists(os.path.join(path, "version.txt"))):
     fv.close()
 else:
     fv = open(os.path.join(path, "version.txt"), "r")
-    if fv.readline()<v:
-        aggiornamento(fv.readline())
+    pv = fv.readline()
+    if pv < v:
+        aggiornamento(pv, v)
         fv.close()
         fv = open(os.path.join(path, "version.txt"), "w")
         fv.write(v)
+    fv.close()
 import feedparser
 from subprocess import check_output
 feed_name="School Life Diary Releases"
