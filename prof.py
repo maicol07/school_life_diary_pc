@@ -1,13 +1,14 @@
 # IMPORTAZIONE MODULI E LIBRERIE
-import PIL.Image
-import PIL.ImageTk
 import ctypes
 import gettext
 import locale
-import os.path
 import sqlite3 as sql
 import webbrowser
 from tkinter.filedialog import askopenfilename
+
+import PIL.Image
+import PIL.ImageTk
+import os.path
 
 global fn_prof
 global path
@@ -58,7 +59,6 @@ lg.install()
 # IMPORTAZIONE LIBRERIE PER LA GRAFICA
 from tkinter import *
 import tkinter.messagebox as tkmb
-from ttkthemes.themed_style import *
 from tkinter.ttk import *
 from tkinter import Toplevel
 
@@ -182,7 +182,7 @@ def add():
     wa = Toplevel()
     wa.configure(background="white")
     wa.title(_("Inserisci professore") + " - School Life Diary")
-    wa.iconbitmap(r"images/sld_icon_beta.ico")
+    wa.iconbitmap(r"images/school_life_diary.ico")
     wa.geometry("350x300+600+200")
     fap = Labelframe(wa, text=_("Maschera di inserimento"))
     fap.pack(padx=10, pady=10)
@@ -233,7 +233,7 @@ def edit():
     we = Toplevel()
     we.configure(background="white")
     we.title(_("Modifica professore") + " - School Life Diary")
-    we.iconbitmap(r"images/sld_icon_beta.ico")
+    we.iconbitmap(r"images/school_life_diary.ico")
     we.geometry("350x350+600+200")
     fap = Labelframe(we, text=_("Maschera di modifica"))
     fap.pack(padx=10, pady=10)
@@ -330,7 +330,7 @@ def creaFinestra():
     wip.configure(background="white")
     inizializza()
     wip.title(_("Professori") + " - School Life Diary")
-    wip.iconbitmap(r"images/sld_icon_beta.ico")
+    wip.iconbitmap(r"images/school_life_diary.ico")
     wip.geometry("1000x375+600+200")
     iAdd = PhotoImage(file=r"icons/add.png")
     iEdit = PhotoImage(file=r"icons/edit.png")

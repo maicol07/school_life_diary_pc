@@ -1,7 +1,13 @@
 # IMPORTAZIONE MODULI E LIBRERIE
-import os.path, gettext, ctypes, locale, PIL.Image, PIL.ImageTk
 import sqlite3 as sql
 from tkinter.colorchooser import askcolor
+
+import PIL.Image
+import PIL.ImageTk
+import ctypes
+import gettext
+import locale
+import os.path
 
 global fn_sub
 global path
@@ -38,9 +44,8 @@ lg.install()
 # IMPORTAZIONE LIBRERIE PER LA GRAFICA
 from tkinter import *
 import tkinter.messagebox as tkmb
-from ttkthemes.themed_style import *
 from tkinter.ttk import *
-from tkinter import Tk, Toplevel
+from tkinter import Toplevel
 
 
 # INIZIALIZZA DATI
@@ -130,7 +135,7 @@ def add():
     wa = Toplevel()
     wa.configure(background="white")
     wa.title(_("Inserisci materia") + " - School Life Diary")
-    wa.iconbitmap(r"images/sld_icon_beta.ico")
+    wa.iconbitmap(r"images/school_life_diary.ico")
     wa.geometry("350x300+600+200")
     fam = Labelframe(wa, text=_("Maschera di inserimento"))
     fam.pack(padx=10, pady=10)
@@ -174,7 +179,7 @@ def edit():
     we = Toplevel()
     we.configure(background="white")
     we.title(_("Modifica materia") + " - School Life Diary")
-    we.iconbitmap(r"images/sld_icon_beta.ico")
+    we.iconbitmap(r"images/school_life_diary.ico")
     we.geometry("350x300+600+200")
     fam = Labelframe(we, text=_("Maschera di modifica"))
     fam.pack(padx=10, pady=10)
@@ -238,7 +243,7 @@ def creaFinestra():
     wim.configure(background="white")
     inizializza()
     wim.title(_("Materie") + " - School Life Diary")
-    wim.iconbitmap(r"images/sld_icon_beta.ico")
+    wim.iconbitmap(r"images/school_life_diary.ico")
     wim.geometry("750x375+600+200")
     iAdd = PhotoImage(file=r"icons/add.png")
     iEdit = PhotoImage(file=r"icons/edit.png")

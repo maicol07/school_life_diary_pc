@@ -7,9 +7,8 @@ from transifex.api import TransifexAPI
 global tr
 tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com')
 from tkinter import *
-from ttkthemes.themed_style import *
 from tkinter.ttk import *
-from tkinter import filedialog, Tk, Toplevel
+from tkinter import filedialog, Toplevel
 import tkinter.messagebox as tkmb
 import os.path  # serve per verificare se un file è presente o no
 from zipfile import *
@@ -91,7 +90,7 @@ def cambiaLingua():
     wl = Toplevel()
     wl.configure(background="white")
     wl.title(_("Cambia lingua") + " - School Life Diary")
-    wl.iconbitmap(r"images/sld_icon_beta.ico")
+    wl.iconbitmap(r"images/school_life_diary.ico")
     wl.geometry("500x250+100+100")
     lgl = os.listdir(os.path.join(path, "locale"))
     e1 = Label(wl, text=_("Scegliere la propria lingua: "))
@@ -258,7 +257,7 @@ def modifica_valore(event):
     wcv = Toplevel()
     wcv.configure(background="white")
     wcv.title(_("Cambia valore - Impostazioni") + " - School Life Diary")
-    wcv.iconbitmap(r"images/sld_icon_beta.ico")
+    wcv.iconbitmap(r"images/school_life_diary.ico")
     wcv.geometry("400x200+600+250")
     psave = PIL.Image.open(r"icons/save.png")
     isave = PIL.ImageTk.PhotoImage(psave)
@@ -350,7 +349,7 @@ def creaFinestra():
     ws = Toplevel()
     ws.configure(bg="white")
     ws.title(_("Impostazioni") + " - School Life Diary")
-    ws.iconbitmap(r"images/sld_icon_beta.ico")
+    ws.iconbitmap(r"images/school_life_diary.ico")
     ws.geometry("900x400+600+250")
     fs = Labelframe(ws, text=_("Parametri"))
     fs.pack()

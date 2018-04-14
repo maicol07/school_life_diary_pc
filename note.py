@@ -1,5 +1,7 @@
-import os, os.path, time
+import os
+import os.path
 import sqlite3 as sql
+import time
 
 global nt
 
@@ -64,9 +66,8 @@ from tkinter import *
 from tkinter.scrolledtext import *
 from tkinter import filedialog
 import tkinter.messagebox as tkmb
-from ttkthemes.themed_style import *
 from tkinter.ttk import *
-from tkinter import Tk, Toplevel
+from tkinter import Toplevel
 import PIL.Image, PIL.ImageTk
 
 
@@ -177,7 +178,7 @@ def edit():
     global we
     we = Toplevel()
     we.title(_("Modifica annotazione") + " - School Life Diary")
-    we.iconbitmap(r"images/sld_icon_beta.ico")
+    we.iconbitmap(r"images/school_life_diary.ico")
     we.geometry("750x325+600+200")
     we.configure(bg="white")
     f = LabelFrame(we, text=_("Maschera di modifica"))
@@ -219,7 +220,7 @@ def add():
     wa = Toplevel()
     wa.configure(bg="white")
     wa.title(_("Inserisci annotazione") + " - School Life Diary")
-    wa.iconbitmap(r"images/sld_icon_beta.ico")
+    wa.iconbitmap(r"images/school_life_diary.ico")
     wa.geometry("750x325+600+200")
     f = LabelFrame(wa, text=_("Maschera di inserimento"))
     f.pack()
@@ -313,7 +314,7 @@ def creaFinestra():
     wn = Toplevel()
     inizializza()
     wn.title(_("Annotazioni") + " - School Life Diary")
-    wn.iconbitmap(r"images/sld_icon_beta.ico")
+    wn.iconbitmap(r"images/school_life_diary.ico")
     wn.configure(bg="white")
     wn.geometry("850x350+600+200")
     iAdd = PhotoImage(file=r"icons/add.png")

@@ -1,5 +1,11 @@
 import sqlite3 as sql
-import os.path, gettext, ctypes, locale, PIL.Image, PIL.ImageTk
+
+import PIL.Image
+import PIL.ImageTk
+import ctypes
+import gettext
+import locale
+import os.path
 
 global path
 global fn_set
@@ -26,9 +32,8 @@ else:
 
 # Importazione di Tkinter
 from tkinter import *
-from ttkthemes.themed_style import *
 from tkinter.ttk import *
-from tkinter import Tk, Toplevel
+from tkinter import Toplevel
 import tkinter.messagebox as tkmb
 
 if not (os.path.exists(os.path.join(path, "language.txt"))):
@@ -80,7 +85,7 @@ def cambia_orario():
     wtc = Toplevel()
     wtc.configure(bg="white")
     wtc.title(_("Modifica Orario - Orario scolastico") + " - School Life Diary")
-    wtc.iconbitmap(r"images/sld_icon_beta.ico")
+    wtc.iconbitmap(r"images/school_life_diary.ico")
     wtc.geometry("700x200+600+250")
     l = Label(wtc, text=_("Inserire le materie da visualizzare."))
     l.pack(padx=10, pady=10)
@@ -192,7 +197,7 @@ def creaFinestra():
     wt = Toplevel()
     wt.configure(bg="white")
     wt.title(_("Orario scolastico") + " - School Life Diary")
-    wt.iconbitmap(r"images/sld_icon_beta.ico")
+    wt.iconbitmap(r"images/school_life_diary.ico")
     wt.geometry("700x300+600+250")
     ft = Frame(wt)
     ft.pack()

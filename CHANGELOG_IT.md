@@ -25,7 +25,7 @@ Questo formato è basato sul formato [Keep a Changelog](http://keepachangelog.co
 
 ### Rimosso
 
-- Rimossa la funzionalità integrata di eliminazione dei dati direttamente dall'applicazione. Sarà necessario aprire manualmente la cartella dell'applicazione in Documenti\School Life Diary. Questo passaggio sarà ricordato anche quando si clicca sul pulsante CANCELLA TUTTO nelle Impostazioni.
+- Rimossa la funzionalità integrata di eliminazione dei dati direttamente dall'applicazione. Sarà necessario aprire manualmente la cartella dell'applicazione in Documenti\School Life Diary. Questo passaggio sarà ricordato anche quando si clicca sul pulsante CANCELLA TUTTO nelle Impostazioni. Probabilmente questa funzionalità ritornerà nella versione 1.1 della applicazione.
 
 
 ## Versione 0.3.0.1 (30/11/2017)
