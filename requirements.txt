@@ -1,4 +1,4 @@
-Pillow
+Pillow==5.1.0
 polib
 ttkthemes
 feedparser
