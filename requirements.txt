@@ -1,5 +1,5 @@
 Pillow==5.1.0
-polib
+polib==1.1.0
 ttkthemes
 feedparser
 transifex-client
