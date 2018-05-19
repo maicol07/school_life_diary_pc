@@ -1,5 +1,5 @@
 python-transifex
-bs4
+bs4==0.0.1
 beautifulsoup4
 requests==2.18.4
 Pillow==5.1.0
