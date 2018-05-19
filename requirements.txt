@@ -1,4 +1,4 @@
-python-transifex
+python-transifex==0.1.7
 bs4==0.0.1
 beautifulsoup4==4.6.0
 requests==2.18.4
