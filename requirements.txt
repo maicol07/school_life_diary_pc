@@ -1,6 +1,6 @@
 python-transifex
 bs4
-beautifulsoup4
+beautifulsoup4==4.6.0
 requests
 Pillow==5.1.0
 polib==1.1.0
