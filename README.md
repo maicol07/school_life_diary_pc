@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/maicol07/school_life_diary_pc.svg?branch=master)](https://travis-ci.org/maicol07/school_life_diary_pc)
 [![GitHub license](https://img.shields.io/github/license/maicol07/school_life_diary_pc.svg)](https://github.com/maicol07/school_life_diary_pc/blob/master/LICENSE)
 [![Inline docs](http://inch-ci.org/github/maicol07/school_life_diary_pc.svg?branch=master)](http://inch-ci.org/github/maicol07/school_life_diary_pc)
-[![Maintainability](https://api.codeclimate.com/v1/badges/036e4db030eddca22df9/maintainability)](https://codeclimate.com/github/maicol07/school_life_diary_pc/maintainability)
 [![HitCount](http://hits.dwyl.io/maicol07/school_life_diary_pc.svg)](http://hits.dwyl.io/maicol07/school_life_diary_pc)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
 [![GitHub release](https://img.shields.io/github/release/maicol07/school_life_diary_pc/all.svg)](https://github.com/maicol07/school_life_diary_pc/releases/)
