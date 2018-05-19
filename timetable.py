@@ -1,16 +1,15 @@
-import sqlite3 as sql
-
-import PIL.Image
-import PIL.ImageTk
 import ctypes
 import gettext
 import locale
 import os.path
+import sqlite3 as sql
+
+import PIL.Image
+import PIL.ImageTk
 
 global path
 global fn_set
 global fn_time
-global dt
 fn_set = "settings.db"
 fn_time = "timetable.db"
 path = os.path.expanduser(r'~\Documents\School Life Diary')
@@ -20,7 +19,8 @@ if not (os.path.exists(os.path.join(path, fn_time))):
     conn = sql.connect(os.path.join(path, fn_time), isolation_level=None)
     c = conn.cursor()
     c.execute(
-        """CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
+        """CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, 
+        `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
 else:
     conn = sql.connect(os.path.join(path, fn_time), isolation_level=None)
     c = conn.cursor()
@@ -28,34 +28,37 @@ else:
     ris = c.fetchall()
     if not (len(ris) == 1):
         c.execute(
-            """CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
+            """CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, 
+            `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
 
-# Importazione di Tkinter
+    # Importazione di Tkinter
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import Toplevel
 import tkinter.messagebox as tkmb
 
-if not (os.path.exists(os.path.join(path, "language.txt"))):
-    windll = ctypes.windll.kernel32
-    lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-    lgl = ["en", "it"]
-    lg = gettext.translation("timetable", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
-else:
-    fl = open(os.path.join(path, "language.txt"), "r")
-    lgcode = fl.readline()
-    lg = gettext.translation('timetable', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-lg.install()
+
+def install_language():
+    """Installazione lingua"""
+    if not (os.path.exists(os.path.join(path, "language.txt"))):
+        windll = ctypes.windll.kernel32
+        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        lg = gettext.translation("timetable", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
+    else:
+        fl = open(os.path.join(path, "language.txt"), "r")
+        lgcode = fl.readline()
+        lg = gettext.translation('timetable', localedir=os.path.join(path, 'locale'), languages=[lgcode])
+    lg.install()
 
 
 def Salvataggio(matl, matm, matmm, matg, matv, mats):
     try:
-        conn = sql.connect(os.path.join(path, fn_time), isolation_level=None)
-        c = conn.cursor()
+        connection = sql.connect(os.path.join(path, fn_time), isolation_level=None)
+        cur = connection.cursor()
         gg = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab"]
         mat = [matl, matm, matmm, matg, matv, mats]
         for i in range(len(mat)):
-            c.execute("""UPDATE timetable SET {} = '{}' WHERE ID={}; """.format(gg[i], mat[i], sel["text"][0]))
+            cur.execute("""UPDATE timetable SET {} = '{}' WHERE ID={}; """.format(gg[i], mat[i], sel["text"][0]))
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Salvataggio effettuato con successo!"))
         wtc.destroy()
@@ -63,7 +66,8 @@ def Salvataggio(matl, matm, matmm, matg, matv, mats):
         creaFinestra()
     except Exception as ex:
         tkmb.showerror(title=_("Errore!"),
-                       message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore.\nErrore: {}").format(ex))
+                       message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore.\n"
+                                 "Errore: {}").format(ex))
 
 
 def updtcblist(e, m):
@@ -79,7 +83,8 @@ def cambia_orario():
     sel = tt.item(tt.focus())
     if sel["text"] == "":
         tkmb.showwarning(title=_("Nessuna riga selezionata!"),
-                         message=_("Non è stata selezionata nessuna riga. Si prega di selezionarne una per apportare modifiche."))
+                         message=_("Non è stata selezionata nessuna riga. Si prega di selezionarne una per apportare "
+                                   "modifiche."))
         return ""
     global wtc, matconn, matc
     wtc = Toplevel()
@@ -97,14 +102,15 @@ def cambia_orario():
     except Exception as ex:
         tkmb.showerror(title=_("Nessuna materia inserita!"),
                        message=_(
-                           "Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!\nErrore specifico: {}").format(
+                           "Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!\nErrore "
+                           "specifico: {}").format(
                            str(ex)))
     dg = {1: _("Lunedì"), 2: _("Martedì"), 3: _("Mercoledì"), 4: _("Giovedì"), 5: _("Venerdì"), 6: _("Sabato")}
-    f=LabelFrame(wtc, text=_("Maschera di modifica"))
+    f = LabelFrame(wtc, text=_("Maschera di modifica"))
     f.pack()
     for i in dg:
-        lg = Label(f, text=dg[i])
-        lg.grid(row=0, column=i)
+        etichetta_giorno = Label(f, text=dg[i])
+        etichetta_giorno.grid(row=0, column=i)
     lo = Label(f, text=sel["text"])
     lo.grid(row=1, column=0)
 
@@ -132,15 +138,17 @@ def cambia_orario():
     f.pack(padx=10, pady=10)
     psave = PIL.Image.open(r"icons/save.png")
     isave = PIL.ImageTk.PhotoImage(psave)
-    b = Button(f, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: Salvataggio(el.get(), em.get(), emm.get(), eg.get(), ev.get(), es.get()))
+    b = Button(f, text=_("SALVA"), image=isave, compound=LEFT,
+               command=lambda: Salvataggio(el.get(), em.get(), emm.get(), eg.get(), ev.get(), es.get()))
     b.grid(row=0, column=0, padx=10, pady=10)
     matc.close()
     matconn.close()
     wtc.mainloop()
 
 
-def inizializza(c):
+def inizializza(cursor):
     global ds
+    global dt
     ds = {}
     sconn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
     sc = sconn.cursor()
@@ -148,8 +156,8 @@ def inizializza(c):
     sr = sc.fetchall()
     for row in sr:
         ds[row[0]] = (row[1], row[2])
-    c.execute("SELECT * FROM timetable")
-    r = c.fetchall()
+    cursor.execute("SELECT * FROM timetable")
+    r = cursor.fetchall()
     dt = {}
     # Struttura dizionario: {0:[MatLun,MatMar,MatMer,...],1:[...]}
     if not (r == []):
@@ -163,7 +171,7 @@ def inizializza(c):
             dt[i[0]] = l
     else:
         for i in range(9):
-            c.execute("""INSERT INTO timetable (Lun, Mar, Mer, Gio, Ven, Sab)
+            cursor.execute("""INSERT INTO timetable (Lun, Mar, Mer, Gio, Ven, Sab)
             VALUES ("", "", "", "", "", ""); """)
             for a in range(9):
                 l = []
@@ -189,8 +197,8 @@ def popup(event):
 
 def creaFinestra():
     """Creazione finestra principale"""
-    conn = sql.connect(os.path.join(path, fn_time), isolation_level=None)
-    cur = conn.cursor()
+    connection = sql.connect(os.path.join(path, fn_time), isolation_level=None)
+    cur = connection.cursor()
     global dt
     dt = inizializza(cur)
     global wt
@@ -202,10 +210,10 @@ def creaFinestra():
     ft = Frame(wt)
     ft.pack()
     try:
-        matconn = sql.connect(os.path.join(path, "subjects.db"), isolation_level=None)
-        matc = matconn.cursor()
-        matc.execute("SELECT * FROM subjects")
-        mat = matc.fetchall()
+        mat_conn = sql.connect(os.path.join(path, "subjects.db"), isolation_level=None)
+        mat_cur = mat_conn.cursor()
+        mat_cur.execute("SELECT * FROM subjects")
+        mat = mat_cur.fetchall()
         listmat = []
         for i in mat:
             listmat.append(i[1])
@@ -213,7 +221,8 @@ def creaFinestra():
     except Exception as ex:
         tkmb.showerror(title=_("Nessuna materia inserita!"),
                        message=_(
-                           "Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!\nErrore specifico: {}").format(
+                           "Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!\nErrore "
+                           "specifico: {}").format(
                            str(ex)))
         wt.destroy()
         return
@@ -221,10 +230,10 @@ def creaFinestra():
 
     # Creazione dei floating menu
 
-    iEdit = PhotoImage(file=r"icons/edit.png")
+    i_edit = PhotoImage(file=r"icons/edit.png")
     global aMenu
     aMenu = Menu(wt, tearoff=0)
-    aMenu.add_command(label=_('Modifica riga'), image=iEdit, compound="left",
+    aMenu.add_command(label=_('Modifica riga'), image=i_edit, compound="left",
                       command=cambia_orario)
 
     global tt
@@ -240,7 +249,7 @@ def creaFinestra():
     tt.column("mer", anchor=CENTER, width=90)
     tt.heading("gio", text=_("Giovedì"))
     tt.column("gio", anchor=CENTER, width=90)
-    tt.heading("ven", text=("Venerdì"))
+    tt.heading("ven", text=_("Venerdì"))
     tt.column("ven", anchor=CENTER, width=90)
     tt.heading("sab", text=_("Sabato"))
     tt.column("sab", anchor=CENTER, width=90)
@@ -249,15 +258,16 @@ def creaFinestra():
     tt.bind("<Button-3>", popup)
     for i in range(1, int(x) + 1):
         tt.insert("", i, text=_("{}° ora").format(i), values=[dt[i][0],
-                                                           dt[i][1],
-                                                           dt[i][2],
-                                                           dt[i][3],
-                                                           dt[i][4],
-                                                           dt[i][5]])
+                                                              dt[i][1],
+                                                              dt[i][2],
+                                                              dt[i][3],
+                                                              dt[i][4],
+                                                              dt[i][5]])
     li = Label(wt, text=_(
-        "Per modificare l'orario, fai doppio click o usa il tasto destro del mouse su una riga e inserisci le materie dell'ora corrispondente."))
+        "Per modificare l'orario, fai doppio click o usa il tasto destro del mouse su una riga e inserisci le materie "
+        "dell'ora corrispondente."))
     li.pack()
     cur.close()
-    conn.close()
+    connection.close()
     wt.focus()
     wt.mainloop()

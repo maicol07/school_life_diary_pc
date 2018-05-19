@@ -1,13 +1,17 @@
 # IMPORTAZIONE MODULI E LIBRERIE
-import sqlite3 as sql
-from tkinter.colorchooser import askcolor
-
-import PIL.Image
-import PIL.ImageTk
 import ctypes
 import gettext
 import locale
 import os.path
+import sqlite3 as sql
+import tkinter.messagebox as tkmb
+from tkinter import *
+from tkinter import Toplevel
+from tkinter.colorchooser import askcolor
+from tkinter.ttk import *
+
+import PIL.Image
+import PIL.ImageTk
 
 global fn_sub
 global path
@@ -29,67 +33,63 @@ else:
     if not (len(ris) == 1):
         c.execute("""CREATE TABLE "subjects" ( `ID` INTEGER, `name` TEXT, `colour` TEXT, `prof` TEXT);""")
 
-# INSTALLAZIONE LINGUA
-if not (os.path.exists(os.path.join(path, "language.txt"))):
-    windll = ctypes.windll.kernel32
-    lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-    lgl = ["en", "it"]
-    lg = gettext.translation("subjects", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
-else:
-    fl = open(os.path.join(path, "language.txt"), "r")
-    lgcode = fl.readline()
-    lg = gettext.translation('subjects', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-lg.install()
 
-# IMPORTAZIONE LIBRERIE PER LA GRAFICA
-from tkinter import *
-import tkinter.messagebox as tkmb
-from tkinter.ttk import *
-from tkinter import Toplevel
+def install_language():
+    """Installazione lingua"""
+    if not (os.path.exists(os.path.join(path, "language.txt"))):
+        windll = ctypes.windll.kernel32
+        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        lg = gettext.translation("subjects", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
+    else:
+        fl = open(os.path.join(path, "language.txt"), "r")
+        lgcode = fl.readline()
+        lg = gettext.translation('subjects', localedir=os.path.join(path, 'locale'), languages=[lgcode])
+    lg.install()
 
 
 # INIZIALIZZA DATI
 def inizializza():
+    install_language()
     global m
     m = {}
-    conn = sql.connect(os.path.join(path, fn_sub), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT * FROM subjects")
-    sr = c.fetchall()
+    connection = sql.connect(os.path.join(path, fn_sub), isolation_level=None)
+    cur = connection.cursor()
+    cur.execute("SELECT * FROM subjects")
+    sr = cur.fetchall()
     for row in sr:
         m[row[0]] = {"nome": row[1], "colore": row[2], "prof": row[3]}
     for r in m:
         for i in m[r]:
-            if m[r][i] == None:
+            if m[r][i] is None:
                 m[r][i] = ""
 
 
-def sistemaIndici(conn, c):
-    c.execute("SELECT * FROM subjects")
-    r = c.fetchall()
+def sistemaIndici(cursor):
+    cursor.execute("SELECT * FROM subjects")
+    r = cursor.fetchall()
     for i in range(len(r)):
         if i in r[i]:
             continue
         else:
-            c.execute("""UPDATE subjects SET ID={} WHERE name='{}' AND colour='{}'
+            cursor.execute("""UPDATE subjects SET ID={} WHERE name='{}' AND colour='{}'
             AND prof='{}'""".format(i + 1, r[i][1], r[i][2], r[i][3]))
 
 
 def Salvataggio(mode, name, col, prof, idx=0):
-    conn = sql.connect(os.path.join(path, fn_sub), isolation_level=None)
-    c = conn.cursor()
-    sistemaIndici(conn, c)
+    sql_conn = sql.connect(os.path.join(path, fn_sub), isolation_level=None)
+    sql_cur = sql_conn.cursor()
+    sistemaIndici(sql_cur)
     try:
         if mode == "add":
-            c.execute(
+            sql_cur.execute(
                 "INSERT INTO subjects VALUES ('{}','{}','{}','{}')".format(len(list(m.keys())) + 1, name, col, prof))
             wa.destroy()
         elif mode == "edit":
-            c.execute(
+            sql_cur.execute(
                 """UPDATE subjects SET name='{}', colour='{}', prof='{}' WHERE ID={}""".format(name, col, prof, idx))
             we.destroy()
         elif mode == "del":
-            c.execute("DELETE FROM subjects WHERE ID={}".format(idx))
+            sql_cur.execute("DELETE FROM subjects WHERE ID={}".format(idx))
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Salvataggio effettuato con successo!"))
         wim.destroy()
@@ -98,7 +98,7 @@ def Salvataggio(mode, name, col, prof, idx=0):
         tkmb.showerror(title=_("Errore!"),
                        message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore") + "\n" + str(
                            ex))
-    sistemaIndici(conn, c)
+    sistemaIndici(sql_cur)
 
 
 def delete():
@@ -107,11 +107,12 @@ def delete():
     if selMat["text"] == "":
         tkmb.showwarning(title=_("Nessuna materia selezionata!"),
                          message=_(
-                             "Non è stata selezionata nessuna materia. Si prega di selezionarne una per apportare modifiche."))
+                             "Non è stata selezionata nessuna materia. Si prega di selezionarne una per apportare "
+                             "modifiche."))
         return ""
     scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
                            message=_("Si è sicuri di voler eliminare la materia {} ?").format(selMat["values"][0]))
-    if scelta == True:
+    if scelta is True:
         Salvataggio("del", None, None, None, selMat["text"])
     else:
         return ""
@@ -146,7 +147,7 @@ def add():
     e.grid(row=0, column=1, padx=10, pady=10)
     lc = Label(fam, text=_("Colore"))
     cc = Canvas(fam, bg="light blue", width=50, height=20)
-    cc.bind("<Button-1>", lambda e: scegliColore(cc))
+    cc.bind("<Button-1>", lambda event: scegliColore(cc))
     lc.grid(row=2, column=0, padx=1, pady=5)
     cc.grid(row=2, column=1, padx=1, pady=5)
     lp = Label(fam, text=_("Professore"))
@@ -160,7 +161,8 @@ def add():
     updatecb(ep, listaprof)
     psave = PIL.Image.open(r"icons/save.png")
     isave = PIL.ImageTk.PhotoImage(psave)
-    b = Button(wa, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: Salvataggio("add", var.get(), cc["background"], ep.get()))
+    b = Button(wa, text=_("SALVA"), image=isave, compound=LEFT,
+               command=lambda: Salvataggio("add", var.get(), cc["background"], ep.get()))
     b.pack(padx=10, pady=10)
     wa.mainloop()
     pconn.close()
@@ -173,7 +175,8 @@ def edit():
     if selMat["text"] == "":
         tkmb.showwarning(title=_("Nessuna materia selezionata!"),
                          message=_(
-                             "Non è stata selezionata nessuna materia. Si prega di selezionarne una per apportare modifiche."))
+                             "Non è stata selezionata nessuna materia. Si prega di selezionarne una per apportare "
+                             "modifiche."))
         return ""
     global we
     we = Toplevel()
@@ -190,7 +193,7 @@ def edit():
     e.grid(row=0, column=1, padx=10, pady=10)
     lc = Label(fam, text=_("Colore"))
     cc = Canvas(fam, bg=selMat["values"][1], width=50, height=20)
-    cc.bind("<Button-1>", lambda e: scegliColore(cc))
+    cc.bind("<Button-1>", lambda event: scegliColore(cc))
     lc.grid(row=2, column=0, padx=1, pady=5)
     cc.grid(row=2, column=1, padx=1, pady=5)
     lp = Label(fam, text=_("Professore"))
@@ -245,20 +248,20 @@ def creaFinestra():
     wim.title(_("Materie") + " - School Life Diary")
     wim.iconbitmap(r"images/school_life_diary.ico")
     wim.geometry("750x375+600+200")
-    iAdd = PhotoImage(file=r"icons/add.png")
-    iEdit = PhotoImage(file=r"icons/edit.png")
-    iDel = PhotoImage(file=r"icons/delete.png")
+    i_add = PhotoImage(file=r"icons/add.png")
+    i_edit = PhotoImage(file=r"icons/edit.png")
+    i_del = PhotoImage(file=r"icons/delete.png")
     global aMenu
     aMenu = Menu(wim, tearoff=0)
-    aMenu.add_command(label=_('Aggiungi'), image=iAdd, compound="left",
+    aMenu.add_command(label=_('Aggiungi'), image=i_add, compound="left",
                       command=add)
-    aMenu.add_command(label=_('Modifica'), image=iEdit, compound="left",
+    aMenu.add_command(label=_('Modifica'), image=i_edit, compound="left",
                       command=edit)
-    aMenu.add_command(label=_('Elimina'), image=iDel, compound="left",
+    aMenu.add_command(label=_('Elimina'), image=i_del, compound="left",
                       command=delete)
     global bMenu
     bMenu = Menu(wim, tearoff=0)
-    bMenu.add_command(label=_('Aggiungi'), image=iAdd, compound="left",
+    bMenu.add_command(label=_('Aggiungi'), image=i_add, compound="left",
                       command=add)
     global tm
     tm = Treeview(wim)
@@ -280,7 +283,9 @@ def creaFinestra():
                                          m[x]["colore"],
                                          m[x]["prof"]])
     li = Label(wim, text=_(
-        "Per aggiungere una materia, usa il tasto destro del mouse su uno spazio vuoto della finestra.\nPer modificare una materia, fai doppio click sulla riga corrispondente.\nPer modificare o eliminare una materia, selezionare una riga e poi premere il tasto destro del mouse."))
+        "Per aggiungere una materia, usa il tasto destro del mouse su uno spazio vuoto della finestra.\nPer "
+        "modificare una materia, fai doppio click sulla riga corrispondente.\nPer modificare o eliminare una materia, "
+        "selezionare una riga e poi premere il tasto destro del mouse."))
     li.pack()
     wim.bind("<Button-3>", popup2)
     wim.focus()

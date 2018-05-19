@@ -11,7 +11,7 @@
 #
 # LICENSE
 #
-'''
+"""
 --------------------------------------------------------------------
 License
 
@@ -42,13 +42,13 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
 OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 --------------------------------------------------------------------
-'''
-
+"""
 
 from tkinter import *
 
-class ToolTipManager:
 
+# noinspection PyAttributeOutsideInit
+class ToolTipManager:
     label = None
     window = None
     active = 0
@@ -67,7 +67,7 @@ class ToolTipManager:
             try:
                 self.bg = "systeminfobackground"
                 self.fg = "systeminfotext"
-                widget.winfo_rgb(self.fg) # make sure system colors exist
+                widget.winfo_rgb(self.fg)  # make sure system colors exist
                 widget.winfo_rgb(self.bg)
             except:
                 self.bg = "#ffffe0"
@@ -97,7 +97,7 @@ class ToolTipManager:
             self.popup.withdraw()
             self.label = Label(
                 self.popup, fg=self.fg, bg=self.bg, bd=0, padx=2
-                )
+            )
             self.label.pack()
             self.active = 0
         self.xy = event.x_root + 16, event.y_root + 10
@@ -126,7 +126,9 @@ class ToolTipManager:
             widget.after_cancel(self.after_id)
             self.after_id = None
 
+
 _manager = ToolTipManager()
+
 
 ##
 # Registers a tooltip for a given widget.
@@ -139,6 +141,7 @@ _manager = ToolTipManager()
 def register(widget, text):
     _manager.register(widget, text)
 
+
 ##
 # Unregisters a tooltip.  Note that the tooltip information is automatically
 # destroyed when the widget is destroyed.
@@ -146,8 +149,8 @@ def register(widget, text):
 def unregister(widget):
     _manager.unregister(widget)
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     root = Tk()
 
     root.title("ToolTips")
@@ -155,19 +158,24 @@ if __name__ == "__main__":
     b1 = Button(root, bg="red", text="red")
     b1.pack()
 
+    # noinspection PyTypeChecker
     register(b1, "A red button")
 
     b2 = Button(root, bg="green", text="green")
     b2.pack()
 
+    # noinspection PyTypeChecker
     register(b2, "A green button")
 
     b3 = Button(root, fg="blue", text="blue")
     b3.pack()
 
-    def cb(*args):
+
+    def cb():
         return "A blue text"
 
+
+    # noinspection PyTypeChecker
     register(b3, cb)
     # unregister(b3)
 

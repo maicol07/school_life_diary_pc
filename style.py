@@ -3,7 +3,7 @@ from ttkthemes.themed_style import *
 
 def init():
     global s
-    s=ThemedStyle()
+    s = ThemedStyle()
     s.configure("TFrame", background="white")
     s.configure("TButton", height=100)
     s.configure("TLabel", background="white")

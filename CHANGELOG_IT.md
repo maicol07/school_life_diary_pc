@@ -10,13 +10,17 @@ Questo formato è basato sul formato [Keep a Changelog](http://keepachangelog.co
 
 - Nuova sezione professori! Inserisci le info personali quali nome, cognome, immagine, sito web e email. Potrai poi collegarli alle loro materie!
 - Aggiunte nuovi campi nelle materie.
-- Temi! Possibilità di cambiare il tema visivo per l'app
+- Temi! Possibilità di cambiare il tema visivo per l'app.
+- Programma di aggiornamento automatico!! Ogni volta che aggiorni l'applicazione il database si aggiorna automaticamente.
+- Scegli se controllare o no gli aggiornamenti dell'app all'avvio!
 
 ### Cambiato
 
 - Ridisegnata schermata iniziale
+- Distinte le notifiche degli aggiornamenti in stabili, beta e alpha.
 - Miglioramenti interfaccia delle schermate impostazioni e materie, ora viene visualizzata una tabella e un menu contestuale quando si usa il tasto destro.
 - Miglioramenti grafici generali
+- Miglioramenti al codice generali (sia estetici che funzionali, secondo regole PEP 8)
 - Cambiato database da file a SQLITE3
 
 ### Risolto

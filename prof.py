@@ -2,13 +2,17 @@
 import ctypes
 import gettext
 import locale
+import os.path
 import sqlite3 as sql
+import tkinter.messagebox as tkmb
 import webbrowser
+from tkinter import *
+from tkinter import Toplevel
 from tkinter.filedialog import askopenfilename
+from tkinter.ttk import *
 
 import PIL.Image
 import PIL.ImageTk
-import os.path
 
 global fn_prof
 global path
@@ -44,92 +48,88 @@ else:
             `email`	TEXT
     );""")
 
-# INSTALLAZIONE LINGUA
-if not (os.path.exists(os.path.join(path, "language.txt"))):
-    windll = ctypes.windll.kernel32
-    lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-    lgl = ["en", "it"]
-    lg = gettext.translation("subjects", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
-else:
-    fl = open(os.path.join(path, "language.txt"), "r")
-    lgcode = fl.readline()
-    lg = gettext.translation('subjects', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-lg.install()
 
-# IMPORTAZIONE LIBRERIE PER LA GRAFICA
-from tkinter import *
-import tkinter.messagebox as tkmb
-from tkinter.ttk import *
-from tkinter import Toplevel
+def install_language():
+    """Installazione lingua"""
+    if not (os.path.exists(os.path.join(path, "language.txt"))):
+        windll = ctypes.windll.kernel32
+        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        lg = gettext.translation("subjects", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
+    else:
+        fl = open(os.path.join(path, "language.txt"), "r")
+        lgcode = fl.readline()
+        lg = gettext.translation('subjects', localedir=os.path.join(path, 'locale'), languages=[lgcode])
+    lg.install()
 
 
 # INIZIALIZZA DATI
 def inizializza():
+    install_language()
     global prof
     prof = {}
-    conn = sql.connect(os.path.join(path, fn_prof), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT * FROM prof")
-    sr = c.fetchall()
+    connection = sql.connect(os.path.join(path, fn_prof), isolation_level=None)
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM prof")
+    sr = cursor.fetchall()
     for row in sr:
         prof[row[0]] = {"nome": row[1], "cognome": row[2], "imageURI": row[3], "web": row[4], "email": row[5]}
     for r in prof:
         for i in prof[r]:
-            if prof[r][i] == None:
+            if prof[r][i] is None:
                 prof[r][i] = ""
-    c.close()
+    cursor.close()
 
 
-def sistemaIndici(conn, c):
-    c.execute("SELECT * FROM prof")
-    r = c.fetchall()
+def sistemaIndici(cursor):
+    cursor.execute("SELECT * FROM prof")
+    r = cursor.fetchall()
     for i in range(len(r)):
         if i in r[i]:
             continue
         else:
-            c.execute("""UPDATE prof SET ID={} WHERE nome='{}' AND cognome='{}'
+            cursor.execute("""UPDATE prof SET ID={} WHERE nome='{}' AND cognome='{}'
             AND imageURI='{}' AND web='{}' AND email='{}'""".format(i + 1, r[i][1], r[i][2], r[i][3], r[i][4], r[i][5]))
 
 
 def Salvataggio(mode, nome=None, cognome=None, sitoweb=None, email=None, idx=0):
     try:
-        conn = sql.connect(os.path.join(path, fn_prof), isolation_level=None)
-        c = conn.cursor()
-        sistemaIndici(conn, c)
+        sql_conn = sql.connect(os.path.join(path, fn_prof), isolation_level=None)
+        cur = sql_conn.cursor()
+        sistemaIndici(cur)
         if mode == "add":
-            c.execute("SELECT * FROM prof")
-            r = c.fetchall()
-            if "fImage" in globals() and not (fImage == None):
-                c.execute(
+            cur.execute("SELECT * FROM prof")
+            if "fImage" in globals() and not (fImage is None):
+                cur.execute(
                     "INSERT INTO prof VALUES ('{}','{}','{}','{}','{}','{}')".format(len(prof.keys()) + 1, nome.get(),
                                                                                      cognome.get(), fImage,
                                                                                      sitoweb.get(), email.get()))
             else:
-                c.execute(
+                cur.execute(
                     "INSERT INTO prof VALUES ('{}','{}','{}','{}','{}','{}')".format(len(prof.keys()) + 1, nome.get(),
                                                                                      cognome.get(), "", sitoweb.get(),
                                                                                      email.get()))
             wa.destroy()
         elif mode == "edit":
-            if "fImage" in globals() and not (fImage == None):
-                c.execute("""UPDATE prof
+            if "fImage" in globals() and not (fImage is None):
+                cur.execute("""UPDATE prof
                           SET nome = '{}', cognome = '{}', imageURI='{}', web='{}', email='{}'
                           WHERE ID={}; """.format(nome.get(), cognome.get(), fImage, sitoweb.get(), email.get(), idx))
             else:
-                c.execute("""UPDATE prof
+                cur.execute("""UPDATE prof
                           SET nome = '{}', cognome = '{}', imageURI='', web='{}', email='{}'
                           WHERE ID={}; """.format(nome.get(), cognome.get(), sitoweb.get(), email.get(), idx))
             we.destroy()
         elif mode == "del":
-            c.execute("""DELETE FROM prof WHERE ID={};""".format(idx))
-        sistemaIndici(conn, c)
+            cur.execute("""DELETE FROM prof WHERE ID={};""".format(idx))
+        sistemaIndici(cur)
         tkmb.showinfo(title=_("Successo!"), message=_("Salvataggio effettuato con successo!"))
         wip.destroy()
         creaFinestra()
     except Exception as ex:
         tkmb.showerror(title=_("Errore!"),
                        message=_(
-                           "Si è verificato un errore, riprovare oppure contattare lo sviluppatore. Errore riscontrato:") + "\n" * 2 + str(
+                           "Si è verificato un errore, riprovare oppure contattare lo sviluppatore. "
+                           "Errore riscontrato:") + "\n" * 2 + str(
                            ex))
 
 
@@ -145,7 +145,7 @@ def delete():
     scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
                            message=_("Si è sicuri di voler eliminare il professore {} ?".format(
                                selProf["values"][1] + " " + selProf["values"][2])))
-    if (scelta == True):
+    if scelta is True:
         Salvataggio("del", idx=selProf["text"])
     else:
         return ""
@@ -162,7 +162,8 @@ def selImmagine(bi, window):
     else:
         bi["text"] = _("Seleziona immagine")
     img = PIL.Image.open(fImage)
-    # Ridimensionamento immagine a 100 px per larghezza, altezza variabile e scalata in base a quella vecchia e alla larghezza di 100 px
+    # Ridimensionamento immagine a 100 px per larghezza, altezza variabile e scalata in base a quella vecchia e alla
+    # larghezza di 100 px
     basewidth = 100
     wpercent = (basewidth / float(img.size[0]))
     hsize = int((float(img.size[1]) * float(wpercent)))
@@ -177,6 +178,7 @@ def selImmagine(bi, window):
 
 
 ## MASCHERA DI AGGIUNTA ##
+# noinspection PyTypeChecker
 def add():
     global wa
     wa = Toplevel()
@@ -221,13 +223,15 @@ def add():
 
 
 ## MASCHERA DI MODIFICA ##
+# noinspection PyTypeChecker
 def edit():
     global selProf
     selProf = tp.item(tp.focus())
     if selProf["text"] == "":
         tkmb.showwarning(title=_("Nessun professore selezionato!"),
                          message=_(
-                             "Non è stato selezionato nessun professore. Si prega di selezionarne uno per apportare modifiche."))
+                             "Non è stato selezionato nessun professore. Si prega di selezionarne uno per apportare "
+                             "modifiche."))
         return ""
     global we
     we = Toplevel()
@@ -251,11 +255,13 @@ def edit():
     li.grid(row=2, column=0, padx=10, pady=10)
     bi = Button(fap, text=_("Seleziona immagine"), command=lambda: selImmagine(bi, "we"))
     for i in prof:
-        if prof[i]["nome"] == selProf["values"][0] and prof[i]["cognome"] == selProf["values"][1] and prof[i]["web"] == \
-                selProf["values"][2] and prof[i]["email"] == selProf["values"][3] and not (selProf["image"] == ""):
+        if prof[i]["nome"] == selProf["values"][0] and prof[i]["cognome"] == selProf["values"][1] \
+                and prof[i]["web"] == selProf["values"][2] and prof[i]["email"] == selProf["values"][3] \
+                and not (selProf["image"] == ""):
             try:
                 iprof = PIL.Image.open(prof[i]["imageURI"])
-                # Ridimensionamento immagine a 100 px per larghezza, altezza variabile e scalata in base a quella vecchia e alla larghezza di 100 px
+                # Ridimensionamento immagine a 100 px per larghezza, altezza variabile e scalata in base a quella
+                # vecchia e alla larghezza di 100 px
                 basewidth = 100
                 wpercent = (basewidth / float(iprof.size[0]))
                 hsize = int((float(iprof.size[1]) * float(wpercent)))
@@ -332,20 +338,20 @@ def creaFinestra():
     wip.title(_("Professori") + " - School Life Diary")
     wip.iconbitmap(r"images/school_life_diary.ico")
     wip.geometry("1000x375+600+200")
-    iAdd = PhotoImage(file=r"icons/add.png")
-    iEdit = PhotoImage(file=r"icons/edit.png")
-    iDel = PhotoImage(file=r"icons/delete.png")
+    i_add = PhotoImage(file=r"icons/add.png")
+    i_edit = PhotoImage(file=r"icons/edit.png")
+    i_del = PhotoImage(file=r"icons/delete.png")
     global aMenu
     aMenu = Menu(wip, tearoff=0)
-    aMenu.add_command(label=_('Aggiungi'), image=iAdd, compound="left",
+    aMenu.add_command(label=_('Aggiungi'), image=i_add, compound="left",
                       command=add)
-    aMenu.add_command(label=_('Modifica'), image=iEdit, compound="left",
+    aMenu.add_command(label=_('Modifica'), image=i_edit, compound="left",
                       command=edit)
-    aMenu.add_command(label=_('Elimina'), image=iDel, compound="left",
+    aMenu.add_command(label=_('Elimina'), image=i_del, compound="left",
                       command=delete)
     global bMenu
     bMenu = Menu(wip, tearoff=0)
-    bMenu.add_command(label=_('Aggiungi'), image=iAdd, compound="left",
+    bMenu.add_command(label=_('Aggiungi'), image=i_add, compound="left",
                       command=add)
     global tp
     tp = Treeview(wip)
@@ -386,10 +392,14 @@ def creaFinestra():
                                                  prof[x]["email"]])
                 tkmb.showwarning(_("Immagine non esistente!"),
                                  message=_(
-                                     "Non esiste una immagine per il professore {}! Molto probabilmente l'hai spostata o eliminata. Per risolvere selezionare nuovamente l'immagine modificando il professore oppure spostarla nella cartella precedente.".format(
+                                     "Non esiste una immagine per il professore {}! Molto probabilmente l'hai "
+                                     "spostata o eliminata. Per risolvere selezionare nuovamente l'immagine "
+                                     "modificando il professore oppure spostarla nella cartella precedente.".format(
                                          prof[x]["nome"] + " " + prof[x]["cognome"])))
     li = Label(wip, text=_(
-        "Per aggiungere un professore, usa il tasto destro del mouse su uno spazio vuoto della finestra.\nPer modificare un professore, fai doppio click sulla riga corrispondente.\nPer modificare o eliminare un professore, selezionare una riga e poi premere il tasto destro del mouse"))
+        "Per aggiungere un professore, usa il tasto destro del mouse su uno spazio vuoto della finestra.\nPer "
+        "modificare un professore, fai doppio click sulla riga corrispondente.\nPer modificare o eliminare un "
+        "professore, selezionare una riga e poi premere il tasto destro del mouse"))
     li.pack()
     wip.bind("<Button-3>", popup2)
     wip.focus()

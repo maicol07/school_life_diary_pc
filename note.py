@@ -1,7 +1,19 @@
+import ctypes
+import gettext
+import locale
 import os
 import os.path
 import sqlite3 as sql
 import time
+import tkinter.messagebox as tkmb
+from tkinter import *
+from tkinter import Toplevel
+from tkinter import filedialog
+from tkinter.scrolledtext import *
+from tkinter.ttk import *
+
+import PIL.Image
+import PIL.ImageTk
 
 global nt
 
@@ -48,37 +60,28 @@ else:
 	`URIallegato`	TEXT
 );""")
 
-import gettext
-import ctypes
-import locale
 
-if not (os.path.exists(os.path.join(path, "language.txt"))):
-    windll = ctypes.windll.kernel32
-    lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-    lgl = ["en", "it"]
-    lg = gettext.translation("note", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
-else:
-    fl = open(os.path.join(path, "language.txt"), "r")
-    lgcode = fl.readline()
-    lg = gettext.translation('note', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-lg.install()
-from tkinter import *
-from tkinter.scrolledtext import *
-from tkinter import filedialog
-import tkinter.messagebox as tkmb
-from tkinter.ttk import *
-from tkinter import Toplevel
-import PIL.Image, PIL.ImageTk
+def install_language():
+    """Installazione lingua"""
+    if not (os.path.exists(os.path.join(path, "language.txt"))):
+        windll = ctypes.windll.kernel32
+        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        lg = gettext.translation("note", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
+    else:
+        fl = open(os.path.join(path, "language.txt"), "r")
+        lgcode = fl.readline()
+        lg = gettext.translation('note', localedir=os.path.join(path, 'locale'), languages=[lgcode])
+    lg.install()
 
 
-def sistemaIndici(c):
-    c.execute("SELECT * FROM notes")
-    r = c.fetchall()
+def sistemaIndici(cur):
+    cur.execute("SELECT * FROM notes")
+    r = cur.fetchall()
     for i in range(len(r)):
         if i in r[i]:
             continue
         else:
-            c.execute("""UPDATE notes SET ID={} WHERE nome='{}' AND descrizione='{}'
+            cur.execute("""UPDATE notes SET ID={} WHERE nome='{}' AND descrizione='{}'
             AND data_creazione='{}' AND data_modifica='{}' AND allegati='{}' AND URIallegato='{}'""".format(i + 1,
                                                                                                             r[i][1],
                                                                                                             r[i][2],
@@ -90,48 +93,35 @@ def sistemaIndici(c):
 
 def Salvataggio(mode, titolo, descrizione):
     try:
-        conn = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
-        c = conn.cursor()
-        sistemaIndici(c)
+        sql_conn = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
+        sql_cur = sql_conn.cursor()
+        sistemaIndici(sql_cur)
         if mode == "add":
             if "fs" in globals():
-                c.execute("INSERT INTO notes VALUES ('{}','{}','{}','{}', '{}', '{}', '{}');".format(len(list(nt.keys())
-                                                                                                         ) + 1,
-                                                                                                     titolo.get(),
-                                                                                                     descrizione.get(
-                                                                                                         1.0, END),
-                                                                                                     time.strftime(
-                                                                                                         "%d/%m/%Y"),
-                                                                                                     time.strftime(
-                                                                                                         "%d/%m/%Y"),
-                                                                                                     fs[len(fs) - 1],
-                                                                                                     sf))
+                sql_cur.execute("INSERT INTO notes VALUES ('{}','{}','{}','{}', '{}', '{}', '{}');".format(
+                    len(list(nt.keys())) + 1, titolo.get(), descrizione.get(1.0, END), time.strftime("%d/%m/%Y"),
+                    time.strftime("%d/%m/%Y"), fs[len(fs) - 1],
+                    sf))
             else:
-                c.execute("INSERT INTO notes VALUES ('{}','{}','{}','{}', '{}', '{}', '{}');".format(len(list(nt.keys())
-                                                                                                         ) + 1,
-                                                                                                     titolo.get(),
-                                                                                                     descrizione.get(
-                                                                                                         1.0, END),
-                                                                                                     time.strftime(
-                                                                                                         "%d/%m/%Y"),
-                                                                                                     time.strftime(
-                                                                                                         "%d/%m/%Y"),
-                                                                                                     "", ""))
+                sql_cur.execute("INSERT INTO notes VALUES ('{}','{}','{}','{}', '{}', '{}', '{}');".format(
+                    len(list(nt.keys())) + 1, titolo.get(), descrizione.get(1.0, END), time.strftime("%d/%m/%Y"),
+                    time.strftime("%d/%m/%Y"), "", ""))
             wa.destroy()
         elif mode == "edit":
             if "fs" in globals() and "lfe" in globals():
-                c.execute("""UPDATE notes SET nome='{}', descrizione='{}', data_modifica='{}', allegati='{}',
+                sql_cur.execute("""UPDATE notes SET nome='{}', descrizione='{}', data_modifica='{}', allegati='{}',
     URIallegato='{}' WHERE ID={};""".format(titolo.get(), descrizione.get(1.0, END), time.strftime(
                     "%d/%m/%Y"), fs[len(fs) - 1], sf, selItem["text"]))
             else:
-                c.execute("""UPDATE notes SET nome='{}', descrizione='{}', data_modifica='{}' WHERE ID={};""".format(
-                    titolo.get(), descrizione.get(1.0, END), time.strftime("%d/%m/%Y"), selItem["text"]))
+                sql_cur.execute(
+                    """UPDATE notes SET nome='{}', descrizione='{}', data_modifica='{}' WHERE ID={};""".format(
+                        titolo.get(), descrizione.get(1.0, END), time.strftime("%d/%m/%Y"), selItem["text"]))
             we.destroy()
         elif mode == "del":
-            c.execute("DELETE FROM notes WHERE ID={}".format(selItem["text"]))
-        sistemaIndici(c)
-        c.close()
-        conn.close()
+            sql_cur.execute("DELETE FROM notes WHERE ID={}".format(selItem["text"]))
+        sistemaIndici(sql_cur)
+        sql_cur.close()
+        sql_conn.close()
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Salvataggio effettuato con successo!"))
         wn.destroy()
@@ -152,7 +142,7 @@ def delete():
     scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
                            message=_("Si è sicuri di voler eliminare la annotazione con titolo {}?").format(
                                selItem["values"][0]))
-    if scelta == True:
+    if scelta is True:
         Salvataggio("del", "", "")
     else:
         return ""
@@ -190,7 +180,6 @@ def edit():
     et.grid(row=0, column=1, padx=10, pady=2)
     l1 = Label(f, text=_("Modificare il contenuto dell'annotazione"))
     l1.grid(row=1, column=0, padx=10, pady=5)
-    varc = StringVar(value="")
     ec = ScrolledText(f, width=50, height=10)
     ec.grid(row=1, column=1, padx=10, pady=2)
     ec.insert(INSERT, selItem["values"][1])
@@ -231,7 +220,6 @@ def add():
     et.grid(row=0, column=1, padx=10, pady=2)
     l1 = Label(f, text=_("Inserire il contenuto della nuova annotazione"))
     l1.grid(row=1, column=0, padx=10, pady=5)
-    varc = StringVar(value="")
     ec = ScrolledText(f, width=50, height=10)
     ec.grid(row=1, column=1, padx=10, pady=2)
     l2 = Label(f, text=_("Inserisci un allegato (opzionale)"))
@@ -255,18 +243,18 @@ def add():
 def inizializza():
     global nt
     nt = {}
-    conn = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT * FROM notes")
-    sr = c.fetchall()
+    connection = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM notes")
+    sr = cursor.fetchall()
     for row in sr:
         nt[row[0]] = {"nome": row[1], "descrizione": row[2], "data_creazione": row[3], "data_modifica": row[4],
                       "allegati": row[5], "URIallegato": row[6]}
     for r in nt:
         for i in nt[r]:
-            if nt[r][i] == None:
+            if nt[r][i] is None:
                 nt[r][i] = ""
-    c.close()
+    cursor.close()
 
 
 def on_double_click(event):
@@ -317,22 +305,22 @@ def creaFinestra():
     wn.iconbitmap(r"images/school_life_diary.ico")
     wn.configure(bg="white")
     wn.geometry("850x350+600+200")
-    iAdd = PhotoImage(file=r"icons/add.png")
-    iEdit = PhotoImage(file=r"icons/edit.png")
-    iDel = PhotoImage(file=r"icons/delete.png")
+    i_add = PhotoImage(file=r"icons/add.png")
+    i_edit = PhotoImage(file=r"icons/edit.png")
+    i_del = PhotoImage(file=r"icons/delete.png")
     patt = PIL.Image.open(r"icons/paper-clip.png")
     iatt = PIL.ImageTk.PhotoImage(patt)
     global aMenu
     aMenu = Menu(wn, tearoff=0)
-    aMenu.add_command(label=_('Aggiungi'), image=iAdd, compound="left",
+    aMenu.add_command(label=_('Aggiungi'), image=i_add, compound="left",
                       command=add)
-    aMenu.add_command(label=_('Modifica'), image=iEdit, compound="left",
+    aMenu.add_command(label=_('Modifica'), image=i_edit, compound="left",
                       command=edit)
-    aMenu.add_command(label=_('Elimina'), image=iDel, compound="left", command=delete)
+    aMenu.add_command(label=_('Elimina'), image=i_del, compound="left", command=delete)
     aMenu.add_separator()
     global bMenu
     bMenu = Menu(wn, tearoff=0)
-    bMenu.add_command(label=_('Aggiungi'), image=iAdd, compound="left",
+    bMenu.add_command(label=_('Aggiungi'), image=i_add, compound="left",
                       command=add)
     f = Frame(wn)
     f.pack()
@@ -360,7 +348,6 @@ def creaFinestra():
                                             nt[x]["data_modifica"],
                                             nt[x]["allegati"]], image=iatt)
         else:
-            ia = None
             t.insert("", x, text=x, values=[nt[x]["nome"],
                                             nt[x]["descrizione"],
                                             nt[x]["data_creazione"],

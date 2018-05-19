@@ -5,14 +5,21 @@
 from transifex.api import TransifexAPI
 
 global tr
-tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com')
+tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com/')
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import filedialog, Toplevel
 import tkinter.messagebox as tkmb
 import os.path  # serve per verificare se un file è presente o no
 from zipfile import *
-import subprocess, time, gettext, ctypes, locale, polib, PIL.Image, PIL.ImageTk
+import subprocess
+import time
+import gettext
+import ctypes
+import locale
+import polib
+import PIL.Image
+import PIL.ImageTk
 import sqlite3 as sql
 import wckToolTips
 import style
@@ -27,25 +34,28 @@ path = os.path.expanduser(r'~\Documents\School Life Diary')
 conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
 c = conn.cursor()
 
-## INSTALLAZIONE LINGUA ##
-if not (os.path.exists(os.path.join(path, "language.txt"))):
-    windll = ctypes.windll.kernel32
-    lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-    lgl = ["en", "it"]
-    lg = gettext.translation("settings", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
-else:
-    fl = open(os.path.join(path, "language.txt"), "r")
-    lgcode = fl.readline()
-    lg = gettext.translation('settings', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    fl.close()
-lg.install()
+
+def install_language():
+    """Installazione lingua"""
+    if not (os.path.exists(os.path.join(path, "language.txt"))):
+        windll = ctypes.windll.kernel32
+        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        lg = gettext.translation("settings", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
+    else:
+        fl = open(os.path.join(path, "language.txt"), "r")
+        lgcode = fl.readline()
+        lg = gettext.translation('settings', localedir=os.path.join(path, 'locale'), languages=[lgcode])
+        fl.close()
+    lg.install()
 
 
 ## SALVATAGGIO LINGUA ##
-def salvaLingua(cb, lgl, wl, mode):
+
+
+def salvaLingua(cb, mode):
     try:
         if mode == "download":
-            l = ["main", "settings", "note", "timetable", "subject"]
+            l = sorted(["main", "settings", "note", "timetable", "subjects"])
             for i in l:
                 lang = tr.list_languages('school-life-diary-pc', i + "pot")
                 for y in lang:
@@ -64,37 +74,31 @@ def salvaLingua(cb, lgl, wl, mode):
             f.close()
         tkmb.showinfo(title=_("Salvataggio effettuato"),
                       message=_(
-                          "La lingua scelta è stata salvata. L'applicazione ora si chiuderà, ricordati di RIAVVIARE per RENDERE EFFETTIVE le modifiche!!"))
+                          "La lingua scelta è stata salvata. L'applicazione ora si chiuderà, ricordati di RIAVVIARE "
+                          "per RENDERE EFFETTIVE le modifiche!!"))
         exit()
     except Exception as ex:
-        if str(ex) == "404: b'Not Found'":
-            updatecb(cb, lgl)
-            tkmb.showinfo(title=_("Lingue scaricate"),
-                          message=_("La lingue sono state scaricate. Puoi sceglierne una dal menu!"))
-            wl.destroy()
-            cambiaLingua()
-        else:
-            tkmb.showerror(title=_("Si è verificato un errore!!"),
-                           message=_(
-                               "È stato riscontrato un errore imprevisto. Riprovare o contattare lo sviluppatore.") + "\n" + str(
-                               ex))
+        tkmb.showerror(title=_("Si è verificato un errore!!"),
+                       message=_("È stato riscontrato un errore imprevisto. "
+                                 "Riprovare o contattare lo sviluppatore.") + "\n" + str(ex))
 
 
 ## AGGIORNAMENTO LISTA LINGUE ##
-def updatecb(cb, lgl):
-    cb["values"] = lgl
+def updatecb(cb, lang_list):
+    cb["values"] = lang_list
 
 
 ## CAMBIO LINGUA ##
 def cambiaLingua():
+    install_language()
     wl = Toplevel()
     wl.configure(background="white")
     wl.title(_("Cambia lingua") + " - School Life Diary")
     wl.iconbitmap(r"images/school_life_diary.ico")
     wl.geometry("500x250+100+100")
-    lgl = os.listdir(os.path.join(path, "locale"))
+    languages_list = os.listdir(os.path.join(path, "locale"))
     e1 = Label(wl, text=_("Scegliere la propria lingua: "))
-    cb = Combobox(wl, postcommand=lambda: updatecb(cb, lgl))
+    cb = Combobox(wl, postcommand=lambda: updatecb(cb, languages_list))
     e1.pack(padx=10, pady=10)
     cb.pack(padx=10, pady=10)
     global ichange, idown
@@ -102,20 +106,19 @@ def cambiaLingua():
     ichange = PIL.ImageTk.PhotoImage(pchange)
     pdown = PIL.Image.open(r"icons/download.png")
     idown = PIL.ImageTk.PhotoImage(pdown)
-    btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: salvaLingua(cb, lgl, wl, "change"))
+    btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: salvaLingua(cb, "change"))
     btn.pack(padx=10, pady=10)
-    l = Label(wl, text=_(
-        "Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti dalla nostra piattaforma di traduzione."))
+    l = Label(wl, text=_("Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti "
+                         "dalla nostra piattaforma di traduzione."))
     l.pack(padx=10, pady=2)
     btn1 = Button(wl, text=_("SCARICA O AGGIORNA LINGUE"), image=idown, compound=LEFT,
-                  command=lambda: salvaLingua(cb, lgl, wl, "download"))
+                  command=lambda: salvaLingua(cb, "download"))
     btn1.pack(padx=5, pady=10)
 
 
 ## BACKUP DEI DATABASE ##
 def backup():
     fn_bk = "backups"
-    bfoldpath = os.path.join(path, fn_bk)
     if not (os.path.exists(os.path.join(path, fn_bk))):
         os.mkdir(os.path.join(path, fn_bk))
     bzip = ZipFile(os.path.join(path,
@@ -131,12 +134,12 @@ def backup():
                                                           "backup-" + time.strftime("%d-%m-%Y") + "-" + time.strftime(
                                                               "%H-%M-%S") + ".zip") + '"')
     tkmb.showinfo(title=_("Backup effettuato!"),
-                  message=_("""Backup creato con successo!
-Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: """) + os.path.join(path,
-                                                                                                                 fn_bk,
-                                                                                                                 "backup-" + time.strftime(
-                                                                                                                     "%d-%m-%Y") + "-" + time.strftime(
-                                                                                                                     "%H-%M-%S") + ".zip"))
+                  message="{0}{1}".format(_("""Backup creato con successo!
+Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: """),
+                                          os.path.join(path, fn_bk,
+                                                       "backup-{}-{}.zip".format(time.strftime("%d-%m-%Y"),
+                                                                                 time.strftime(
+                                                                                     "%H-%M-%S")))))
 
 
 # RIPRISTINO DEI DATI DA BACKUP
@@ -153,16 +156,21 @@ def ripristino():
     except Exception as ex:
         tkmb.showerror(title=_("Ripristino non riuscito"),
                        message=_(
-                           "Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, oppure contattare lo sviluppatore.") + "\n" + ex)
+                           "Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, "
+                           "oppure contattare lo sviluppatore.") + "\n" + ex)
+
+    # ELIMINAZIONE DI TUTTI I DATI
 
 
-# ELIMINAZIONE DI TUTTI I DATI
 def cancellatutto():
     tkmb.showinfo(title=_("Come cancellare i dati?"),
-                  message=_("""Dalla versione 1.0 di School Life Diary, con il cambiamento del database da file a SQLite, non è più possibile cancellare i dati all'interno dell'app.
-È possibile, tuttavia, cancellare i file .db che trovi nella cartella dell'applicazione (in Documenti\School Life Diary). La cartella si aprirà dopo che hai premuto OK.
+                  message=_("""Dalla versione 1.0 di School Life Diary, con il cambiamento del database da file a 
+                  SQLite, non è più possibile cancellare i dati all'interno dell'app. È possibile, tuttavia, 
+                  cancellare i file .db che trovi nella cartella dell'applicazione (in Documenti\School Life Diary). 
+                  La cartella si aprirà dopo che hai premuto OK. 
 
-Il software si chiuderà automaticamente dopo che la cartella si è aperta, per permettere la corretta eliminazione dei dati."""))
+Il software si chiuderà automaticamente dopo che la cartella si è aperta, per permettere la corretta eliminazione dei 
+dati."""))
     subprocess.Popen(r'explorer "{}"'.format(path))
     exit()
 
@@ -170,12 +178,12 @@ Il software si chiuderà automaticamente dopo che la cartella si è aperta, per 
 # Salvataggio impostazioni
 def salvaImpostazioni(par, val):
     try:
-        conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
-        c = conn.cursor()
+        sql_conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
+        sql_cur = sql_conn.cursor()
         # if par == "ORE_MAX_GIORNATA":
         # c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(str(int(val)), par))
         # else:
-        c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(val, par))
+        sql_cur.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(val, par))
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Parametro modificato con successo!"))
         wcv.destroy()
@@ -191,12 +199,12 @@ def salvaImpostazioni(par, val):
             s.configure("TLabelframe.Label", background="white")
             s.configure("TScale", background="white")
             s.configure("TCheckbutton", background="white")
-            s.configure(".", font=c.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0])
+            s.configure(".", font=sql_cur.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0])
         if par == "PC_FONT":
             s = style.s
             s.configure(".", font=val)
-        c.close()
-        conn.close()
+        sql_cur.close()
+        sql_conn.close()
         creaFinestra()
     except Exception as ex:
         tkmb.showerror(title=_("ERRORE!"),
@@ -205,6 +213,7 @@ def salvaImpostazioni(par, val):
 
 
 # ACCETTAZIONE SOLO VALORI INTERI NELLO SLIDER
+# noinspection PyUnusedLocal
 def accept_whole_number_only(sv, e=None):
     value = sv.get()
     if int(value) != value:
@@ -212,11 +221,12 @@ def accept_whole_number_only(sv, e=None):
 
 
 # INIZIALIZZAZIONE IMPOSTAZIONI
-def inizializza(c):
+def inizializza(cursor):
+    install_language()
     global ds
     ds = {}
-    c.execute("SELECT * FROM settings")
-    sr = c.fetchall()
+    cursor.execute("SELECT * FROM settings")
+    sr = cursor.fetchall()
     for row in sr:
         if row[0] == "ALPHA_VERS" or row[0] == "BETA_VERS":
             if row[1] == "1":
@@ -229,7 +239,7 @@ def inizializza(c):
 
 def fontcallback(fs, var):
     # chiedi il font all'utente
-    font = askfont(wcv)
+    font = askfont(wcv, title=_("Selettore carattere"))
     # la variabile font è "" se l'utente ha annullato
     if font:
         # spaces in the family name need to be escaped
@@ -272,7 +282,7 @@ def modifica_valore(event):
         sv.pack(padx=10, pady=10)
         bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
                      command=lambda: salvaImpostazioni(par, int(sv.get())))
-    if par == "PC_THEME":
+    elif par == "PC_THEME":
         etichetta1 = Label(wcv, text=_("Scegliere il valore da attribuire al parametro:"))
         etichetta1.pack(padx=10, pady=10)
         menut = Combobox(wcv, postcommand=lambda: updateList(menut, style.s.theme_names()))
@@ -280,8 +290,12 @@ def modifica_valore(event):
         menut.pack(padx=10, pady=10)
         bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
                      command=lambda: salvaImpostazioni(par, menut.get()))
-    if par == "ALPHA_VERS" or par == "BETA_VERS":
-        etichetta1 = Label(wcv, text=_("Modifica il consenso per ricevere versioni non stabili:"))
+    elif par == "ALPHA_VERS" or par == "BETA_VERS" or par == "CHECK_VERSIONS":
+        if par != "CHECK_VERSIONS":
+            etichetta1 = Label(wcv, text=_("Modifica il consenso per ricevere versioni non stabili:"))
+        else:
+            etichetta1 = Label(wcv, text=_("Modifica il consenso per controllare gli aggiornamenti all'avvio "
+                                           "dell'applicazione."))
         etichetta1.pack(padx=10, pady=10)
         var = IntVar()
         if item["values"][1] == _("Sì"):
@@ -292,17 +306,20 @@ def modifica_valore(event):
             etwar = Label(wcv, text=_("Le versioni Alpha sono poco stabili e non adatte all'uso\n"
                                       "quotidiano. Possono contenere parecchi problemi, ma vengono\n"
                                       "aggiornate più frequentemente rispetto alle versioni beta e stabili."))
-            c = Checkbutton(wcv, text=_("Ricevi versioni alpha"), variable=var)
+            etwar.pack(padx=10, pady=10)
+            cb = Checkbutton(wcv, text=_("Ricevi versioni alpha"), variable=var)
         elif par == "BETA_VERS":
             etwar = Label(wcv, text=_("Le versioni Beta sono abbastanza stabili e abbastanza adatte all'uso\n"
                                       "quotidiano. Possono contenere alcuni problemi, ma vengono\n"
                                       "aggiornate più frequentemente rispetto alle versioni stabili."))
-            c = Checkbutton(wcv, text=_("Ricevi versioni beta"), variable=var)
-        etwar.pack(padx=10, pady=10)
-        c.pack(padx=10, pady=3)
+            etwar.pack(padx=10, pady=10)
+            cb = Checkbutton(wcv, text=_("Ricevi versioni beta"), variable=var)
+        elif par == "CHECK_UPDATES":
+            cb = Checkbutton(wcv, text=_("Controlla aggiornamenti all'avvio di School Life Diary"), variable=var)
+        cb.pack(padx=10, pady=3)
         bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
                      command=lambda: salvaImpostazioni(par, var.get()))
-    if par == "PC_FONT":
+    elif par == "PC_FONT":
         etichetta1 = Label(wcv, text=_('Scegli il carattere da utilizzare: '))
         etichetta1.pack(padx=10, pady=10)
         fc = Label(wcv, text=_("Carattere attuale: {}").format(item["values"][1]))
@@ -314,7 +331,7 @@ def modifica_valore(event):
         btn.pack(padx=10, pady=10)
         bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
                      command=lambda: salvaImpostazioni(par, var.get()))
-    bts.pack(padx=10, pady=10)
+    # bts.pack(padx=10, pady=10)
     wcv.focus()
     wcv.mainloop()
 
@@ -328,23 +345,23 @@ def updateList(menut, l):
 def popup(event):
     if event.widget != ts:
         return
-    iEdit = PhotoImage(file=r"icons/edit.png")
-    sMenu = Menu(ws, tearoff=0)
-    sMenu.add_command(label=_('Modifica'), image=iEdit, compound="left",
-                      command=lambda: modifica_valore(event))
+    i_edit = PhotoImage(file=r"icons/edit.png")
+    s_menu = Menu(ws, tearoff=0)
+    s_menu.add_command(label=_('Modifica'), image=i_edit, compound="left",
+                       command=lambda: modifica_valore(event))
     # mostra il menu popup
     try:
-        sMenu.tk_popup(event.x_root + 53, event.y_root, 0)
+        s_menu.tk_popup(event.x_root + 53, event.y_root, 0)
     finally:
         # make sure to release the grab (Tk 8.0a1 only)
-        sMenu.grab_release()
+        s_menu.grab_release()
 
 
 # CREAZIONE FINESTRA
 def creaFinestra():
-    conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
-    c = conn.cursor()
-    inizializza(c)
+    connection = sql.connect(os.path.join(path, fn_set), isolation_level=None)
+    cur = connection.cursor()
+    inizializza(cur)
     global ws
     ws = Toplevel()
     ws.configure(bg="white")
@@ -397,8 +414,8 @@ def creaFinestra():
     bf.grid(row=0, column=3, padx=10, pady=10)
     wckToolTips.register(bf, _("Apri la cartella dei dati di School Life Diary (con tutti i file dei database)"))
     ws.focus()
-    c.close()
-    conn.close()
+    cur.close()
+    connection.close()
     ws.mainloop()
 
 

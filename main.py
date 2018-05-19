@@ -10,23 +10,34 @@
 
 ### START MAIN ###
 
-## IMPORTAZIONE MODULI ESTERNI ##
-import PIL.Image
-import PIL.ImageTk
 import ctypes
 import gettext
 import locale
 import os
+import os.path
 import sqlite3 as sql
-import webbrowser
-
-global pathset
-from tkinter import *
-from tkinter.ttk import *
-from tkinter import Tk, Toplevel  # Serve per impostare lo sfondo bianco nelle finestre
 import tkinter.messagebox as tkmb
-import style
+import webbrowser
 from sys import platform
+from tkinter import *
+from tkinter import Tk, Toplevel  # Serve per impostare lo sfondo bianco nelle finestre
+from tkinter.ttk import *
+
+## IMPORTAZIONE ALTRI MODULI ESTERNI ##
+import PIL.Image
+import PIL.ImageTk
+import feedparser
+
+## IMPORTAZIONE FILE ESTERNI ##
+import agenda
+import note
+import prof
+import settings
+import style
+import subjects
+import timetable
+
+global path
 
 ## IMPOSTAZIONE PERCORSO ##
 path = os.path.expanduser(r'~\Documents\School Life Diary')
@@ -38,8 +49,6 @@ w.withdraw()
 w.configure(bg="white")
 w.title("School Life Diary")
 w.iconbitmap(r"images/school_life_diary.ico")
-# w.geometry("335x325+200+100")
-
 
 ## INSTALLAZIONE LINGUA ##
 global lgcode
@@ -57,14 +66,17 @@ else:
         try:
             tkmb.showerror(title=_("Lingua non impostata!"),
                            message=_(
-                               r"La lingua impostata non è stata riconosciuta. Per risolvere prova a eliminare il file in Documenti/School Life Diary/language.txt . Se il problema non si risolve, contattare lo sviluppatore. Errore: ") + str(
+                               r"La lingua impostata non è stata riconosciuta. Per risolvere prova a eliminare il "
+                               r"file in Documenti/School Life Diary/language.txt . Se il problema non si risolve, "
+                               r"contattare lo sviluppatore. Errore: ") + str(
                                ex))
         except NameError:
             tkmb.showerror(title="Can't install the language!",
-                           message=r"Can't recognize the set language. To fix this try to delete the file in Documents/School Life Diary/language.txt . If the problem still occurs, contact the developer. Error: ") + str(
+                           message=r"Can't recognize the set language. To fix this try to delete the file in "
+                                   r"Documents/School Life Diary/language.txt . If the problem still occurs, "
+                                   r"contact the developer. Error: ") + str(
                 ex)
-        w.iconify()
-
+        w.withdraw()
 lg.install()
 
 ## CREAZIONE DATABASE (PRIMO AVVIO) ##
@@ -78,11 +90,12 @@ if not (os.path.exists(os.path.join(path, output_filename))):
         w.deiconify()
         tkmb.showwarning(title=_("Attenzione! Database non presente!"),
                          message=_(
-                             "Non hai effettuato la migrazione del database. Il programma si avvierà, ma non saranno visualizzati i tuoi dati fino a che non effettuerai la migrazione."))
+                             "Non hai effettuato la migrazione del database. Il programma si avvierà, ma non saranno "
+                             "visualizzati i tuoi dati fino a che non effettuerai la migrazione."))
         rd = tkmb.askokcancel(title=_("Conferma download strumento migrazione database"),
                               message=_("Vuoi scaricare lo strumento di migrazione del database?"))
         w.iconify()
-        if rd == True:
+        if rd is True:
             webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases")
     fs = open(os.path.join(path, output_filename), "w")
     fs.close()
@@ -101,12 +114,14 @@ if not (os.path.exists(os.path.join(path, output_filename))):
         th = 'clam'
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","{}", "{}"); """.format(th, _(
         "Tema visivo dell'applicazione")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(0, _(
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(_("Sì"), _(
         "Consenso a ricevere notifiche di versioni alpha")))
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
         "Consenso a ricevere notifiche di versioni beta")))
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
         "Carattere utilizzato in tutti i testi dell'applicazione")))
+    c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("CHECK_UPDATES", "{}", "{}");""".format(_(
+        "Sì"), _("Consenso a controllare all'avvio dell'app se sono disponibili aggiornamenti.")))
 else:
     conn = sql.connect(os.path.join(path, output_filename), isolation_level=None)
     c = conn.cursor()
@@ -137,13 +152,10 @@ else:
             """INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
                 "Carattere utilizzato in tutti i testi dell'applicazione")))
 
-## IMPORTAZIONE FILE ESTERNI ##
-import settings, subjects, timetable, note, prof
-
 
 ## FINESTRA INFORMAZIONI ##
 def info():
-    '''Crea la finestra delle informazioni'''
+    """Crea la finestra delle informazioni"""
     wi = Toplevel()
     wi.configure(bg="white")
     wi.title(_("Informazioni") + " - School Life Diary")
@@ -151,22 +163,23 @@ def info():
     wi.geometry("850x750+250+50")
     f1 = Frame(wi)
     f1.pack()
-    title = Label(f1, text="School Life Diary", font=("Comic Sans MS", 25, "bold italic"))
-    title.pack(padx=10, pady=5)
+    infotitle = Label(f1, text="School Life Diary", font=("Comic Sans MS", 25, "bold italic"))
+    infotitle.pack(padx=10, pady=5)
     subtitle = Label(f1, text=_("sviluppato e mantenuto da maicol07"))
     subtitle.pack(padx=10, pady=2)
-    fl = Labelframe(f1, text=_("Link"))
-    fl.pack()
-    bws = Button(fl, text=_("Sito web"), command=lambda: webbrowser.open("https://www.school-life-diary.tk"))
+    framelinks = Labelframe(f1, text=_("Link"))
+    framelinks.pack()
+    bws = Button(framelinks, text=_("Sito web"), command=lambda: webbrowser.open("https://www.school-life-diary.tk"))
     bws.grid(row=0, column=0, padx=10, pady=5)
-    bgit = Button(fl, text=_("Pagina del progetto su GitHub"),
+    bgit = Button(framelinks, text=_("Pagina del progetto su GitHub"),
                   command=lambda: webbrowser.open("https://github.com/maicol07/school_life_diary_pc"))
     bgit.grid(row=0, column=1, padx=10, pady=5)
-    bwsp = Button(fl, text=_("Sito web sviluppatore"),
+    bwsp = Button(framelinks, text=_("Sito web sviluppatore"),
                   command=lambda: webbrowser.open("https://www.maicol07.tk"))
     bwsp.grid(row=0, column=2, padx=10, pady=5)
     l25 = Label(f1, text=_("Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale "
-                           "ha licenza Creative Commons BY 3.0.\nAlcune icone fatte da Pixel Buddha, Freepik, Roundicons "
+                           "ha licenza Creative Commons BY 3.0.\nAlcune icone fatte da Pixel Buddha, Freepik, "
+                           "Roundicons "
                            "e Smash Icons di www.flaticon.com hanno licenza Creative Commons BY 3.0"))
     l25.pack(padx=10, pady=5)
     l3 = Label(f1, text=_("Traduttori: "))
@@ -183,29 +196,29 @@ def info():
     changel = Text(cl, font="Courier 10", width=100, height=25)
     changel.pack()
     clf = open("CHANGELOG_{}.md".format(lgcode.upper()[:2]), "r")
-    for r in clf.readlines():
-        changel.insert(INSERT, r)
+    for row in clf.readlines():
+        changel.insert(INSERT, row)
     changel.config(state=DISABLED)
 
 
-def aggiornamento(pv, tv):
+def aggiornamento(prev_vers, target_version):
     from bs4 import BeautifulSoup
     import requests
     import urllib.request
 
-    url = 'https://www.school-life-diary.tk/appupdates/pc'
-    ext = 'txt'
+    update_url = 'https://www.school-life-diary.tk/appupdates/pc'
+    extension = 'txt'
 
-    def listFD(url, ext=''):
-        page = requests.get(url).text
+    def listFD(updateurl, ext=''):
+        page = requests.get(updateurl).text
         soup = BeautifulSoup(page, 'html.parser')
-        return [url + '/' + node.get('href') for node in soup.find_all('a') if node.get('href').endswith(ext)]
+        return [updateurl + '/' + node.get('href') for node in soup.find_all('a') if node.get('href').endswith(ext)]
 
-    while pv != tv:
-        for file in listFD(url, ext):
+    while prev_vers != target_version:
+        for file in listFD(update_url, extension):
             lf = file.split("/")
             lv = lf[-1].split("-")
-            if lv[0] == pv:
+            if lv[0] == prev_vers:
                 try:
                     data = urllib.request.urlopen(file)
                 except TimeoutError:
@@ -218,20 +231,20 @@ def aggiornamento(pv, tv):
                 for i in data:
                     if not (" " in str(i)):
                         try:
-                            c.close()
-                            conn.close()
+                            cur.close()
+                            connection.close()
                         except:
                             pass
-                        conn = sql.connect(os.path.join(path, str(i)[2:-3]))
-                        c = conn.cursor()
+                        connection = sql.connect(os.path.join(path, str(i)[2:-3]))
+                        cur = connection.cursor()
                     else:
-                        c.execute(str(i)[2:-3])
+                        cur.execute(str(i)[2:-3])
                 try:
-                    c.close()
-                    conn.close()
+                    cur.close()
+                    connection.close()
                 except:
                     pass
-                pv = lv[1][:-4]
+                prev_vers = lv[1][:-4]
 
 
 ### INSTALLAZIONE STILE ###
@@ -258,47 +271,51 @@ else:
         fv = open(os.path.join(path, "version.txt"), "w")
         fv.write(v)
     fv.close()
-import feedparser
 
-feed_name = "School Life Diary Releases"
-url = r"https://github.com/maicol07/school_life_diary_pc/releases.atom"
-feed = feedparser.parse(url)
-try:
-    post = feed.entries[0]
-    title = post.title
-    lp = title.split(" ")
-    ac = c.execute("SELECT value FROM settings WHERE setting='ALPHA_VERS'").fetchone()
-    bc = c.execute("SELECT value FROM settings WHERE setting='BETA_VERS'").fetchone()
-    if (lp[0][1:].isdecimal() == True):
-        lp[0] = lp[0][1:]
-    if (v != lp[0][1:]):
+if c.execute("SELECT value FROM settings WHERE setting='CHECK_UPDATES'").fetchone() == _("Sì"):
+    feed_name = "School Life Diary Releases"
+    url = r"https://github.com/maicol07/school_life_diary_pc/releases.atom"
+    feed = feedparser.parse(url)
+    try:
+        post = feed.entries[0]
+        title = post.title
+        lp = title.split(" ")
+        ac = c.execute("SELECT value FROM settings WHERE setting='ALPHA_VERS'").fetchone()
+        bc = c.execute("SELECT value FROM settings WHERE setting='BETA_VERS'").fetchone()
+        if lp[0][1:].isdecimal() is True:
+            lp[0] = lp[0][1:]
+        if v != lp[0][1:]:
+            w.deiconify()
+            if lp[0][0].lower() == "v":
+                agg = tkmb.askyesno(title=_("Nuova versione disponibile!"),
+                                    message=_("""È disponibile una nuova versione stabile di School Life Diary. Ti 
+                                    consigliamo di aggiornare il prima possibile per non perdere le nuove funzionalità, 
+                                    i miglioramenti e le correzioni di problemi. Vuoi accedere alla pagina da cui 
+                                    scaricare l'aggiornamento alla versione stabile {}?""").format(lp[0][1:]))
+            elif lp[0][0].lower() == "b" and bc == _("Sì"):
+                agg = tkmb.askyesno(title=_("Nuova versione BETA disponibile!"),
+                                    message=_("""È disponibile una nuova versione BETA di School Life Diary. Queste 
+                                    versioni non sono del tutto stabili e possono contenere alcuni problemi, 
+                                    ma includono nuove funzionalità. Ricevi questo avviso poichè hai dato il tuo 
+                                    consenso a ricevere le notifiche di versioni BETA Vuoi accedere alla pagina da 
+                                    cui scaricare l'aggiornamento alla versione BETA {}?""").format(lp[0][1:]))
+            elif lp[0][0].lower() == "a" and ac == _("Sì"):
+                agg = tkmb.askyesno(title=_("Nuova versione ALPHA disponibile!"),
+                                    message=_("""È disponibile una nuova versione ALPHA di School Life Diary. Queste 
+                                    versioni non sono stabili e possono contenere parecchi problemi, ma includono nuove 
+                                    funzionalità. Ricevi questo avviso poichè hai dato il tuo consenso a ricevere le 
+                                    notifiche di nuove versioni ALPHA. Vuoi accedere alla pagina da cui scaricare 
+                                    l'aggiornamento alla versione ALPHA {}?""").format(lp[0][1:]))
+            if agg is True:
+                webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases/")
+            w.iconify()
+    except IndexError:
         w.deiconify()
-        if lp[0][0].lower() == "v":
-            agg = tkmb.askyesno(title=_("Nuova versione disponibile!"),
-                                message=_("""È disponibile una nuova versione stabile di School Life Diary.
-Ti consigliamo di aggiornare il prima possibile per non perdere le nuove funzionalità, i miglioramenti e le correzioni di problemi.
-Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione stabile {}?""").format(lp[0][1:]))
-        elif lp[0][0].lower() == "b" and bc == _("Sì"):
-            agg = tkmb.askyesno(title=_("Nuova versione BETA disponibile!"),
-                                message=_("""È disponibile una nuova versione BETA di School Life Diary.
-        Queste versioni non sono del tutto stabili e possono contenere alcuni problemi, ma includono nuove funzionalità. Ricevi questo avviso poichè
-        hai dato il tuo consenso a ricevere le notifiche di versioni BETA
-        Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione BETA {}?""").format(lp[0][1:]))
-        elif lp[0][0].lower() == "a" and ac == _("Sì"):
-            agg = tkmb.askyesno(title=_("Nuova versione ALPHA disponibile!"),
-                                message=_("""È disponibile una nuova versione ALPHA di School Life Diary.
-        Queste versioni non sono stabili e possono contenere parecchi problemi, ma includono nuove funzionalità. Ricevi questo avviso poichè
-        hai dato il tuo consenso a ricevere le notifiche di nuove versioni ALPHA.
-        Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione ALPHA {}?""").format(lp[0][1:]))
-        if (agg == True):
-            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases/")
+        tkmb.showwarning(title=_("Nessuna connessione ad internet"),
+                         message=_(
+                             "Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La "
+                             "ricerca verrà ritentata la prossima volta che sarà riaperto il programma."))
         w.iconify()
-except IndexError:
-    w.deiconify()
-    tkmb.showwarning(title=_("Nessuna connessione ad internet"),
-                     message=_(
-                         "Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."))
-    w.iconify()
 mb = Menu(w)
 w.config(menu=mb)
 fm = Menu(mb, tearoff=0)
@@ -367,7 +384,7 @@ ban = Button(f2, text=_("ANNOTAZIONI"),  # background="#C389C3",
              compound="left", command=note.creaFinestra)
 bag = Button(f2, text=_("AGENDA"),  # background="#7DFB7D",
              image=pagenda,
-             compound="left", command=lambda: webbrowser.open('https://calendar.google.com'))
+             compound="left", command=agenda.creaFinestra)
 bo.grid(row=0, column=0, padx=5)
 bm.grid(row=0, column=1, padx=5)
 bp.grid(row=0, column=2, padx=5)
