@@ -36,7 +36,17 @@ c = conn.cursor()
 
 
 def install_language():
-    """Installazione lingua"""
+    """
+    Installa la lingua del modulo impostazioni.
+
+    Parametri
+    ----------
+    Nessuno
+
+    Ritorna
+    -------
+    Niente
+    """
     if not (os.path.exists(os.path.join(path, "language.txt"))):
         windll = ctypes.windll.kernel32
         lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -49,10 +59,22 @@ def install_language():
     lg.install()
 
 
-## SALVATAGGIO LINGUA ##
-
-
 def salvaLingua(cb, mode):
+    """
+        MODALITA' 1: Salva la lingua scelta
+        MODALITA' 2: Scarica le lingue aggiornate dal server di traduzione (Transifex)
+
+        Parametri
+        ----------
+        :param cb : (Tkinter Combobox)
+            Menu a tendina lingue.
+        :param mode : (string)
+            Modalità di avvio.
+
+        Ritorna
+        -------
+        Niente
+        """
     try:
         if mode == "download":
             l = sorted(["main", "settings", "note", "timetable", "subjects"])
@@ -83,13 +105,36 @@ def salvaLingua(cb, mode):
                                  "Riprovare o contattare lo sviluppatore.") + "\n" + str(ex))
 
 
-## AGGIORNAMENTO LISTA LINGUE ##
 def updatecb(cb, lang_list):
+    """
+        Aggiorna le opzioni del menu a tendina con le lingue nella lista.
+
+        Parametri
+        ----------
+        :param cb : (string)
+            Menu a tendina lingue.
+        :param lang_list : (string)
+            Lista delle lingue presenti.
+
+        Ritorna
+        -------
+        Niente
+        """
     cb["values"] = lang_list
 
 
-## CAMBIO LINGUA ##
 def cambiaLingua():
+    """
+        Schermata cambio lingua
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     install_language()
     wl = Toplevel()
     wl.configure(background="white")
@@ -116,8 +161,18 @@ def cambiaLingua():
     btn1.pack(padx=5, pady=10)
 
 
-## BACKUP DEI DATABASE ##
 def backup():
+    """
+        Backup dei dati dell'applicazione
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     fn_bk = "backups"
     if not (os.path.exists(os.path.join(path, fn_bk))):
         os.mkdir(os.path.join(path, fn_bk))
@@ -142,8 +197,18 @@ Puoi trovare il backup nella cartella appena aperta o al seguente percorso del t
                                                                                      "%H-%M-%S")))))
 
 
-# RIPRISTINO DEI DATI DA BACKUP
 def ripristino():
+    """
+        Ripristino dei dati da un file di backup.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     try:
         bkpath = filedialog.askopenfilename()
         bk = ZipFile(bkpath, "r")
@@ -163,6 +228,17 @@ def ripristino():
 
 
 def cancellatutto():
+    """
+        Cancella tutti i dati dell'applicazione.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     tkmb.showinfo(title=_("Come cancellare i dati?"),
                   message=_("""Dalla versione 1.0 di School Life Diary, con il cambiamento del database da file a 
                   SQLite, non è più possibile cancellare i dati all'interno dell'app. È possibile, tuttavia, 
@@ -175,8 +251,21 @@ dati."""))
     exit()
 
 
-# Salvataggio impostazioni
 def salvaImpostazioni(par, val):
+    """
+        Salva l'impostazione modificata.
+
+        Parametri
+        ----------
+        :param par : (string)
+            Nome del parametro modificato
+        :param val : (string)
+            Valore del parametro modificato.
+
+        Ritorna
+        -------
+        Niente
+        """
     try:
         sql_conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
         sql_cur = sql_conn.cursor()
@@ -212,23 +301,48 @@ def salvaImpostazioni(par, val):
                                  "Riprovare o contattare lo sviluppatore! Errore riscontrato:\n") + str(ex))
 
 
-# ACCETTAZIONE SOLO VALORI INTERI NELLO SLIDER
 # noinspection PyUnusedLocal
 def accept_whole_number_only(sv, e=None):
+    """
+        Accetta solo valori interi nello slider
+
+        Parametri
+        ----------
+        :param sv : (string)
+            Slider valori.
+        :param e : (event)
+            Evento.
+
+        Ritorna
+        -------
+        Niente
+        """
     value = sv.get()
     if int(value) != value:
         sv.set(int(round(value)))
 
 
-# INIZIALIZZAZIONE IMPOSTAZIONI
 def inizializza(cursor):
+    """
+        Inizializzazione modulo annotazioni:
+            • Crea dizionario con tutte le annotazioni, recuperate dal database
+
+        Parametri
+        ----------
+        :param cursor : (sqlite3.Cursor)
+            Cursore per la connessione al database.
+
+        Ritorna
+        -------
+        Niente
+        """
     install_language()
     global ds
     ds = {}
     cursor.execute("SELECT * FROM settings")
     sr = cursor.fetchall()
     for row in sr:
-        if row[0] == "ALPHA_VERS" or row[0] == "BETA_VERS":
+        if row[0] == "ALPHA_VERS" or row[0] == "BETA_VERS" or row[0] == "CHECK_UPDATES":
             if row[1] == "1":
                 ds[row[0]] = (_("Sì"), row[2])
             else:
@@ -238,6 +352,22 @@ def inizializza(cursor):
 
 
 def fontcallback(fs, var):
+    """
+        Font picker. Seleziona il carattere da utilizzare all'interno dell'applicazione.
+
+        Parametri
+        ----------
+        :param fs : (string)
+            Azione da eseguire (aggiunta, modifica o rimozione)
+        :param var : (string)
+            Titolo della nota.
+        :param descrizione : (string)
+            Descrizione della nota.
+
+        Ritorna
+        -------
+        Niente
+        """
     # chiedi il font all'utente
     font = askfont(wcv, title=_("Selettore carattere"))
     # la variabile font è "" se l'utente ha annullato
@@ -253,8 +383,19 @@ def fontcallback(fs, var):
         var.set(font_str)
 
 
-# MODIFICA VALORE DEL PARAMETRO
 def modifica_valore(event):
+    """
+        Modifica l'impostazione.
+
+        Parametri
+        ----------
+        :param event : (Treeview callback event)
+            Evento che determina la pressione
+
+        Ritorna
+        -------
+        • Niente
+        """
     item_id = event.widget.focus()
     item = event.widget.item(item_id)
     try:
@@ -262,7 +403,7 @@ def modifica_valore(event):
     except IndexError:
         tkmb.showwarning(_("Nessun parametro selezionato!"),
                          _("Non hai selezionato nessun parametro!! Selezionane uno e poi ripeti l'operazione!"))
-        return ""
+        return
     global wcv, bts
     wcv = Toplevel()
     wcv.configure(background="white")
@@ -290,8 +431,8 @@ def modifica_valore(event):
         menut.pack(padx=10, pady=10)
         bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
                      command=lambda: salvaImpostazioni(par, menut.get()))
-    elif par == "ALPHA_VERS" or par == "BETA_VERS" or par == "CHECK_VERSIONS":
-        if par != "CHECK_VERSIONS":
+    elif par == "ALPHA_VERS" or par == "BETA_VERS" or par == "CHECK_UPDATES":
+        if par != "CHECK_UPDATES":
             etichetta1 = Label(wcv, text=_("Modifica il consenso per ricevere versioni non stabili:"))
         else:
             etichetta1 = Label(wcv, text=_("Modifica il consenso per controllare gli aggiornamenti all'avvio "
@@ -331,18 +472,43 @@ def modifica_valore(event):
         btn.pack(padx=10, pady=10)
         bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
                      command=lambda: salvaImpostazioni(par, var.get()))
-    # bts.pack(padx=10, pady=10)
+    bts.pack(padx=10, pady=10)
     wcv.focus()
     wcv.mainloop()
 
 
-# IMPOSTAZIONE ELEMENTI MENU A TENDINA
 def updateList(menut, l):
+    """
+        Impostazione elementi menu a tendina
+
+        Parametri
+        ----------
+        :param menut : (Tkinter Combobox)
+            Menu a tendina vuoto
+        :param l : (list)
+            Lista con i valori da aggiungere al menu a tendina.
+
+        Ritorna
+        -------
+        Niente
+        """
     menut["values"] = sorted(l)
 
 
 # MENU TASTO DESTRO
 def popup(event):
+    """
+        Mostra un menu di opzioni quando viene cliccata una riga della tabella con il tasto destro.
+
+        Parametri
+        ----------
+        :param event : (treeview callback)
+            Parametro che identifica l'evento del cliccare con il tasto destro una annotazione dalla tabella.
+
+        Ritorna
+        -------
+        Niente
+        """
     if event.widget != ts:
         return
     i_edit = PhotoImage(file=r"icons/edit.png")
@@ -359,6 +525,17 @@ def popup(event):
 
 # CREAZIONE FINESTRA
 def creaFinestra():
+    """
+        Crea la finestra dell'agenda.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     connection = sql.connect(os.path.join(path, fn_set), isolation_level=None)
     cur = connection.cursor()
     inizializza(cur)

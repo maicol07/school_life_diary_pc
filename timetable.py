@@ -39,7 +39,17 @@ import tkinter.messagebox as tkmb
 
 
 def install_language():
-    """Installazione lingua"""
+    """
+    Installa la lingua del modulo orario.
+
+    Parametri
+    ----------
+    Nessuno
+
+    Ritorna
+    -------
+    Niente
+    """
     if not (os.path.exists(os.path.join(path, "language.txt"))):
         windll = ctypes.windll.kernel32
         lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -52,6 +62,28 @@ def install_language():
 
 
 def Salvataggio(matl, matm, matmm, matg, matv, mats):
+    """
+        Salva l'orario nel database, modificando una sola riga (ora).
+
+        Parametri
+        ----------
+        :param matl : (string)
+            Materia del Lunedì.
+        :param matm : (string)
+            Materia del Martedì.
+        :param matmm : (string)
+            Materia del Mercoledì.
+        :param matg : (string)
+            Materia del Giovedì.
+        :param matv : (string)
+            Materia del Venerdì.
+        :param mats : (string)
+            Materia del Sabato.
+
+        Ritorna
+        -------
+        Niente
+            """
     try:
         connection = sql.connect(os.path.join(path, fn_time), isolation_level=None)
         cur = connection.cursor()
@@ -71,6 +103,20 @@ def Salvataggio(matl, matm, matmm, matg, matv, mats):
 
 
 def updtcblist(e, m):
+    """
+        Inserisce dentro il menu a tendina le materie.
+
+        Parametri
+        ----------
+        :param e : (Combobox)
+            Menu a tendina, inizialmente vuoto, riempito con questa funzione
+        :param m : (list)
+            Lista materie.
+
+        Ritorna
+        -------
+        Niente
+            """
     l = []
     for i in m:
         l.append(i[1])
@@ -79,13 +125,24 @@ def updtcblist(e, m):
 
 
 def cambia_orario():
+    """
+        Cambia una riga dell'orario
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+    """
     global sel
     sel = tt.item(tt.focus())
     if sel["text"] == "":
         tkmb.showwarning(title=_("Nessuna riga selezionata!"),
                          message=_("Non è stata selezionata nessuna riga. Si prega di selezionarne una per apportare "
                                    "modifiche."))
-        return ""
+        return
     global wtc, matconn, matc
     wtc = Toplevel()
     wtc.configure(bg="white")
@@ -147,6 +204,20 @@ def cambia_orario():
 
 
 def inizializza(cursor):
+    """
+        Inizializzazione modulo orario:
+            • Crea dizionario con tutte l'orario, recuperate dal database.
+            • Crea dizionario con tutte le impostazioni
+
+        Parametri
+        ----------
+        :param cursor : (sqlite3.Cursor)
+            Cursore per la connessione al database SQLite
+
+        Ritorna
+        -------
+        Niente
+        """
     global ds
     global dt
     ds = {}
@@ -185,6 +256,18 @@ def inizializza(cursor):
 
 # MENU TASTO DESTRO
 def popup(event):
+    """
+        Mostra un menu di opzioni quando viene cliccata una riga della tabella con il tasto destro.
+
+        Parametri
+        ----------
+        :param event : (treeview callback)
+            Parametro che identifica l'evento del cliccare con il tasto destro una annotazione dalla tabella.
+
+        Ritorna
+        -------
+        Niente
+        """
     if event.widget != tt:
         return
     # display the popup menu
@@ -196,7 +279,17 @@ def popup(event):
 
 
 def creaFinestra():
-    """Creazione finestra principale"""
+    """
+        Crea la finestra dell'orario.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     connection = sql.connect(os.path.join(path, fn_time), isolation_level=None)
     cur = connection.cursor()
     global dt

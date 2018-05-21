@@ -2,6 +2,10 @@ from ttkthemes.themed_style import *
 
 
 def init():
+    """
+    Inizializzazione stile widget
+    :return:
+    """
     global s
     s = ThemedStyle()
     s.configure("TFrame", background="white")

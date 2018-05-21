@@ -50,7 +50,17 @@ else:
 
 
 def install_language():
-    """Installazione lingua"""
+    """
+    Installa la lingua del modulo professori.
+
+    Parametri
+    ----------
+    Nessuno
+
+    Ritorna
+    -------
+    Niente
+    """
     if not (os.path.exists(os.path.join(path, "language.txt"))):
         windll = ctypes.windll.kernel32
         lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -64,6 +74,18 @@ def install_language():
 
 # INIZIALIZZA DATI
 def inizializza():
+    """
+        Inizializzazione modulo professori:
+            • Crea dizionario con tutti i professori, recuperati dal database
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     install_language()
     global prof
     prof = {}
@@ -81,6 +103,18 @@ def inizializza():
 
 
 def sistemaIndici(cursor):
+    """
+        Corregge possibili negli indici dei professori, salvate nel database.
+
+        Parametri
+        ----------
+        :param cursor : (sqlite3.Cursor)
+            Cursore che effettua operazioni sul database.
+
+        Ritorna
+        -------
+        Niente
+            """
     cursor.execute("SELECT * FROM prof")
     r = cursor.fetchall()
     for i in range(len(r)):
@@ -92,6 +126,29 @@ def sistemaIndici(cursor):
 
 
 def Salvataggio(mode, nome=None, cognome=None, sitoweb=None, email=None, idx=0):
+    """
+        Salva il professore nel database, in base all'azione scelta (aggiunta, modifica, eliminazione)
+
+        Parametri
+        ----------
+        :param mode : (string)
+            Azione da eseguire (aggiunta, modifica o rimozione)
+        :param nome : (string)
+            Nome del professore.
+        :param cognome : (string)
+            Cognome del professore.
+        :param sitoweb : (string)
+            Sito web del professore.
+        :param email : (string)
+            Email del professore.
+        :param idx : (int)
+            ID (indice) del professore
+
+
+        Ritorna
+        -------
+        Niente
+        """
     try:
         sql_conn = sql.connect(os.path.join(path, fn_prof), isolation_level=None)
         cur = sql_conn.cursor()
@@ -133,26 +190,50 @@ def Salvataggio(mode, nome=None, cognome=None, sitoweb=None, email=None, idx=0):
                            ex))
 
 
-## MASCHERA DI ELIMINAZIONE ##
 def delete():
+    """
+        Avvisa l'utente che si sta per rimuovere un professore.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        • Niente
+        """
     global selProf
     selProf = tp.item(tp.focus())
     if selProf["text"] == "":
         tkmb.showwarning(title=_("Nessun professore selezionato!"),
                          message=_(
                              "Non è stato selezionato nessun professore. Si prega di selezionarne uno per eliminarlo."))
-        return ""
+        return
     scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
                            message=_("Si è sicuri di voler eliminare il professore {} ?".format(
                                selProf["values"][1] + " " + selProf["values"][2])))
     if scelta is True:
         Salvataggio("del", idx=selProf["text"])
     else:
-        return ""
+        return
 
 
 ## SELEZIONE IMMAGINE ##
 def selImmagine(bi, window):
+    """
+        Apre il file picker per selezionare una immagine
+
+        Parametri
+        ----------
+        :param bi : (Tkinter Button)
+            Pulsante Immagine Tkinter
+        :param window : (string)
+            Stringa che riporta il nome della finestra.
+
+        Ritorna
+        -------
+        Niente
+        """
     if not ("fImage" in globals()):
         global fImage
     fImage = askopenfilename(
@@ -180,6 +261,17 @@ def selImmagine(bi, window):
 ## MASCHERA DI AGGIUNTA ##
 # noinspection PyTypeChecker
 def add():
+    """
+        Finestra per l'aggiunta del professore.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     global wa
     wa = Toplevel()
     wa.configure(background="white")
@@ -222,9 +314,19 @@ def add():
     wa.mainloop()
 
 
-## MASCHERA DI MODIFICA ##
 # noinspection PyTypeChecker
 def edit():
+    """
+        Modifica il professore.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        • Niente
+        """
     global selProf
     selProf = tp.item(tp.focus())
     if selProf["text"] == "":
@@ -232,7 +334,7 @@ def edit():
                          message=_(
                              "Non è stato selezionato nessun professore. Si prega di selezionarne uno per apportare "
                              "modifiche."))
-        return ""
+        return
     global we
     we = Toplevel()
     we.configure(background="white")
@@ -308,6 +410,18 @@ def edit():
 
 # MENU TASTO DESTRO
 def popup(event):
+    """
+        Mostra un menu di opzioni quando viene cliccata una riga della tabella con il tasto destro.
+
+        Parametri
+        ----------
+        :param event : (treeview callback)
+            Parametro che identifica l'evento del cliccare con il tasto destro una annotazione dalla tabella.
+
+        Ritorna
+        -------
+        Niente
+        """
     if event.widget != tp:
         return
     # display the popup menu
@@ -319,6 +433,19 @@ def popup(event):
 
 
 def popup2(event):
+    """
+        Mostra un menu di opzioni (solo aggiunta) quando viene cliccato uno spazio vuoto della finestra con il
+        tasto destro.
+
+        Parametri
+        ----------
+        :param event : (treeview callback)
+            Parametro che identifica l'evento del cliccare con il tasto destro uno spazio vuoto della finestra.
+
+        Ritorna
+        -------
+        Niente
+        """
     if event.widget != wip:
         return
     # display the popup menu
@@ -331,6 +458,17 @@ def popup2(event):
 
 # CREA FINESTRA
 def creaFinestra():
+    """
+        Crea la finestra dei professori.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     global wip
     wip = Toplevel()
     wip.configure(background="white")

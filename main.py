@@ -155,7 +155,17 @@ else:
 
 ## FINESTRA INFORMAZIONI ##
 def info():
-    """Crea la finestra delle informazioni"""
+    """
+    Crea la finestra informazioni.
+
+    Parametri
+    ----------
+    Nessuno
+
+    Ritorna
+    -------
+    Niente
+    """
     wi = Toplevel()
     wi.configure(bg="white")
     wi.title(_("Informazioni") + " - School Life Diary")
@@ -202,6 +212,25 @@ def info():
 
 
 def aggiornamento(prev_vers, target_version):
+    """
+    Esegue l'aggiornamento del database alla versione installata
+
+    Parametri
+    ----------
+    :param prev_vers : (string)
+        Parametro che identifica la versione precedente del software.
+    :param target_version : (string)
+        Parametro che identifica la nuova versione a cui si è aggiornato il software.
+
+    Ritorna
+    -------
+    Niente
+
+    Errori
+    ------
+    TimeOutError
+        Quando è impossibile stabilire una connessione con l'host.
+    """
     from bs4 import BeautifulSoup
     import requests
     import urllib.request
@@ -210,6 +239,20 @@ def aggiornamento(prev_vers, target_version):
     extension = 'txt'
 
     def listFD(updateurl, ext=''):
+        """
+            Recupera gli aggiornamenti (le query SQL) dal server.
+
+            Parametri
+            ----------
+            :param updateurl : (string)
+                Parametro che identifica l'url da cui scaricare gli aggiornamenti da eseguire.
+            :param ext : (string)
+                Parametro che identifica l'estensione del file da scaricare.
+
+            Ritorna
+            -------
+            Lista con tutti i file recuperati dall'URL
+            """
         page = requests.get(updateurl).text
         soup = BeautifulSoup(page, 'html.parser')
         return [updateurl + '/' + node.get('href') for node in soup.find_all('a') if node.get('href').endswith(ext)]

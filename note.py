@@ -62,7 +62,17 @@ else:
 
 
 def install_language():
-    """Installazione lingua"""
+    """
+    Installa la lingua del modulo annotazioni.
+
+    Parametri
+    ----------
+    Nessuno
+
+    Ritorna
+    -------
+    Niente
+    """
     if not (os.path.exists(os.path.join(path, "language.txt"))):
         windll = ctypes.windll.kernel32
         lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -75,6 +85,18 @@ def install_language():
 
 
 def sistemaIndici(cur):
+    """
+        Corregge possibili negli indici delle annotazioni, salvate nel database.
+
+        Parametri
+        ----------
+        :param cur : (sqlite3.Cursor)
+            Cursore che effettua operazioni sul database.
+
+        Ritorna
+        -------
+        Niente
+        """
     cur.execute("SELECT * FROM notes")
     r = cur.fetchall()
     for i in range(len(r)):
@@ -92,6 +114,22 @@ def sistemaIndici(cur):
 
 
 def Salvataggio(mode, titolo, descrizione):
+    """
+        Salva l'annotazione nel database, in base all'azione scelta (aggiunta, modifica, eliminazione)
+
+        Parametri
+        ----------
+        :param mode : (string)
+            Azione da eseguire (aggiunta, modifica o rimozione)
+        :param titolo : (string)
+            Titolo della nota.
+        :param descrizione : (string)
+            Descrizione della nota.
+
+        Ritorna
+        -------
+        Niente
+        """
     try:
         sql_conn = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
         sql_cur = sql_conn.cursor()
@@ -132,23 +170,46 @@ def Salvataggio(mode, titolo, descrizione):
 
 
 def delete():
+    """
+        Avvisa l'utente che si sta per rimuovere una annotazione.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        • Niente
+        """
     global selItem
     selItem = t.item(t.focus())
     if selItem == "":
         tkmb.showwarning(title=_("Nessuna annotazione selezionata"),
                          messaggio=_("Non è stata selezionata nessuna annotazione. "
                                      "Si prega di selezionarne una per apportarne le modifiche."))
-        return ""
+        return
     scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
                            message=_("Si è sicuri di voler eliminare la annotazione con titolo {}?").format(
                                selItem["values"][0]))
     if scelta is True:
         Salvataggio("del", "", "")
     else:
-        return ""
+        return
 
 
 def file(lf):
+    """
+        Apre il file picker
+
+        Parametri
+        ----------
+        :param lf : (Label)
+            Parametro che identifica l'etichetta con il nome del file.
+
+        Ritorna
+        -------
+        Niente
+        """
     global sf
     sf = filedialog.askopenfilename()
     global fs
@@ -158,13 +219,24 @@ def file(lf):
 
 
 def edit():
+    """
+        Modifica la annotazione.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        • Niente
+        """
     global selItem
     selItem = t.item(t.focus())
     if selItem["text"] == "":
         tkmb.showwarning(title=_("Nessuna annotazione selezionata"),
                          message=_("Non è stata selezionata nessuna annotazione. "
                                    "Si prega di selezionarne una per apportarne le modifiche."))
-        return ""
+        return
     global we
     we = Toplevel()
     we.title(_("Modifica annotazione") + " - School Life Diary")
@@ -205,6 +277,17 @@ def edit():
 
 
 def add():
+    """
+        Finestra per l'aggiunta dell'annotazione
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     global wa
     wa = Toplevel()
     wa.configure(bg="white")
@@ -241,6 +324,18 @@ def add():
 
 # INIZIALIZZA DATI
 def inizializza():
+    """
+        Inizializzazione modulo annotazioni:
+            • Crea dizionario con tutte le annotazioni, recuperate dal database
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     global nt
     nt = {}
     connection = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
@@ -258,6 +353,18 @@ def inizializza():
 
 
 def on_double_click(event):
+    """
+        Apri l'allegato della annotazione
+
+        Parametri
+        ----------
+        :param event : (treeview callback)
+            Parametro che identifica l'evento del cliccare due volte una annotazione dalla tabella.
+
+        Ritorna
+        -------
+        Niente
+        """
     item_id = event.widget.focus()
     item = event.widget.item(item_id)
     idn = item['text']
@@ -267,6 +374,18 @@ def on_double_click(event):
 
 # MENU TASTO DESTRO
 def popup(event):
+    """
+        Mostra un menu di opzioni quando viene cliccata una riga della tabella con il tasto destro.
+
+        Parametri
+        ----------
+        :param event : (treeview callback)
+            Parametro che identifica l'evento del cliccare con il tasto destro una annotazione dalla tabella.
+
+        Ritorna
+        -------
+        Niente
+        """
     if event.widget != t:
         return
     patt = PIL.Image.open(r"icons/paper-clip.png")
@@ -287,6 +406,19 @@ def popup(event):
 
 
 def popup2(event):
+    """
+        Mostra un menu di opzioni (solo aggiunta) quando viene cliccato uno spazio vuoto della finestra con il
+        tasto destro.
+
+        Parametri
+        ----------
+        :param event : (treeview callback)
+            Parametro che identifica l'evento del cliccare con il tasto destro uno spazio vuoto della finestra.
+
+        Ritorna
+        -------
+        Niente
+        """
     if event.widget != wn:
         return
     # display the popup menu
@@ -298,6 +430,17 @@ def popup2(event):
 
 
 def creaFinestra():
+    """
+        Crea la finestra delle annotazioni.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     global wn
     wn = Toplevel()
     inizializza()

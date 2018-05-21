@@ -35,7 +35,17 @@ else:
 
 
 def install_language():
-    """Installazione lingua"""
+    """
+    Installa la lingua del modulo materie.
+
+    Parametri
+    ----------
+    Nessuno
+
+    Ritorna
+    -------
+    Niente
+    """
     if not (os.path.exists(os.path.join(path, "language.txt"))):
         windll = ctypes.windll.kernel32
         lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
@@ -47,8 +57,19 @@ def install_language():
     lg.install()
 
 
-# INIZIALIZZA DATI
 def inizializza():
+    """
+        Inizializzazione modulo materie:
+            • Crea dizionario con tutte le materie, recuperate dal database
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     install_language()
     global m
     m = {}
@@ -65,6 +86,18 @@ def inizializza():
 
 
 def sistemaIndici(cursor):
+    """
+        Corregge possibili negli indici delle materie, salvate nel database.
+
+        Parametri
+        ----------
+        :param cursor : (sqlite3.Cursor)
+            Cursore che effettua operazioni sul database.
+
+        Ritorna
+        -------
+        Niente
+            """
     cursor.execute("SELECT * FROM subjects")
     r = cursor.fetchall()
     for i in range(len(r)):
@@ -76,6 +109,27 @@ def sistemaIndici(cursor):
 
 
 def Salvataggio(mode, name, col, prof, idx=0):
+    """
+        Salva la materia nel database, in base all'azione scelta (aggiunta, modifica, eliminazione)
+
+        Parametri
+        ----------
+        :param mode : (string)
+            Azione da eseguire (aggiunta, modifica o rimozione)
+        :param name : (string)
+            Nome della materia.
+        :param col : (string)
+            Colore della materia.
+        :param prof : (string)
+            Professore relativo alla materia.
+        :param idx : (int)
+            ID (indice) della materia
+
+
+        Ritorna
+        -------
+        Niente
+        """
     sql_conn = sql.connect(os.path.join(path, fn_sub), isolation_level=None)
     sql_cur = sql_conn.cursor()
     sistemaIndici(sql_cur)
@@ -102,6 +156,17 @@ def Salvataggio(mode, name, col, prof, idx=0):
 
 
 def delete():
+    """
+        Avvisa l'utente che si sta per rimuovere una materia.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        • Niente
+        """
     global selMat
     selMat = tm.item(tm.focus())
     if selMat["text"] == "":
@@ -109,22 +174,47 @@ def delete():
                          message=_(
                              "Non è stata selezionata nessuna materia. Si prega di selezionarne una per apportare "
                              "modifiche."))
-        return ""
+        return
     scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
                            message=_("Si è sicuri di voler eliminare la materia {} ?").format(selMat["values"][0]))
     if scelta is True:
         Salvataggio("del", None, None, None, selMat["text"])
     else:
-        return ""
+        return
 
 
 def scegliColore(cc):
+    """
+        Color Picker. Scegli colore.
+
+        Parametri
+        ----------
+        :param cc : (Tkinter Canvas)
+            Widget canvas
+
+        Ritorna
+        -------
+        Niente
+        """
     color = askcolor()
     cc["background"] = color[1]
 
 
-## AGGIORNAMENTO LISTA PROFESSORI ##
 def updatecb(cb, l):
+    """
+        Aggiornamento opzioni menu a tendina con la lista dei professori
+
+        Parametri
+        ----------
+        :param cb : (Tkinter Combobox)
+            Menu a tendina vuoto
+        :param l : (list)
+            Lista professori
+
+        Ritorna
+        -------
+        Niente
+        """
     lp = []
     for i in l:
         lp.append("{} {}".format(i[1], i[2]))
@@ -132,6 +222,17 @@ def updatecb(cb, l):
 
 
 def add():
+    """
+        Finestra per l'aggiunta della materia.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     global wa
     wa = Toplevel()
     wa.configure(background="white")
@@ -170,6 +271,17 @@ def add():
 
 
 def edit():
+    """
+        Modifica la materia.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        • Niente
+        """
     global selMat
     selMat = tm.item(tm.focus())
     if selMat["text"] == "":
@@ -177,7 +289,7 @@ def edit():
                          message=_(
                              "Non è stata selezionata nessuna materia. Si prega di selezionarne una per apportare "
                              "modifiche."))
-        return ""
+        return
     global we
     we = Toplevel()
     we.configure(background="white")
@@ -218,6 +330,18 @@ def edit():
 
 # MENU TASTO DESTRO
 def popup(event):
+    """
+        Mostra un menu di opzioni quando viene cliccata una riga della tabella con il tasto destro.
+
+        Parametri
+        ----------
+        :param event : (treeview callback)
+            Parametro che identifica l'evento del cliccare con il tasto destro una annotazione dalla tabella.
+
+        Ritorna
+        -------
+        Niente
+        """
     if event.widget != tm:
         return
     # display the popup menu
@@ -229,6 +353,19 @@ def popup(event):
 
 
 def popup2(event):
+    """
+        Mostra un menu di opzioni (solo aggiunta) quando viene cliccato uno spazio vuoto della finestra con il
+        tasto destro.
+
+        Parametri
+        ----------
+        :param event : (treeview callback)
+            Parametro che identifica l'evento del cliccare con il tasto destro uno spazio vuoto della finestra.
+
+        Ritorna
+        -------
+        Niente
+        """
     if event.widget != wim:
         return
     # display the popup menu
@@ -241,6 +378,17 @@ def popup2(event):
 
 # CREA FINESTRA
 def creaFinestra():
+    """
+        Crea la finestra dell'agenda.
+
+        Parametri
+        ----------
+        Nessuno
+
+        Ritorna
+        -------
+        Niente
+        """
     global wim
     wim = Toplevel()
     wim.configure(background="white")
