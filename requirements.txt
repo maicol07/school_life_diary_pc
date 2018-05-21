@@ -1,7 +1,7 @@
-python-transifex
-bs4
-beautifulsoup4
-requests
+python-transifex==0.1.7
+bs4==0.0.1
+beautifulsoup4==4.6.0
+requests==2.18.4
 Pillow==5.1.0
 polib==1.1.0
 ttkthemes==2.0.6

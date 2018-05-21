@@ -4,7 +4,6 @@
 [![Build Status](https://travis-ci.org/maicol07/school_life_diary_pc.svg?branch=master)](https://travis-ci.org/maicol07/school_life_diary_pc)
 [![GitHub license](https://img.shields.io/github/license/maicol07/school_life_diary_pc.svg)](https://github.com/maicol07/school_life_diary_pc/blob/master/LICENSE)
 [![Inline docs](http://inch-ci.org/github/maicol07/school_life_diary_pc.svg?branch=master)](http://inch-ci.org/github/maicol07/school_life_diary_pc)
-[![Maintainability](https://api.codeclimate.com/v1/badges/036e4db030eddca22df9/maintainability)](https://codeclimate.com/github/maicol07/school_life_diary_pc/maintainability)
 [![HitCount](http://hits.dwyl.io/maicol07/school_life_diary_pc.svg)](http://hits.dwyl.io/maicol07/school_life_diary_pc)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
 [![GitHub release](https://img.shields.io/github/release/maicol07/school_life_diary_pc/all.svg)](https://github.com/maicol07/school_life_diary_pc/releases/)
@@ -43,7 +42,7 @@ Sito web app: https://apps.maicol07.tk
 ## Segnalazione bug
 È possibile segnalare bug nella sezione issues
 ## Contribusci al progetto! [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
-Puoi contribuire al progetto scrivendo articoli nella [wiki](https://github.com/maicol07/school_life_diary_pc/wiki), riportando un [bug](https://github.com/maicol07/school_life_diary_pc/issues) o aiutandomi a sviluppare il software aprendo una [pull request](https://github.com/maicol07/school_life_diary_pc/pulls), dopo aver effettuato il fork del repo.
+Puoi contribuire al progetto scrivendo articoli nella [wiki](https://github.com/maicol07/school_life_diary_pc/wiki), segnalando un [bug](https://github.com/maicol07/school_life_diary_pc/issues) o aiutandomi a sviluppare il software aprendo una [pull request](https://github.com/maicol07/school_life_diary_pc/pulls), dopo aver effettuato il fork del repo.
 
 # <img src="http://www.myiconfinder.com/uploads/iconsets/24-24-5a4e6b31d441c44062c0fa1b34035a27.png" alt="ENG"></img>English
 Port of School Life Diary Android App for PC.
@@ -67,4 +66,4 @@ App website: https://apps.maicol07.tk
 ## Bug report
 You can report bug in the [issues](https://github.com/maicol07/school_life_diary_pc/issues) tab.
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
-You can contribute to the project writing articles in the [wiki](https://github.com/maicol07/school_life_diary_pc/wiki), reporting a [issue](https://github.com/maicol07/school_life_diary_pc/issues) or help me developing the app by opening a [pull request](https://github.com/maicol07/school_life_diary_pc/pulls), after a repository forking.
+You can contribute to the project writing articles in the [wiki](https://github.com/maicol07/school_life_diary_pc/wiki), reporting an [issue](https://github.com/maicol07/school_life_diary_pc/issues) or help me developing the app by opening a [pull request](https://github.com/maicol07/school_life_diary_pc/pulls), after a repository forking.
