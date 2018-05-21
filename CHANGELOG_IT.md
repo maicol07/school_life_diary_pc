@@ -4,7 +4,7 @@ Tutti i cambiamenti notabili verranno documentati in questo file
 Questo formato è basato sul formato [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) e questo progetto aderisce al [Versionamento Semantico 2.0.0](https://semver.org/lang/it/).
 
 
-## Non ancora rilasciato - Versione 1.0 (??/??/2018)
+## Non ancora rilasciato - Versione 1.0 (Estate 2018)
 
 ### Aggiunto
 
@@ -13,6 +13,7 @@ Questo formato è basato sul formato [Keep a Changelog](http://keepachangelog.co
 - Temi! Possibilità di cambiare il tema visivo per l'app.
 - Programma di aggiornamento automatico!! Ogni volta che aggiorni l'applicazione il database si aggiorna automaticamente.
 - Scegli se controllare o no gli aggiornamenti dell'app all'avvio!
+- Aggiunte docstring nelle funzioni del codice
 
 ### Cambiato
 
