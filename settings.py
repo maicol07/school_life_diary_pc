@@ -24,6 +24,7 @@ import sqlite3 as sql
 import wckToolTips
 import style
 from tkFontChooser import askfont
+import datepicker
 
 global path
 global fn_set
@@ -31,6 +32,84 @@ global fn_set
 ## VARIABILI D'AMBIENTE ##
 fn_set = "settings.db"
 path = os.path.expanduser(r'~\Documents\School Life Diary')
+
+## CREAZIONE DATABASE (PRIMO AVVIO) ##
+
+output_filename = "settings.db"
+
+if not (os.path.exists(path)):
+    os.mkdir(path)
+if not (os.path.exists(os.path.join(path, fn_set))):
+    if os.path.exists(os.path.join(path, "settings.npy")):
+        w.deiconify()
+        tkmb.showwarning(title=_("Attenzione! Database non presente!"),
+                         message=_(
+                             "Non hai effettuato la migrazione del database. Il programma si avvierà, ma non saranno "
+                             "visualizzati i tuoi dati fino a che non effettuerai la migrazione."))
+        rd = tkmb.askokcancel(title=_("Conferma download strumento migrazione database"),
+                              message=_("Vuoi scaricare lo strumento di migrazione del database?"))
+        w.iconify()
+        if rd is True:
+            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases")
+    fs = open(os.path.join(path, fn_set), "w")
+    fs.close()
+    conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
+    c = conn.cursor()
+    c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
+                                                   `value` TEXT,
+                                                   `descr` TEXT);""")
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(
+        _("Numero di ore massime per giornate da visualizzare nell'orario")))
+    if "win" == platform[:3]:
+        th = 'vista'
+    elif "darwin" in platform:
+        th = 'clam'
+    else:
+        th = 'clam'
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","{}", "{}"); """.format(th, _(
+        "Tema visivo dell'applicazione")))
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(_("Sì"), _(
+        "Consenso a ricevere notifiche di versioni alpha")))
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
+        "Consenso a ricevere notifiche di versioni beta")))
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
+        "Carattere utilizzato in tutti i testi dell'applicazione")))
+    c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("CHECK_UPDATES", "{}", "{}");""".format(_(
+        "Sì"), _("Consenso a controllare all'avvio dell'app se sono disponibili aggiornamenti.")))
+    c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("PERIODS", "{}", "{}")""".format(
+        "2 - 2018-09-15 - 2019-06-07", _("Periodi scolastici")))
+else:
+    conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
+    c = conn.cursor()
+    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='settings';")
+    ris = c.fetchall()
+    if not (len(ris) == 1):
+        c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
+                                                   `value` TEXT,
+                                                   `descr` TEXT);""")
+    c.execute("SELECT * FROM settings")
+    r = c.fetchall()
+    if len(ris) == 0:
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(
+            _("Numero di ore massime per giornate da visualizzare nell'orario")))
+        if "win" == platform[:3]:
+            th = 'vista'
+        elif "darwin" in platform:
+            th = 'clam'
+        else:
+            th = 'clam'
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","{}", "{}"); """.format(th, _(
+            "Tema visivo dell'applicazione")))
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(0, _(
+            "Consenso a ricevere notifiche di versioni alpha")))
+        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
+            "Consenso a ricevere notifiche di versioni beta")))
+        c.execute(
+            """INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
+                "Carattere utilizzato in tutti i testi dell'applicazione")))
+        c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("PERIODS", "{}", "{}")""".format(
+            "2; 15/09/2018 - 23/12/2018; 09/01/2019 - 07/06/2019", _("Periodi scolastici")))
+
 conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
 c = conn.cursor()
 
@@ -77,7 +156,7 @@ def salvaLingua(cb, mode):
         """
     try:
         if mode == "download":
-            l = sorted(["main", "settings", "note", "timetable", "subjects"])
+            l = sorted(["main", "settings", "note", "timetable", "subjects", "agenda", "voti"])
             for i in l:
                 lang = tr.list_languages('school-life-diary-pc', i + "pot")
                 for y in lang:
@@ -275,6 +354,8 @@ def salvaImpostazioni(par, val):
         sql_cur.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(val, par))
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Parametro modificato con successo!"))
+        if par == "PERIODS":
+            wp.destroy()
         wcv.destroy()
         ws.destroy()
         if par == "PC_THEME":
@@ -357,12 +438,10 @@ def fontcallback(fs, var):
 
         Parametri
         ----------
-        :param fs : (string)
-            Azione da eseguire (aggiunta, modifica o rimozione)
-        :param var : (string)
-            Titolo della nota.
-        :param descrizione : (string)
-            Descrizione della nota.
+        :param fs : (Tkinter.Label)
+            Etichetta font selezionato.
+        :param var : (StringVar)
+            Variabile che contiene il font selezionato.
 
         Ritorna
         -------
@@ -465,13 +544,63 @@ def modifica_valore(event):
         etichetta1.pack(padx=10, pady=10)
         fc = Label(wcv, text=_("Carattere attuale: {}").format(item["values"][1]))
         fc.pack(padx=10, pady=10)
-        fs = Label(wcv)
-        fs.pack()
+        font_selezionato = Label(wcv)
+        font_selezionato.pack()
         var = StringVar(value=item["values"][1])
-        btn = Button(wcv, text=_('Scegli carattere'), command=lambda: fontcallback(fs, var))
+        btn = Button(wcv, text=_('Scegli carattere'), command=lambda: fontcallback(font_selezionato, var))
         btn.pack(padx=10, pady=10)
         bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
                      command=lambda: salvaImpostazioni(par, var.get()))
+    elif par == "PERIODS":
+        def periods(per):
+            def saveperiods():
+                string = ""
+                for x in var_list:
+                    string += "{} - {}; ".format(globals()["d1_{}".format(x)].get(), globals()["d2_{}".format(x)].get())
+                print(string)
+                salvaImpostazioni(par, "{}; {}".format(per, string[:-2]))
+
+            global wp
+            wp = Toplevel()
+            wp.configure(background="white")
+            wp.geometry("525x{}+200+400".format(200 + 100 * per))
+            wp.title(_("Cambia valore - Periodi - Impostazioni") + " - School Life Diary")
+            wp.iconbitmap(r"images/school_life_diary.ico")
+            e = Label(wp, text=_("Imposta le date di inizio/fine dei due periodi scolastici"))
+            e.pack(pady=5)
+            var_list = []
+            periods_list = item["values"][1].split(";")
+            for i in range(1, per + 1):
+                fp = Labelframe(wp, text=_("Periodo n. {}").format(i))
+                fp.pack(padx=5, pady=10)
+                l1 = Label(fp, text=_("Data di inizio"))
+                l2 = Label(fp, text=_("Data di fine"))
+                l1.grid(row=0, column=0, padx=5)
+                l2.grid(row=0, column=1)
+                globals()["d1_{}".format(i)] = datepicker.Datepicker(fp)
+                globals()["d1_{}".format(i)].grid(row=1, column=0, padx=5, pady=2)
+                globals()["d2_{}".format(i)] = datepicker.Datepicker(fp)
+                if i in range(len(periods_list)):
+                    globals()["d1_{}".format(i)].date_var.set(periods_list[i].split(" - ")[0][1:])
+                    globals()["d2_{}".format(i)].date_var.set(periods_list[i].split(" - ")[1])
+                globals()["d2_{}".format(i)].grid(row=1, column=1, pady=2)
+                var_list.append(i)
+            btn_save = Button(wp, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: saveperiods())
+            btn_save.pack()
+            wp.focus()
+            wp.mainloop()
+
+        etichetta1 = Label(wcv, text=_("Imposta il numero di periodi"))
+        etichetta1.pack(pady=10)
+        var = IntVar()
+        var.set(item["values"][1].split(";")[0])
+        num_per = Scale(wcv, variable=var, from_=1, to=6, orient=HORIZONTAL,
+                        command=lambda e: accept_whole_number_only(num_per))
+        num_per.pack()
+        lvar = Label(wcv, textvariable=var)
+        lvar.pack(padx=10, pady=2)
+        bts = Button(wcv, text=_("OK"), command=lambda: periods(var.get()))
+
     bts.pack(padx=10, pady=10)
     wcv.focus()
     wcv.mainloop()
@@ -544,18 +673,18 @@ def creaFinestra():
     ws.configure(bg="white")
     ws.title(_("Impostazioni") + " - School Life Diary")
     ws.iconbitmap(r"images/school_life_diary.ico")
-    ws.geometry("900x400+600+250")
-    fs = Labelframe(ws, text=_("Parametri"))
-    fs.pack()
+    ws.geometry("1050x400+450+250")
+    frame_imp = Labelframe(ws, text=_("Parametri"))
+    frame_imp.pack()
     global ts
-    ts = Treeview(fs)
+    ts = Treeview(frame_imp)
     ts["columns"] = ("par", "val_att", "descr")
     ts.heading("#0", text=_("ID"))
     ts.column("#0", width=30)
     ts.heading("par", text=_("Parametro"), anchor=CENTER)
     ts.column("par", anchor=CENTER)
     ts.heading("val_att", text=_("Valore attuale"))
-    ts.column("val_att", anchor=CENTER)
+    ts.column("val_att", width=325, anchor=CENTER)
     ts.heading("descr", text=_("Descrizione"))
     ts.column("descr", width=450, anchor=CENTER)
     ts.bind("<Double-Button-1>", modifica_valore)
@@ -563,7 +692,7 @@ def creaFinestra():
     ts.pack()
     for x in range(len(list(ds))):
         e = ds[list(ds.keys())[x]]
-        ts.insert("", "end", text=x + 1, values=[list(ds.keys())[x], e[0], e[1]])
+        ts.insert("", "end", text=x + 1, values=[list(ds.keys())[x], e[0], _(e[1])])
     li = Label(ws, text=_(
         "Per modificare un parametro, fai doppio click sulla riga corrispondente o tasto destro con il mouse."))
     li.pack()

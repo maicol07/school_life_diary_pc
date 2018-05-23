@@ -328,7 +328,6 @@ def edit():
     cur.close()
 
 
-# MENU TASTO DESTRO
 def popup(event):
     """
         Mostra un menu di opzioni quando viene cliccata una riga della tabella con il tasto destro.

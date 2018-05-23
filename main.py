@@ -18,7 +18,6 @@ import os.path
 import sqlite3 as sql
 import tkinter.messagebox as tkmb
 import webbrowser
-from sys import platform
 from tkinter import *
 from tkinter import Tk, Toplevel  # Serve per impostare lo sfondo bianco nelle finestre
 from tkinter.ttk import *
@@ -36,6 +35,7 @@ import settings
 import style
 import subjects
 import timetable
+import voti
 
 global path
 
@@ -79,79 +79,6 @@ else:
         w.withdraw()
 lg.install()
 
-## CREAZIONE DATABASE (PRIMO AVVIO) ##
-
-output_filename = "settings.db"
-
-if not (os.path.exists(path)):
-    os.mkdir(path)
-if not (os.path.exists(os.path.join(path, output_filename))):
-    if os.path.exists(os.path.join(path, "settings.npy")):
-        w.deiconify()
-        tkmb.showwarning(title=_("Attenzione! Database non presente!"),
-                         message=_(
-                             "Non hai effettuato la migrazione del database. Il programma si avvierà, ma non saranno "
-                             "visualizzati i tuoi dati fino a che non effettuerai la migrazione."))
-        rd = tkmb.askokcancel(title=_("Conferma download strumento migrazione database"),
-                              message=_("Vuoi scaricare lo strumento di migrazione del database?"))
-        w.iconify()
-        if rd is True:
-            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases")
-    fs = open(os.path.join(path, output_filename), "w")
-    fs.close()
-    conn = sql.connect(os.path.join(path, output_filename), isolation_level=None)
-    c = conn.cursor()
-    c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
-                                                   `value` TEXT,
-                                                   `descr` TEXT);""")
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(
-        _("Numero di ore massime per giornate da visualizzare nell'orario")))
-    if "win" == platform[:3]:
-        th = 'vista'
-    elif "darwin" in platform:
-        th = 'clam'
-    else:
-        th = 'clam'
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","{}", "{}"); """.format(th, _(
-        "Tema visivo dell'applicazione")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(_("Sì"), _(
-        "Consenso a ricevere notifiche di versioni alpha")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
-        "Consenso a ricevere notifiche di versioni beta")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
-        "Carattere utilizzato in tutti i testi dell'applicazione")))
-    c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("CHECK_UPDATES", "{}", "{}");""".format(_(
-        "Sì"), _("Consenso a controllare all'avvio dell'app se sono disponibili aggiornamenti.")))
-else:
-    conn = sql.connect(os.path.join(path, output_filename), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='settings';")
-    ris = c.fetchall()
-    if not (len(ris) == 1):
-        c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
-                                                   `value` TEXT,
-                                                   `descr` TEXT);""")
-    c.execute("SELECT * FROM settings")
-    r = c.fetchall()
-    if len(ris) == 0:
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(
-            _("Numero di ore massime per giornate da visualizzare nell'orario")))
-        if "win" == platform[:3]:
-            th = 'vista'
-        elif "darwin" in platform:
-            th = 'clam'
-        else:
-            th = 'clam'
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","{}", "{}"); """.format(th, _(
-            "Tema visivo dell'applicazione")))
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(0, _(
-            "Consenso a ricevere notifiche di versioni alpha")))
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
-            "Consenso a ricevere notifiche di versioni beta")))
-        c.execute(
-            """INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
-                "Carattere utilizzato in tutti i testi dell'applicazione")))
-
 
 ## FINESTRA INFORMAZIONI ##
 def info():
@@ -174,7 +101,9 @@ def info():
     f1 = Frame(wi)
     f1.pack()
     infotitle = Label(f1, text="School Life Diary", font=("Comic Sans MS", 25, "bold italic"))
-    infotitle.pack(padx=10, pady=5)
+    infotitle.pack()
+    subtitle1 = Label(f1, text="{} Anniversary Update".format(v), font=("Times New Roman", 18, "bold italic"))
+    subtitle1.pack()
     subtitle = Label(f1, text=_("sviluppato e mantenuto da maicol07"))
     subtitle.pack(padx=10, pady=2)
     framelinks = Labelframe(f1, text=_("Link"))
@@ -294,12 +223,13 @@ def aggiornamento(prev_vers, target_version):
 
 style.init()
 s = style.s
-conn = sql.connect(os.path.join(path, output_filename), isolation_level=None)
+conn = sql.connect(os.path.join(path, "settings.db"), isolation_level=None)
 c = conn.cursor()
 s.set_theme(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone()[0])
 s.configure('.', font=c.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0])
 
 ### Verifica se esistono degli aggiornamenti per il programma ###
+global v
 v = "1.0.0"
 if not (os.path.exists(os.path.join(path, "version.txt"))):
     fv = open(os.path.join(path, "version.txt"), "w")
@@ -380,7 +310,7 @@ fm.add_command(label=_("Esci"), image=pexit,
 mb.add_cascade(label=_("Opzioni"), menu=om)
 om.add_command(label=_("Impostazioni"), image=psettings,
                compound="left", command=settings.creaFinestra)
-om.add_command(label=_("Cambia lingua"), image=planguage,
+om.add_command(label=_("Lingua"), image=planguage,
                compound="left", command=settings.cambiaLingua)
 mb.add_cascade(label=_("Aiuto"), menu=hm)
 hm.add_command(label=_("Guida"), image=pguida,
@@ -421,7 +351,7 @@ bp = Button(f2, text=_("PROFESSORI"),  # background="#7DFB7D",
             compound="left", command=prof.creaFinestra)
 bv = Button(f2, text=_("VOTI"),  # background="#ADD8E6",
             image=pvoti,
-            compound="left", command=lambda: webbrowser.open('https://apps.maicol07.tk/app/sld/voti/'))
+            compound="left", command=voti.creaFinestra)
 ban = Button(f2, text=_("ANNOTAZIONI"),  # background="#C389C3",
              image=pnote,
              compound="left", command=note.creaFinestra)
