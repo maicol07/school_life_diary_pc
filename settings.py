@@ -1,37 +1,39 @@
 ### SETTINGS.PY ###
 
 
-## IMPORTAZIONE LIBRERIE E IMPOSTAZIONE CLIENT TRADUZIONI ##
-from transifex.api import TransifexAPI
+## IMPORTAZIONE LIBRERIE ##
 
-global tr
-tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com/')
-from tkinter import *
-from tkinter.ttk import *
-from tkinter import filedialog, Toplevel
-import tkinter.messagebox as tkmb
+import ctypes
+import gettext
+import locale
 import os.path  # serve per verificare se un file è presente o no
-from zipfile import *
+import sqlite3 as sql
 import subprocess
 import time
-import gettext
-import ctypes
-import locale
-import polib
+import tkinter.messagebox as tkmb
+from tkinter import *
+from tkinter import filedialog, Toplevel
+from tkinter.ttk import *
+from zipfile import *
+
 import PIL.Image
 import PIL.ImageTk
-import sqlite3 as sql
-import wckToolTips
-import style
+import polib
 from tkFontChooser import askfont
+from transifex.api import TransifexAPI
+
 import datepicker
+import style
+import wckToolTips
 
 global path
 global fn_set
+global tr
 
 ## VARIABILI D'AMBIENTE ##
 fn_set = "settings.db"
 path = os.path.expanduser(r'~\Documents\School Life Diary')
+tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com/')
 
 ## CREAZIONE DATABASE (PRIMO AVVIO) ##
 
@@ -39,6 +41,18 @@ output_filename = "settings.db"
 
 if not (os.path.exists(path)):
     os.mkdir(path)
+if os.path.exists("locale") and not (os.path.exists(os.path.join(path, "locale"))):
+    l = sorted(["main", "settings", "note", "timetable", "subjects", "agenda", "voti"])
+    for i in l:
+        lang = tr.list_languages('school-life-diary-pc', i + "pot")
+        for y in lang:
+            pathdl = os.path.join(path, 'locale', y[:2], "LC_MESSAGES")
+            if not (os.path.exists(os.path.join(pathdl, (i + '.po')))):
+                if not (os.path.exists(os.path.join(pathdl))):
+                    os.makedirs(os.path.join(pathdl))
+            tr.get_translation('school-life-diary-pc', i + "pot", y, os.path.join(pathdl, (i + '.po')))
+            po = polib.pofile(os.path.join(pathdl, (i + '.po')))
+            po.save_as_mofile(os.path.join(pathdl, (i + '.mo')))
 if not (os.path.exists(os.path.join(path, fn_set))):
     if os.path.exists(os.path.join(path, "settings.npy")):
         w.deiconify()
@@ -164,8 +178,6 @@ def salvaLingua(cb, mode):
                     if not (os.path.exists(os.path.join(pathdl, (i + '.po')))):
                         if not (os.path.exists(os.path.join(pathdl))):
                             os.makedirs(os.path.join(pathdl))
-                        '''filecreation = open(os.path.join(pathdl, (i + '.po')), "w")
-                        filecreation.close()'''
                     tr.get_translation('school-life-diary-pc', i + "pot", y, os.path.join(pathdl, (i + '.po')))
                     po = polib.pofile(os.path.join(pathdl, (i + '.po')))
                     po.save_as_mofile(os.path.join(pathdl, (i + '.mo')))

@@ -7,7 +7,7 @@
 #                   #
 #####################
 
-
+print("CARICAMENTO IN CORSO...")
 ### START MAIN ###
 
 import ctypes
@@ -27,20 +27,19 @@ import PIL.Image
 import PIL.ImageTk
 import feedparser
 
+global path
+path = os.path.expanduser(r'~\Documents\School Life Diary')
+
+import settings
+
 ## IMPORTAZIONE FILE ESTERNI ##
 import agenda
 import note
 import prof
-import settings
 import style
 import subjects
 import timetable
 import voti
-
-global path
-
-## IMPOSTAZIONE PERCORSO ##
-path = os.path.expanduser(r'~\Documents\School Life Diary')
 
 ## CREAZIONE FINESTRA MENU PRINCIPALE ##
 global w
@@ -51,6 +50,7 @@ w.title("School Life Diary")
 w.iconbitmap(r"images/school_life_diary.ico")
 
 ## INSTALLAZIONE LINGUA ##
+
 global lgcode
 if not (os.path.exists(os.path.join(path, "language.txt"))):
     windll = ctypes.windll.kernel32
@@ -118,7 +118,7 @@ def info():
     bwsp.grid(row=0, column=2, padx=10, pady=5)
     l25 = Label(f1, text=_("Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale "
                            "ha licenza Creative Commons BY 3.0.\nAlcune icone fatte da Pixel Buddha, Freepik, "
-                           "Roundicons "
+                           "Roundicons, Dimitry Miroliubov "
                            "e Smash Icons di www.flaticon.com hanno licenza Creative Commons BY 3.0"))
     l25.pack(padx=10, pady=5)
     l3 = Label(f1, text=_("Traduttori: "))
