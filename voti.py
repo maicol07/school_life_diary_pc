@@ -83,6 +83,8 @@ def updatecombobox(cb, tt=True):
     ----------
     :param cb: (ttk.combobox)
         Combobox che conterrà tutte le materie. Inizialmente vuota.
+    :param tt: (bool)
+        Valore booleano che determina se è selezionato Tutte le materie o una materia specifica.
 
     Ritorna
     --------
@@ -162,36 +164,36 @@ def Salvataggio(mode, voto, materia, data, periodo, tipo, descrizione, peso="100
     sql_cur = sql_conn.cursor()
     if mode in ["add", "del"]:
         sistemaIndici(sql_cur)
-    # try:
-    if mode in ["add", "edit"]:
-        for i in periodo.split(";"):
-            if periodo.split(";").index(i) == 0:
-                continue
-            k = i[1:].split(" - ")
-            if k[0] < data < k[1]:
-                periodo = periodo.split(";").index(i)
-                break
-    if peso == "":
-        peso = "100"
-    if mode == "add":
-        sql_cur.execute("INSERT INTO voti VALUES ('{}','{}','{}','{}', '{}','{}','{}','{}')".format(
-            len(list(voti.keys())) + 1, voto, materia, data, periodo, tipo, peso, descrizione))
-        wa.destroy()
-    elif mode == "edit":
-        sql_cur.execute(
-            """UPDATE voti SET voto='{}', materia='{}', data='{}', periodo='{}', tipo='{}', peso='{}',
-descrizione='{}' WHERE ID={}""".format(voto, materia, data, periodo, tipo, peso, descrizione, idx))
-        we.destroy()
-    elif mode == "del":
-        sql_cur.execute("DELETE FROM voti WHERE ID={}".format(idx))
-    tkmb.showinfo(title=_("Successo!"),
-                  message=_("Salvataggio effettuato con successo!"))
-    wv.destroy()
-    creaFinestra()
-    # except Exception as ex:
-    #    tkmb.showerror(title=_("Errore!"),
-    #                   message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore") + "\n" + str(
-    #                       ex))
+    try:
+        if mode in ["add", "edit"]:
+            for i in periodo.split(";"):
+                if periodo.split(";").index(i) == 0:
+                    continue
+                k = i[1:].split(" - ")
+                if k[0] < data < k[1]:
+                    periodo = periodo.split(";").index(i)
+                    break
+        if peso == "":
+            peso = "100"
+        if mode == "add":
+            sql_cur.execute("INSERT INTO voti VALUES ('{}','{}','{}','{}', '{}','{}','{}','{}')".format(
+                len(list(voti.keys())) + 1, voto, materia, data, periodo, tipo, peso, descrizione))
+            wa.destroy()
+        elif mode == "edit":
+            sql_cur.execute(
+                """UPDATE voti SET voto='{}', materia='{}', data='{}', periodo='{}', tipo='{}', peso='{}',
+    descrizione='{}' WHERE ID={}""".format(voto, materia, data, periodo, tipo, peso, descrizione, idx))
+            we.destroy()
+        elif mode == "del":
+            sql_cur.execute("DELETE FROM voti WHERE ID={}".format(idx))
+        tkmb.showinfo(title=_("Successo!"),
+                      message=_("Salvataggio effettuato con successo!"))
+        wv.destroy()
+        creaFinestra()
+    except Exception as ex:
+        tkmb.showerror(title=_("Errore!"),
+                       message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore") + "\n" + str(
+                           ex))
     if mode in ["add", "del"]:
         sistemaIndici(sql_cur)
 

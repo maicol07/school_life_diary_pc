@@ -166,7 +166,8 @@ def Salvataggio(mode, titolo, descrizione):
         creaFinestra()
     except Exception as ex:
         tkmb.showerror(title=_("Errore!"),
-                       message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore.\n" + str(ex)))
+                       message=_("Si è verificato un errore, riprovare oppure "
+                                 "contattare lo sviluppatore.") + "\n" + str(ex))
 
 
 def delete():

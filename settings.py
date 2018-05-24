@@ -170,17 +170,18 @@ def salvaLingua(cb, mode):
         """
     try:
         if mode == "download":
-            l = sorted(["main", "settings", "note", "timetable", "subjects", "agenda", "voti"])
-            for i in l:
-                lang = tr.list_languages('school-life-diary-pc', i + "pot")
-                for y in lang:
-                    pathdl = os.path.join(path, 'locale', y[:2], "LC_MESSAGES")
-                    if not (os.path.exists(os.path.join(pathdl, (i + '.po')))):
-                        if not (os.path.exists(os.path.join(pathdl))):
-                            os.makedirs(os.path.join(pathdl))
-                    tr.get_translation('school-life-diary-pc', i + "pot", y, os.path.join(pathdl, (i + '.po')))
-                    po = polib.pofile(os.path.join(pathdl, (i + '.po')))
-                    po.save_as_mofile(os.path.join(pathdl, (i + '.mo')))
+            resources = sorted(["main", "settings", "note", "timetable", "subjects", "agenda", "voti"])
+            for resource in resources:
+                language = tr.list_languages('school-life-diary-pc', resource + "pot")
+                for z in language:
+                    path_download = os.path.join(path, 'locale', z[:2], "LC_MESSAGES")
+                    if not (os.path.exists(os.path.join(path_download, (resource + '.po')))):
+                        if not (os.path.exists(os.path.join(path_download))):
+                            os.makedirs(os.path.join(path_download))
+                    tr.get_translation('school-life-diary-pc', resource + "pot", z,
+                                       os.path.join(path_download, (resource + '.po')))
+                    po_file = polib.pofile(os.path.join(path_download, (resource + '.po')))
+                    po_file.save_as_mofile(os.path.join(path_download, (resource + '.mo')))
         else:
             f = open(os.path.join(path, "language.txt"), "w")
             f.write(cb.get())
@@ -244,9 +245,9 @@ def cambiaLingua():
     idown = PIL.ImageTk.PhotoImage(pdown)
     btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: salvaLingua(cb, "change"))
     btn.pack(padx=10, pady=10)
-    l = Label(wl, text=_("Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti "
-                         "dalla nostra piattaforma di traduzione."))
-    l.pack(padx=10, pady=2)
+    label = Label(wl, text=_("Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti "
+                             "dalla nostra piattaforma di traduzione."))
+    label.pack(padx=10, pady=2)
     btn1 = Button(wl, text=_("SCARICA O AGGIORNA LINGUE"), image=idown, compound=LEFT,
                   command=lambda: salvaLingua(cb, "download"))
     btn1.pack(padx=5, pady=10)
@@ -444,13 +445,13 @@ def inizializza(cursor):
             ds[row[0]] = (row[1], row[2])
 
 
-def fontcallback(fs, var):
+def fontcallback(font_sel, var):
     """
         Font picker. Seleziona il carattere da utilizzare all'interno dell'applicazione.
 
         Parametri
         ----------
-        :param fs : (Tkinter.Label)
+        :param font_sel : (Tkinter.Label)
             Etichetta font selezionato.
         :param var : (StringVar)
             Variabile che contiene il font selezionato.
@@ -470,7 +471,7 @@ def fontcallback(fs, var):
             font_str += ' underline'
         if font['overstrike']:
             font_str += ' overstrike'
-        fs.configure(font=font_str, text=_("Carattere selezionato: {}").format(font_str.replace('\ ', ' ')))
+        font_sel.configure(font=font_str, text=_("Carattere selezionato: {}").format(font_str.replace('\ ', ' ')))
         var.set(font_str)
 
 
@@ -582,21 +583,21 @@ def modifica_valore(event):
             e.pack(pady=5)
             var_list = []
             periods_list = item["values"][1].split(";")
-            for i in range(1, per + 1):
-                fp = Labelframe(wp, text=_("Periodo n. {}").format(i))
+            for k in range(1, per + 1):
+                fp = Labelframe(wp, text=_("Periodo n. {}").format(k))
                 fp.pack(padx=5, pady=10)
                 l1 = Label(fp, text=_("Data di inizio"))
                 l2 = Label(fp, text=_("Data di fine"))
                 l1.grid(row=0, column=0, padx=5)
                 l2.grid(row=0, column=1)
-                globals()["d1_{}".format(i)] = datepicker.Datepicker(fp)
-                globals()["d1_{}".format(i)].grid(row=1, column=0, padx=5, pady=2)
-                globals()["d2_{}".format(i)] = datepicker.Datepicker(fp)
-                if i in range(len(periods_list)):
-                    globals()["d1_{}".format(i)].date_var.set(periods_list[i].split(" - ")[0][1:])
-                    globals()["d2_{}".format(i)].date_var.set(periods_list[i].split(" - ")[1])
-                globals()["d2_{}".format(i)].grid(row=1, column=1, pady=2)
-                var_list.append(i)
+                globals()["d1_{}".format(k)] = datepicker.Datepicker(fp)
+                globals()["d1_{}".format(k)].grid(row=1, column=0, padx=5, pady=2)
+                globals()["d2_{}".format(k)] = datepicker.Datepicker(fp)
+                if k in range(len(periods_list)):
+                    globals()["d1_{}".format(k)].date_var.set(periods_list[k].split(" - ")[0][1:])
+                    globals()["d2_{}".format(k)].date_var.set(periods_list[k].split(" - ")[1])
+                globals()["d2_{}".format(k)].grid(row=1, column=1, pady=2)
+                var_list.append(k)
             btn_save = Button(wp, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: saveperiods())
             btn_save.pack()
             wp.focus()
@@ -618,7 +619,7 @@ def modifica_valore(event):
     wcv.mainloop()
 
 
-def updateList(menut, l):
+def updateList(menut, lista):
     """
         Impostazione elementi menu a tendina
 
@@ -626,14 +627,14 @@ def updateList(menut, l):
         ----------
         :param menut : (Tkinter Combobox)
             Menu a tendina vuoto
-        :param l : (list)
+        :param lista : (list)
             Lista con i valori da aggiungere al menu a tendina.
 
         Ritorna
         -------
         Niente
         """
-    menut["values"] = sorted(l)
+    menut["values"] = sorted(lista)
 
 
 # MENU TASTO DESTRO
