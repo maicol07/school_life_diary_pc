@@ -230,6 +230,7 @@ s.configure('.', font=c.execute("SELECT value FROM settings WHERE setting='PC_FO
 
 ### Verifica se esistono degli aggiornamenti per il programma ###
 global v
+vs = "alpha"
 v = "1.0.0"
 if not (os.path.exists(os.path.join(path, "version.txt"))):
     fv = open(os.path.join(path, "version.txt"), "w")
@@ -239,6 +240,17 @@ else:
     fv = open(os.path.join(path, "version.txt"), "r")
     pv = fv.readline()
     if pv < v:
+        if vs == "alpha":
+            tkmb.showwarning(_("Versione non stabile rilevata!"),
+                             message=_("La versione che stai utilizzando è una versione ALPHA non stabile, che può"
+                                       "contenere bug e problemi vari, anche gravi. Ti consigliamo di non usare questa"
+                                       "versione in ambito produttivo."))
+        elif vs == "beta":
+            tkmb.showwarning(_("Versione BETA non stabile rilevata!"),
+                             message=_("La versione che stai utilizzando è una versione ALPHA non stabile, che può"
+                                       "contenere piccoli bug e problemi. Puoi usare questa versione in ambito"
+                                       "produttivo, ma segnala i bug, se dovessi incontrarne uno, in vista del rilascio"
+                                       "stabile."))
         aggiornamento(pv, v)
         fv.close()
         fv = open(os.path.join(path, "version.txt"), "w")
