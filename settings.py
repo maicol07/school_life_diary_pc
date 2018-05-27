@@ -182,6 +182,9 @@ def salvaLingua(cb, mode):
                                        os.path.join(path_download, (resource + '.po')))
                     po_file = polib.pofile(os.path.join(path_download, (resource + '.po')))
                     po_file.save_as_mofile(os.path.join(path_download, (resource + '.mo')))
+            fdata = open(os.path.join(path, r"locale/data.txt"), "w")
+            fdata.write(time.strftime("%d-%m-%Y"))
+            fdata.close()
         else:
             f = open(os.path.join(path, "language.txt"), "w")
             f.write(cb.get())
@@ -251,6 +254,18 @@ def cambiaLingua():
     btn1 = Button(wl, text=_("SCARICA O AGGIORNA LINGUE"), image=idown, compound=LEFT,
                   command=lambda: salvaLingua(cb, "download"))
     btn1.pack(padx=5, pady=10)
+    if os.path.exists(os.path.join(path, r"locale/data.txt")):
+        fdata = open(os.path.join(path, r"locale/data.txt"), "r")
+        data = fdata.readline()
+        if data == "":
+            data = "N/A"
+        fdata.close()
+    else:
+        data = _("Mai scaricato")
+    data_ult_agg = Label(wl, text=_("Data ultimo aggiornamento: {}").format(data))
+    data_ult_agg.pack(pady=10)
+    wl.focus()
+    wl.mainloop()
 
 
 def backup():
