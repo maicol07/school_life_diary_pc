@@ -5,6 +5,37 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## Not released yet - Versione 1.0 (Estate 2018)
+
+### Added
+
+- New professors module! Insert personal info like name, surname, photo, website and email. You can also link professors to their subjects!
+- New marks module! Add your marks (also with weight) and let the software calculate your average!
+- Added new inputs in subjects.
+- Themes! Too bored of the Windows native style? Now you can use your preferred theme!
+- Auto update program!! Every time you update the app, your database will be updated too automatically!
+- You can choose if you want to receive updates for the app!
+- Added docstrings and functions in the code
+
+### Changed
+
+- Refreshed menu screen
+- Now updates notifications are divided into Alpha, Beta and Stable!
+- Enhancements to settings, subjects and timetable screens, now there is a beatiful table and you can use right click!! (It opens a contestual menu, by the way! :) )
+- General graphical enhancements
+- Code enhancements (functionals and styling, following PEP 8 guidelines)
+- Changed storage from File to SQLITE3
+- Reduced a lot app start time and size. Who don't want a smaller and faster app?
+
+### Fixed
+
+- Transifex translations download issue is now solved!
+
+### Removed
+
+- Removed internal "Delete all data" feature. You have to open Documenti\School Life Diary folder manually. You cannot click DELETE ALL button in settings. Probably this feature will be back in 1.1.
+
+
 ## Version 0.3.0.1 (11/30/2017)
 
 ### Fixed
