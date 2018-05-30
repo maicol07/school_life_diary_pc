@@ -2,7 +2,10 @@
 
 
 ## IMPORTAZIONE LIBRERIE ##
+import sys
 
+### IMPOSTAZIONE PERCORSO LIBRERIE ESTERNE ###
+sys.path.insert(0, 'lib')
 import ctypes
 import gettext
 import locale
@@ -22,9 +25,8 @@ import polib
 from tkFontChooser import askfont
 from transifex.api import TransifexAPI
 
-import datepicker
+from lib import datepicker, wckToolTips
 import style
-import wckToolTips
 
 global path
 global fn_set
@@ -34,6 +36,31 @@ global tr
 fn_set = "settings.db"
 path = os.path.expanduser(r'~\Documents\School Life Diary')
 tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com/')
+
+
+def install_language():
+    """
+    Installa la lingua del modulo impostazioni.
+
+    Parametri
+    ----------
+    Nessuno
+
+    Ritorna
+    -------
+    Niente
+    """
+    if not (os.path.exists(os.path.join(path, "language.txt"))):
+        windll = ctypes.windll.kernel32
+        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        lg = gettext.translation("settings", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
+    else:
+        fl = open(os.path.join(path, "language.txt"), "r")
+        lgcode = fl.readline()
+        lg = gettext.translation('settings', localedir=os.path.join(path, 'locale'), languages=[lgcode])
+        fl.close()
+    lg.install()
+
 
 ## CREAZIONE DATABASE (PRIMO AVVIO) ##
 
@@ -53,6 +80,7 @@ if os.path.exists("locale") and not (os.path.exists(os.path.join(path, "locale")
             tr.get_translation('school-life-diary-pc', i + "pot", y, os.path.join(pathdl, (i + '.po')))
             po = polib.pofile(os.path.join(pathdl, (i + '.po')))
             po.save_as_mofile(os.path.join(pathdl, (i + '.mo')))
+install_language()
 if not (os.path.exists(os.path.join(path, fn_set))):
     if os.path.exists(os.path.join(path, "settings.npy")):
         w.deiconify()
@@ -74,9 +102,9 @@ if not (os.path.exists(os.path.join(path, fn_set))):
                                                    `descr` TEXT);""")
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(
         _("Numero di ore massime per giornate da visualizzare nell'orario")))
-    if "win" == platform[:3]:
+    if "win" == sys.platform[:3]:
         th = 'vista'
-    elif "darwin" in platform:
+    elif "darwin" in sys.platform:
         th = 'clam'
     else:
         th = 'clam'
@@ -86,7 +114,7 @@ if not (os.path.exists(os.path.join(path, fn_set))):
         "Consenso a ricevere notifiche di versioni alpha")))
     c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
         "Consenso a ricevere notifiche di versioni beta")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
+    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Trebuchet", _(
         "Carattere utilizzato in tutti i testi dell'applicazione")))
     c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("CHECK_UPDATES", "{}", "{}");""".format(_(
         "Sì"), _("Consenso a controllare all'avvio dell'app se sono disponibili aggiornamenti.")))
@@ -119,37 +147,13 @@ else:
         c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
             "Consenso a ricevere notifiche di versioni beta")))
         c.execute(
-            """INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Helvetica", _(
-                "Carattere utilizzato in tutti i testi dell'applicazione")))
+            """INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format(
+                "Arial 10 normal roman", _("Carattere utilizzato in tutti i testi dell'applicazione")))
         c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("PERIODS", "{}", "{}")""".format(
             "2; 15/09/2018 - 23/12/2018; 09/01/2019 - 07/06/2019", _("Periodi scolastici")))
 
 conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
 c = conn.cursor()
-
-
-def install_language():
-    """
-    Installa la lingua del modulo impostazioni.
-
-    Parametri
-    ----------
-    Nessuno
-
-    Ritorna
-    -------
-    Niente
-    """
-    if not (os.path.exists(os.path.join(path, "language.txt"))):
-        windll = ctypes.windll.kernel32
-        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lg = gettext.translation("settings", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
-    else:
-        fl = open(os.path.join(path, "language.txt"), "r")
-        lgcode = fl.readline()
-        lg = gettext.translation('settings', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-        fl.close()
-    lg.install()
 
 
 def salvaLingua(cb, mode):

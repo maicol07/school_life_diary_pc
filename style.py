@@ -16,4 +16,4 @@ def init():
     s.configure("TLabelframe.Label", background="white")
     s.configure("TScale", background="white")
     s.configure("TCheckbutton", background="white")
-    s.configure('.', font=('Helvetica', 10))
+    s.configure('.', font=('Arial', 10, "normal roman"))
