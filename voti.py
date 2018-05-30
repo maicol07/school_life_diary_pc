@@ -1,3 +1,8 @@
+import sys
+
+### IMPOSTAZIONE PERCORSO LIBRERIE ESTERNE ###
+sys.path.insert(0, 'lib')
+
 import ctypes
 import gettext
 import locale
@@ -11,7 +16,7 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 
-import datepicker
+from lib import datepicker
 
 global fn_voti
 global path

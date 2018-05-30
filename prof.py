@@ -1,4 +1,9 @@
 # IMPORTAZIONE MODULI E LIBRERIE
+import sys
+
+### IMPOSTAZIONE PERCORSO LIBRERIE ESTERNE ###
+sys.path.insert(0, 'lib')
+
 import ctypes
 import gettext
 import locale
