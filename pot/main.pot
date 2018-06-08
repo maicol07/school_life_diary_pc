@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2018-05-24 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.4\n"
+
+#: main.py:67
+msgid "Lingua non impostata!"
+msgstr ""
+
+#: main.py:68
+msgid "La lingua impostata non è stata riconosciuta. Per risolvere prova a eliminare il file in Documenti/School Life Diary/language.txt . Se il problema non si risolve, contattare lo sviluppatore. Errore: "
+msgstr ""
+
+#: main.py:98 main.py:319
+msgid "Informazioni"
+msgstr ""
+
+#: main.py:107
+msgid "sviluppato e mantenuto da maicol07"
+msgstr ""
+
+#: main.py:109
+msgid "Link"
+msgstr ""
+
+#: main.py:111
+msgid "Sito web"
+msgstr ""
+
+#: main.py:113
+msgid "Pagina del progetto su GitHub"
+msgstr ""
+
+#: main.py:116
+msgid "Sito web sviluppatore"
+msgstr ""
+
+#: main.py:119
+msgid ""
+"Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale ha licenza Creative Commons BY 3.0.\n"
+"Alcune icone fatte da Pixel Buddha, Freepik, Roundicons, Dimitry Miroliubov e Smash Icons di www.flaticon.com hanno licenza Creative Commons BY 3.0"
+msgstr ""
+
+#: main.py:124
+msgid "Traduttori: "
+msgstr ""
+
+#: main.py:128
+msgid "Vuoi diventare anche tu un traduttore?"
+msgstr ""
+
+#: main.py:129
+msgid "CLICCA QUI!"
+msgstr ""
+
+#: main.py:133
+msgid "Registro delle modifiche"
+msgstr ""
+
+#: main.py:197
+msgid "Impossibile stabilire la connessione"
+msgstr ""
+
+#: main.py:198
+msgid "[WinError 10060] Impossibile stabilire la connessione.Risposta non corretta della parte connessa dopo l'intervallodi tempo oppure mancata risposta dall'host collegato. Riaprire l'app eriprovare."
+msgstr ""
+
+#: main.py:248 main.py:268 main.py:275
+msgid "Sì"
+msgstr ""
+
+#: main.py:263
+msgid "Nuova versione disponibile!"
+msgstr ""
+
+#: main.py:264
+msgid ""
+"È disponibile una nuova versione stabile di School Life Diary. Ti \n"
+"                                    consigliamo di aggiornare il prima possibile per non perdere le nuove funzionalità, \n"
+"                                    i miglioramenti e le correzioni di problemi. Vuoi accedere alla pagina da cui \n"
+"                                    scaricare l'aggiornamento alla versione stabile {}?"
+msgstr ""
+
+#: main.py:269
+msgid "Nuova versione BETA disponibile!"
+msgstr ""
+
+#: main.py:270
+msgid ""
+"È disponibile una nuova versione BETA di School Life Diary. Queste \n"
+"                                    versioni non sono del tutto stabili e possono contenere alcuni problemi, \n"
+"                                    ma includono nuove funzionalità. Ricevi questo avviso poichè hai dato il tuo \n"
+"                                    consenso a ricevere le notifiche di versioni BETA Vuoi accedere alla pagina da \n"
+"                                    cui scaricare l'aggiornamento alla versione BETA {}?"
+msgstr ""
+
+#: main.py:276
+msgid "Nuova versione ALPHA disponibile!"
+msgstr ""
+
+#: main.py:277
+msgid ""
+"È disponibile una nuova versione ALPHA di School Life Diary. Queste \n"
+"                                    versioni non sono stabili e possono contenere parecchi problemi, ma includono nuove \n"
+"                                    funzionalità. Ricevi questo avviso poichè hai dato il tuo consenso a ricevere le \n"
+"                                    notifiche di nuove versioni ALPHA. Vuoi accedere alla pagina da cui scaricare \n"
+"                                    l'aggiornamento alla versione ALPHA {}?"
+msgstr ""
+
+#: main.py:287
+msgid "Nessuna connessione ad internet"
+msgstr ""
+
+#: main.py:288
+msgid "Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."
+msgstr ""
+
+#: main.py:307
+msgid "File"
+msgstr ""
+
+#: main.py:308
+msgid "Esci"
+msgstr ""
+
+#: main.py:310
+msgid "Opzioni"
+msgstr ""
+
+#: main.py:311
+msgid "Impostazioni"
+msgstr ""
+
+#: main.py:313
+msgid "Lingua"
+msgstr ""
+
+#: main.py:315
+msgid "Aiuto"
+msgstr ""
+
+#: main.py:316
+msgid "Guida"
+msgstr ""
+
+#: main.py:340
+msgid "ORARIO"
+msgstr ""
+
+#: main.py:345
+msgid "MATERIE"
+msgstr ""
+
+#: main.py:349
+msgid "PROFESSORI"
+msgstr ""
+
+#: main.py:352
+msgid "VOTI"
+msgstr ""
+
+#: main.py:355
+msgid "ANNOTAZIONI"
+msgstr ""
+
+#: main.py:358
+msgid "AGENDA"
+msgstr ""

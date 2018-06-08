@@ -1,0 +1,113 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2018-05-24 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.4\n"
+
+#: timetable.py:94
+msgid "Successo!"
+msgstr ""
+
+#: timetable.py:95
+msgid "Salvataggio effettuato con successo!"
+msgstr ""
+
+#: timetable.py:100
+msgid "Errore!"
+msgstr ""
+
+#: timetable.py:101
+msgid ""
+"Si è verificato un errore, riprovare oppure contattare lo sviluppatore.\n"
+"Errore: {}"
+msgstr ""
+
+#: timetable.py:142
+msgid "Nessuna riga selezionata!"
+msgstr ""
+
+#: timetable.py:143
+msgid "Non è stata selezionata nessuna riga. Si prega di selezionarne una per apportare modifiche."
+msgstr ""
+
+#: timetable.py:149
+msgid "Modifica Orario - Orario scolastico"
+msgstr ""
+
+#: timetable.py:152
+msgid "Inserire le materie da visualizzare."
+msgstr ""
+
+#: timetable.py:160 timetable.py:315
+msgid "Nessuna materia inserita!"
+msgstr ""
+
+#: timetable.py:161 timetable.py:316
+msgid ""
+"Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!\n"
+"Errore specifico: {}"
+msgstr ""
+
+#: timetable.py:165 timetable.py:337
+msgid "Lunedì"
+msgstr ""
+
+#: timetable.py:165 timetable.py:339
+msgid "Martedì"
+msgstr ""
+
+#: timetable.py:165 timetable.py:341
+msgid "Mercoledì"
+msgstr ""
+
+#: timetable.py:165 timetable.py:343
+msgid "Giovedì"
+msgstr ""
+
+#: timetable.py:165 timetable.py:345
+msgid "Venerdì"
+msgstr ""
+
+#: timetable.py:165 timetable.py:347
+msgid "Sabato"
+msgstr ""
+
+#: timetable.py:166
+msgid "Maschera di modifica"
+msgstr ""
+
+#: timetable.py:194
+msgid "Azioni"
+msgstr ""
+
+#: timetable.py:198
+msgid "SALVA"
+msgstr ""
+
+#: timetable.py:300
+msgid "Orario scolastico"
+msgstr ""
+
+#: timetable.py:329
+msgid "Modifica riga"
+msgstr ""
+
+#: timetable.py:353
+msgid "{}° ora"
+msgstr ""
+
+#: timetable.py:359
+msgid "Per modificare l'orario, fai doppio click o usa il tasto destro del mouse su una riga e inserisci le materie dell'ora corrispondente."
+msgstr ""
