@@ -1,92 +1,125 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-09-02 15:53+0200\n"
-"PO-Revision-Date: 2017-09-02 15:58+0200\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2018-05-24 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Maicol <maicolbattistini@live.it>, 2018\n"
+"Language-Team: English (https://www.transifex.com/maicol07/teams/78236/en/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 1.8.4\n"
-"Last-Translator: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
 
-#: timetable.py:38
+#: timetable.py:94
 msgid "Successo!"
 msgstr "Success!"
 
-#: timetable.py:39
+#: timetable.py:95
 msgid "Salvataggio effettuato con successo!"
 msgstr "Saved successfully!"
 
-#: timetable.py:44
+#: timetable.py:100
 msgid "Errore!"
 msgstr "Error!"
 
-#: timetable.py:44
-msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
-msgstr "An error has occurred, try again or contact the developer"
+#: timetable.py:101
+msgid ""
+"Si è verificato un errore, riprovare oppure contattare lo sviluppatore.\n"
+"Errore: {}"
+msgstr ""
+"An error has occurred, try again or contact the developer\n"
+"Error: {}"
 
-#: timetable.py:51
+#: timetable.py:142
+msgid "Nessuna riga selezionata!"
+msgstr "No row selected!"
+
+#: timetable.py:143
+msgid ""
+"Non è stata selezionata nessuna riga. Si prega di selezionarne una per "
+"apportare modifiche."
+msgstr "No row has been selected. Please select one to make changes!"
+
+#: timetable.py:149
 msgid "Modifica Orario - Orario scolastico"
 msgstr "Edit Timetable - Timetable"
 
-#: timetable.py:54
-msgid "Inserire la materia da visualizzare nell'orario la"
-msgstr "Insert the subject to be displayed in the"
+#: timetable.py:152
+msgid "Inserire le materie da visualizzare."
+msgstr "Add the subjects to be displayed."
 
-#: timetable.py:54
-msgid "° ora del"
-msgstr "° hour of"
-
-#: timetable.py:59
+#: timetable.py:160 timetable.py:315
 msgid "Nessuna materia inserita!"
 msgstr "No subject inserted!"
 
-#: timetable.py:60
+#: timetable.py:161 timetable.py:316
 msgid ""
-"Errore! Nessuna materia inserita. Inserire delle materie dalla sezione "
-"materie!"
-msgstr "Error! No subect added. Add some subjects from the subjects section!"
+"Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!\n"
+"Errore specifico: {}"
+msgstr ""
+"Error! No subect added. Add some subjects from the subjects section!\n"
+"Specific error: {}"
 
-#: timetable.py:63
-msgid "SALVA"
-msgstr "SAVE"
-
-#: timetable.py:91
-msgid "Orario scolastico"
-msgstr "Timetable"
-
-#: timetable.py:102
-msgid "Giovedì"
-msgstr "Thursday"
-
-#: timetable.py:102
+#: timetable.py:165 timetable.py:337
 msgid "Lunedì"
 msgstr "Monday"
 
-#: timetable.py:102
+#: timetable.py:165 timetable.py:339
 msgid "Martedì"
 msgstr "Tuesday"
 
-#: timetable.py:102
+#: timetable.py:165 timetable.py:341
 msgid "Mercoledì"
 msgstr "Wednesday"
 
-#: timetable.py:102
-msgid "Sabato"
-msgstr "Saturday"
+#: timetable.py:165 timetable.py:343
+msgid "Giovedì"
+msgstr "Thursday"
 
-#: timetable.py:102
+#: timetable.py:165 timetable.py:345
 msgid "Venerdì"
 msgstr "Friday"
 
-#: timetable.py:109
-msgid "° ora"
-msgstr "° hour"
+#: timetable.py:165 timetable.py:347
+msgid "Sabato"
+msgstr "Saturday"
+
+#: timetable.py:166
+msgid "Maschera di modifica"
+msgstr "Editing section"
+
+#: timetable.py:194
+msgid "Azioni"
+msgstr "Actions"
+
+#: timetable.py:198
+msgid "SALVA"
+msgstr "SAVE"
+
+#: timetable.py:300
+msgid "Orario scolastico"
+msgstr "Timetable"
+
+#: timetable.py:329
+msgid "Modifica riga"
+msgstr "Edit row"
+
+#: timetable.py:353
+msgid "{}° ora"
+msgstr "{}° hour"
+
+#: timetable.py:359
+msgid ""
+"Per modificare l'orario, fai doppio click o usa il tasto destro del mouse su"
+" una riga e inserisci le materie dell'ora corrispondente."
+msgstr ""
+"To edit timetable double click or right click on a row and add the subject "
+"to the related hour."

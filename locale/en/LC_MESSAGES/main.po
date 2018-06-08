@@ -1,13 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-09-02 21:29+0200\n"
-"PO-Revision-Date: 2017-09-02 21:32+0200\n"
-"Last-Translator: Maicol <maicolbattistini@live.it>, 2017\n"
+"POT-Creation-Date: 2018-05-24 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Maicol <maicolbattistini@live.it>, 2018\n"
 "Language-Team: English (https://www.transifex.com/maicol07/teams/78236/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
@@ -17,122 +18,196 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.4\n"
 
-#: main.py:57 main.py:143
+#: main.py:67
+msgid "Lingua non impostata!"
+msgstr "Language not setted!"
+
+#: main.py:68
+msgid ""
+"La lingua impostata non è stata riconosciuta. Per risolvere prova a "
+"eliminare il file in Documenti/School Life Diary/language.txt . Se il "
+"problema non si risolve, contattare lo sviluppatore. Errore: "
+msgstr ""
+"The setted language hasn't been recognized. Try to delete the file "
+"Documents/School Life Diary/language.txt to solve . If the problem still "
+"occurs, contact the developer. Error:"
+
+#: main.py:98 main.py:319
 msgid "Informazioni"
 msgstr "About"
 
-#: main.py:64
+#: main.py:107
 msgid "sviluppato e mantenuto da maicol07"
 msgstr "developed and mantained by maicol07"
 
-#: main.py:65
-msgid "Sito web: "
-msgstr "Website:"
+#: main.py:109
+msgid "Link"
+msgstr "Link"
 
-#: main.py:70
-msgid "GitHub School Life Diary: "
-msgstr "GitHub School Life Diary:"
+#: main.py:111
+msgid "Sito web"
+msgstr "Website"
 
-#: main.py:74
+#: main.py:113
+msgid "Pagina del progetto su GitHub"
+msgstr "GitHub Project Page"
+
+#: main.py:116
+msgid "Sito web sviluppatore"
+msgstr "Developer Website"
+
+#: main.py:119
 msgid ""
-"Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza "
-"Creative Commons 3.0"
+"Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale ha licenza Creative Commons BY 3.0.\n"
+"Alcune icone fatte da Pixel Buddha, Freepik, Roundicons, Dimitry Miroliubov e Smash Icons di www.flaticon.com hanno licenza Creative Commons BY 3.0"
 msgstr ""
-"Some icons made by Pixel Buddha from www.flaticon.com has Creative Commons "
-"3.0 license"
+"Thanks to Roundicons from flaticon.com for the main app icon, which is licensed under Creative Commons BY 3.0.\n"
+"Some icons by Pixel Buddha, Freepik, Roundicons, Dimitry Miroliubov and Smash Icons from www.flaticon.com are licensed under Creative Commons BY 3.0"
 
-#: main.py:76
+#: main.py:124
 msgid "Traduttori: "
 msgstr "Translators:"
 
-#: main.py:79
+#: main.py:128
 msgid "Vuoi diventare anche tu un traduttore?"
 msgstr "Would you like to become a translator?"
 
-#: main.py:80
+#: main.py:129
 msgid "CLICCA QUI!"
 msgstr "CLICK HERE!!"
 
-#: main.py:84
-msgid "Funzione non disponibile"
-msgstr "Feature not available"
+#: main.py:133
+msgid "Registro delle modifiche"
+msgstr "Changelog"
 
-#: main.py:85
-msgid "LA FUNZIONE NON È ANCORA DISPONIBILE!"
-msgstr "This feature is not available just yet!"
+#: main.py:197
+msgid "Impossibile stabilire la connessione"
+msgstr "Can't establish the connection"
 
-#: main.py:110
+#: main.py:198
+msgid ""
+"[WinError 10060] Impossibile stabilire la connessione.Risposta non corretta "
+"della parte connessa dopo l'intervallodi tempo oppure mancata risposta "
+"dall'host collegato. Riaprire l'app eriprovare."
+msgstr ""
+"[WinError 10060] The connection can not be established. Incorrect response "
+"of the connected party after the time interval or no response from the "
+"connected host. Re-open the app and start again."
+
+#: main.py:248 main.py:268 main.py:275
+msgid "Sì"
+msgstr "Yes"
+
+#: main.py:263
 msgid "Nuova versione disponibile!"
 msgstr "New version available!"
 
-#: main.py:111
+#: main.py:264
 msgid ""
-"\n"
-"Ti consigliamo di aggiornare il prima possibile per non perdere le novità, "
-"i miglioramenti e le correzioni di problemi.\n"
-"Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione"
+"È disponibile una nuova versione stabile di School Life Diary. Ti \n"
+"                                    consigliamo di aggiornare il prima possibile per non perdere le nuove funzionalità, \n"
+"                                    i miglioramenti e le correzioni di problemi. Vuoi accedere alla pagina da cui \n"
+"                                    scaricare l'aggiornamento alla versione stabile {}?"
 msgstr ""
-"\n"
-"We recommend that you update as soon as possible to take advantage of new "
-"features, improvements and bug fixes.\n"
-"Would you like to go to the page where you can download the update to version"
+"A new stable version of School Life Diary is available.\n"
+"We recommend you to update as soon as possible to take advantage of new features, improvements and bug fixes.\n"
+"Would you like to go to the page where you can download the update to the stable version {}?"
 
-#: main.py:111
-msgid "È disponibile una nuova versione di School Life Diary."
-msgstr "A new version of School Life Diary is avaible!"
+#: main.py:269
+msgid "Nuova versione BETA disponibile!"
+msgstr "New BETA version available!"
 
-#: main.py:131
+#: main.py:270
+msgid ""
+"È disponibile una nuova versione BETA di School Life Diary. Queste \n"
+"                                    versioni non sono del tutto stabili e possono contenere alcuni problemi, \n"
+"                                    ma includono nuove funzionalità. Ricevi questo avviso poichè hai dato il tuo \n"
+"                                    consenso a ricevere le notifiche di versioni BETA Vuoi accedere alla pagina da \n"
+"                                    cui scaricare l'aggiornamento alla versione BETA {}?"
+msgstr ""
+"A new BETA version of School Life Diary is available.\n"
+"These versions aren't stable at all and can include some problems, but they include new features. You receive this advice because\n"
+"you approved receiving notifications about BETA versions.\n"
+"Would you like to go to the page where you can download the update to the BETA version {}?"
+
+#: main.py:276
+msgid "Nuova versione ALPHA disponibile!"
+msgstr "New ALPHA version available!"
+
+#: main.py:277
+msgid ""
+"È disponibile una nuova versione ALPHA di School Life Diary. Queste \n"
+"                                    versioni non sono stabili e possono contenere parecchi problemi, ma includono nuove \n"
+"                                    funzionalità. Ricevi questo avviso poichè hai dato il tuo consenso a ricevere le \n"
+"                                    notifiche di nuove versioni ALPHA. Vuoi accedere alla pagina da cui scaricare \n"
+"                                    l'aggiornamento alla versione ALPHA {}?"
+msgstr ""
+"A new ALPHA version of School Life Diary is available.\n"
+"These versions aren't stable and can include a lot of problems, but they include new features. You receive this advice because\n"
+"you approved receiving notifications about ALPHA versions.\n"
+"Would you like to go to the page where you can download the update to the ALPHA version {}?"
+
+#: main.py:287
+msgid "Nessuna connessione ad internet"
+msgstr "No internet connection"
+
+#: main.py:288
+msgid ""
+"Non è disponibile nessuna connessione ad internet per la ricerca degli "
+"aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà "
+"riaperto il programma."
+msgstr ""
+"No internet connection is available to search for updates. The search will "
+"be retryed the next time the program is reopened."
+
+#: main.py:307
 msgid "File"
 msgstr "File"
 
-#: main.py:132
+#: main.py:308
 msgid "Esci"
 msgstr "Exit"
 
-#: main.py:134
+#: main.py:310
 msgid "Opzioni"
 msgstr "Options"
 
-#: main.py:135
+#: main.py:311
 msgid "Impostazioni"
 msgstr "Settings"
 
-#: main.py:137
-msgid "Cambia lingua"
-msgstr "Change language"
+#: main.py:313
+msgid "Lingua"
+msgstr "Language"
 
-#: main.py:139
+#: main.py:315
 msgid "Aiuto"
 msgstr "Help"
 
-#: main.py:140
+#: main.py:316
 msgid "Guida"
 msgstr "Guide"
 
-#: main.py:168
+#: main.py:340
 msgid "ORARIO"
 msgstr "TIMETABLE"
 
-#: main.py:171
+#: main.py:345
 msgid "MATERIE"
 msgstr "SUBJECTS"
 
-#: main.py:174
+#: main.py:349
+msgid "PROFESSORI"
+msgstr "PROFESSORS"
+
+#: main.py:352
 msgid "VOTI"
 msgstr "MARKS"
 
-#: main.py:176
-msgid "NOTE"
+#: main.py:355
+msgid "ANNOTAZIONI"
 msgstr "NOTES"
 
-#: main.py:178
+#: main.py:358
 msgid "AGENDA"
 msgstr "AGENDA"
-
-#: main.py:180
-msgid "IMPOSTAZIONI"
-msgstr "SETTINGS"
-
-#: main.py:183
-msgid "ESCI"
-msgstr "EXIT"

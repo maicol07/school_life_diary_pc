@@ -1,97 +1,154 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-09-02 15:38+0200\n"
-"PO-Revision-Date: 2017-09-02 15:51+0200\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2018-05-24 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Maicol <maicolbattistini@live.it>, 2018\n"
+"Language-Team: English (https://www.transifex.com/maicol07/teams/78236/en/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 1.8.4\n"
-"Last-Translator: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.4\n"
 
-#: settings.py:35
+#: settings.py:59
+msgid "Attenzione! Database non presente!"
+msgstr "Warning! Database not existant!"
+
+#: settings.py:60
+msgid ""
+"Non hai effettuato la migrazione del database. Il programma si avvierà, ma "
+"non saranno visualizzati i tuoi dati fino a che non effettuerai la "
+"migrazione."
+msgstr ""
+"You haven't migrated the database. The software will start, but your data "
+"won't be displayed until you do the migration."
+
+#: settings.py:63
+msgid "Conferma download strumento migrazione database"
+msgstr "Confirm database migration tool download"
+
+#: settings.py:64
+msgid "Vuoi scaricare lo strumento di migrazione del database?"
+msgstr "Do you want to download the database migration tool?"
+
+#: settings.py:76 settings.py:108
+msgid "Numero di ore massime per giornate da visualizzare nell'orario"
+msgstr "Maximum hours number by day to display in the timetable"
+
+#: settings.py:83 settings.py:115
+msgid "Tema visivo dell'applicazione"
+msgstr "App Visual Theme"
+
+#: settings.py:85 settings.py:91 settings.py:440 settings.py:533
+msgid "Sì"
+msgstr "Yes"
+
+#: settings.py:85 settings.py:117
+msgid "Consenso a ricevere notifiche di versioni alpha"
+msgstr "Receive Alpha Versions Notifications Approval"
+
+#: settings.py:87 settings.py:119
+msgid "Consenso a ricevere notifiche di versioni beta"
+msgstr "Receive Beta Versions Notifications Approval"
+
+#: settings.py:87 settings.py:119 settings.py:442
+msgid "No"
+msgstr "No"
+
+#: settings.py:89 settings.py:122
+msgid "Carattere utilizzato in tutti i testi dell'applicazione"
+msgstr "Font used in all app texts"
+
+#: settings.py:92
+msgid ""
+"Consenso a controllare all'avvio dell'app se sono disponibili aggiornamenti."
+msgstr "Consent to check updates when app starts"
+
+#: settings.py:94 settings.py:125
+msgid "Periodi scolastici"
+msgstr "School periods"
+
+#: settings.py:188
 msgid "Salvataggio effettuato"
 msgstr "Saving made"
 
-#: settings.py:36
+#: settings.py:189
 msgid ""
-"La lingua scelta è stata salvata. RIAVVIA PER RENDERE EFFETTIVE LE MODIFICHE!"
+"La lingua scelta è stata salvata. L'applicazione ora si chiuderà, ricordati "
+"di RIAVVIARE per RENDERE EFFETTIVE le modifiche!!"
 msgstr ""
-"The language selection has been saved. RESTART FOR THE CHANGES TO TAKE "
-"EFFECT!"
+"The language selected has been saved. The app now will close itself, "
+"remember to RESTART for the changes to TAKE EFFECT!"
 
-#: settings.py:38
-msgid "Salvataggio non riuscito"
-msgstr "Save failed"
+#: settings.py:194
+msgid "Si è verificato un errore!!"
+msgstr "An error has been occured!!"
 
-#: settings.py:39
-msgid " Errore: "
-msgstr "Error:"
-
-#: settings.py:39
+#: settings.py:195
 msgid ""
-"Il salvataggio non è andato a buon fine, riprova o contatta lo sviluppatore "
-"per ricevere maggiore aiuto."
-msgstr ""
-"The save operation isn't successful, try again or contact the developer to "
-"receive more help."
+"È stato riscontrato un errore imprevisto. Riprovare o contattare lo "
+"sviluppatore."
+msgstr "An unexpected error has occurred, try again or contact the developer."
 
-#: settings.py:44
+#: settings.py:232
 msgid "Cambia lingua"
 msgstr "Change language"
 
-#: settings.py:47
-msgid "Inglese"
-msgstr "English"
-
-#: settings.py:47
-msgid "Italiano"
-msgstr "Italian"
-
-#: settings.py:48
+#: settings.py:236
 msgid "Scegliere la propria lingua: "
 msgstr "Choose a Language:"
 
-#: settings.py:52
+#: settings.py:245
 msgid "CAMBIA"
 msgstr "SWITCH"
 
-#: settings.py:70
+#: settings.py:247
+msgid ""
+"Scarica lingue non presenti nella lista\n"
+" o aggiorna quelle esistenti dalla nostra piattaforma di traduzione."
+msgstr ""
+"Download languages not existant in the list\n"
+" or update the exsitsting ones from our translation platform."
+
+#: settings.py:250
+msgid "SCARICA O AGGIORNA LINGUE"
+msgstr "DOWNLOAD OR UPDATE LANGUAGES"
+
+#: settings.py:282
 msgid "Backup effettuato!"
 msgstr "Backed up!"
 
-#: settings.py:71
+#: settings.py:283
 msgid ""
 "Backup creato con successo!\n"
-"Puoi trovare il backup nella cartella appena aperta o al seguente percorso "
-"del tuo computer: "
+"Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: "
 msgstr ""
 "Backup created successfully!\n"
-"You can find up the folder that you just opened or to the following location "
-"on your computer:"
+"You can find up the folder that you just opened or to the following location on your computer:"
 
-#: settings.py:81
+#: settings.py:308
 msgid "Ripristino effettuato!"
 msgstr "Restored successfully!"
 
-#: settings.py:82
+#: settings.py:309
 msgid ""
-"Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"
+"Backup ripristinato con successo! Riavvia per rendere effettive le "
+"modifiche!"
 msgstr "Backup restored successfully! Restart for the changes to take effect!"
 
-#: settings.py:86
+#: settings.py:313
 msgid "Ripristino non riuscito"
 msgstr "Restore failed"
 
-#: settings.py:87
+#: settings.py:314
 msgid ""
 "Purtroppo il ripristino non è riuscito. Riprova, anche con un backup "
 "diverso, oppure contattare lo sviluppatore."
@@ -99,121 +156,214 @@ msgstr ""
 "Unfortunately the restore failed. Try again, even with a different backup, "
 "or contact the developer."
 
-#: settings.py:90
-msgid "Conferma n."
-msgstr "Confirmation #"
+#: settings.py:333
+msgid "Come cancellare i dati?"
+msgstr "How to delete data?"
 
-#: settings.py:91
+#: settings.py:334
 msgid ""
-"Sei sicuro di voler eliminare TUTTI i dati presenti nell'applicazione?\n"
-"Questo include:\n"
-"- Orario\n"
-"- Materie\n"
-"- Voti (no online)\n"
-"- Note\n"
-"- Agenda (no Google Calendar online)\n"
-"- Impostazioni\n"
-"NON potrai più recuperare i tuoi dati se vai avanti a meno che non abbia "
-"effettuato un backup precedentemente.\n"
-"Conferme rimaste prima dell'eliminazione: "
+"Dalla versione 1.0 di School Life Diary, con il cambiamento del database da file a \n"
+"                  SQLite, non è più possibile cancellare i dati all'interno dell'app. È possibile, tuttavia, \n"
+"                  cancellare i file .db che trovi nella cartella dell'applicazione (in Documenti\\School Life Diary). \n"
+"                  La cartella si aprirà dopo che hai premuto OK. \n"
+"\n"
+"Il software si chiuderà automaticamente dopo che la cartella si è aperta, per permettere la corretta eliminazione dei \n"
+"dati."
 msgstr ""
-"Are you sure you want to delete all the data in your application?\n"
-"This includes:\n"
-"- Timetable\n"
-"- Subjects\n"
-"- Voti (no online)\n"
-"- Notes\n"
-"-Agenda (no Google Calendar online)\n"
-"-Settings\n"
-"You will NOT be able to recover your data if you go on unless he backed up "
-"previously.\n"
-"Remaining confirmations before deletion:"
+"From School Life Diary version 1.0, with the database change from file to SQLite, it isn't possible to delete data inside the app.\n"
+"However, is it possible to delete .db files you find in the app folder (Documents\\School Life Diary). This folder will open after you click OK.\n"
+"\n"
+"The software will close itself automatically after the folder opened, to allow the correct data deletion."
 
-#: settings.py:107
-msgid "Dati cancellati correttamente"
-msgstr "Deleted data correctly"
-
-#: settings.py:108
-msgid ""
-"Tutti i tuoi dati sono stati cancellati con successo! Riavvia l'applicazione "
-"per non riscontrare errori!"
-msgstr ""
-"All your data has been deleted successfully! Restart the application to not "
-"notice any mistakes!"
-
-#: settings.py:113
+#: settings.py:367
 msgid "Successo!"
 msgstr "Success!"
 
-#: settings.py:114
-msgid ""
-"Parametro modificato con successo! RICORDATI DI RIAVVIARE L'APPLICAZIONE PER "
-"RENDERE EFFETTIVE LE MODIFICHE!!"
-msgstr ""
-"Parameter edited successfully! REMEMBER TO RESTART THE APPLICATION FOR YOUR "
-"CHANGES TO TAKE EFFECT!"
+#: settings.py:368
+msgid "Parametro modificato con successo!"
+msgstr "Parameter edited successfully!"
 
-#: settings.py:120
+#: settings.py:392
 msgid "ERRORE!"
 msgstr "ERROR!"
 
-#: settings.py:121
+#: settings.py:393
 msgid ""
 "Si è verificato un errore durante la modifica del parametro. Riprovare o "
-"contattare lo sviluppatore!"
+"contattare lo sviluppatore! Errore riscontrato:\n"
 msgstr ""
 "An error occurred while changing the parameter. Try again or contact the "
-"developer!"
+"developer! Error found:\n"
 
-#: settings.py:130
+#: settings.py:463
+msgid "Selettore carattere"
+msgstr "Font chooser"
+
+#: settings.py:473
+msgid "Carattere selezionato: {}"
+msgstr "Font selected: {}"
+
+#: settings.py:495
+msgid "Nessun parametro selezionato!"
+msgstr "No parameter selected!"
+
+#: settings.py:496
+msgid ""
+"Non hai selezionato nessun parametro!! Selezionane uno e poi ripeti "
+"l'operazione!"
+msgstr ""
+"You haven't selected any parameter!! Select one and then repeat the "
+"operation!"
+
+#: settings.py:501
 msgid "Cambia valore - Impostazioni"
 msgstr "Change value - Settings"
 
-#: settings.py:133
-msgid "Sceglere il valore da attribuire al parametro:"
-msgstr "Choose the value of the parameter:"
+#: settings.py:507 settings.py:518
+msgid "Scegliere il valore da attribuire al parametro:"
+msgstr "Choose value to attribute to the parameter:"
 
-#: settings.py:138
+#: settings.py:515 settings.py:523 settings.py:552 settings.py:564
+#: settings.py:600
 msgid "SALVA"
 msgstr "SAVE"
 
-#: settings.py:158
+#: settings.py:527
+msgid "Modifica il consenso per ricevere versioni non stabili:"
+msgstr "Change approval to receive non-stable versions:"
+
+#: settings.py:529
+msgid ""
+"Modifica il consenso per controllare gli aggiornamenti all'avvio "
+"dell'applicazione."
+msgstr "Edit the consent to check updates when app starts"
+
+#: settings.py:538
+msgid ""
+"Le versioni Alpha sono poco stabili e non adatte all'uso\n"
+"quotidiano. Possono contenere parecchi problemi, ma vengono\n"
+"aggiornate più frequentemente rispetto alle versioni beta e stabili."
+msgstr ""
+"Alpha versions are little stable and not suitable to daily use. They can contain a lot of problems, but they will be\n"
+"updated frequently instead of beta and stable versions."
+
+#: settings.py:542
+msgid "Ricevi versioni alpha"
+msgstr "Receive Alpha Versions"
+
+#: settings.py:544
+msgid ""
+"Le versioni Beta sono abbastanza stabili e abbastanza adatte all'uso\n"
+"quotidiano. Possono contenere alcuni problemi, ma vengono\n"
+"aggiornate più frequentemente rispetto alle versioni stabili."
+msgstr ""
+"Beta versions are quite stable and enough suitable to daily use. They can contain some problems, but they will be\n"
+"updated frequently instead of stable versions."
+
+#: settings.py:548
+msgid "Ricevi versioni beta"
+msgstr "Receive Beta Versions"
+
+#: settings.py:550
+msgid "Controlla aggiornamenti all'avvio di School Life Diary"
+msgstr "Check updates at School Life Diary start"
+
+#: settings.py:555
+msgid "Scegli il carattere da utilizzare: "
+msgstr "Select font to use:"
+
+#: settings.py:557
+msgid "Carattere attuale: {}"
+msgstr "Current font: {}"
+
+#: settings.py:562
+msgid "Scegli carattere"
+msgstr "Choose font"
+
+#: settings.py:579
+msgid "Cambia valore - Periodi - Impostazioni"
+msgstr "Change value - Periods - Settings"
+
+#: settings.py:581
+msgid "Imposta le date di inizio/fine dei due periodi scolastici"
+msgstr "Set school periods start/end dates"
+
+#: settings.py:586
+msgid "Periodo n. {}"
+msgstr "Period n. {}"
+
+#: settings.py:588
+msgid "Data di inizio"
+msgstr "Start date"
+
+#: settings.py:589
+msgid "Data di fine"
+msgstr "End date"
+
+#: settings.py:605
+msgid "Imposta il numero di periodi"
+msgstr "Set periods number"
+
+#: settings.py:614
+msgid "OK"
+msgstr "OK"
+
+#: settings.py:657
+msgid "Modifica"
+msgstr "Edit"
+
+#: settings.py:686
 msgid "Impostazioni"
 msgstr "Settings"
 
-#: settings.py:163
+#: settings.py:689
+msgid "Parametri"
+msgstr "Parameter"
+
+#: settings.py:694
+msgid "ID"
+msgstr "ID"
+
+#: settings.py:696
 msgid "Parametro"
 msgstr "Parameter"
 
-#: settings.py:164
+#: settings.py:698
 msgid "Valore attuale"
 msgstr "Current value"
 
-#: settings.py:165
+#: settings.py:700
 msgid "Descrizione"
 msgstr "Description"
 
-#: settings.py:166
-msgid "Azioni"
-msgstr "Actions"
-
-#: settings.py:174
+#: settings.py:708
 msgid ""
-"Imposta il numero di ore massime per giornate da visualizzare nell'orario"
-msgstr "Sets the maximum number of hours to days to display in the timetable"
+"Per modificare un parametro, fai doppio click sulla riga corrispondente o "
+"tasto destro con il mouse."
+msgstr "To edit a parameter double click or right click on the related row."
 
-#: settings.py:175
-msgid "Cambia"
-msgstr "Modify"
+#: settings.py:711
+msgid "Backup & Ripristino"
+msgstr "Backup & Restoration"
 
-#: settings.py:181
+#: settings.py:720
 msgid "ESEGUI BACKUP"
 msgstr "RUN BACKUP"
 
-#: settings.py:182
+#: settings.py:722
 msgid "ESEGUI RIPRISTINO"
 msgstr "RUN RESTORE"
 
-#: settings.py:183
+#: settings.py:724
 msgid "CANCELLA TUTTO"
 msgstr "DELETE ALL"
+
+#: settings.py:726
+msgid "APRI CARTELLA LOCALE"
+msgstr "OPEN LOCAL FOLDER"
+
+#: settings.py:733
+msgid ""
+"Apri la cartella dei dati di School Life Diary (con tutti i file dei "
+"database)"
+msgstr "Open the School Life Diary data folder (with all database files)"
