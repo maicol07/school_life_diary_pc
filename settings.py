@@ -25,7 +25,8 @@ import polib
 from tkFontChooser import askfont
 from transifex.api import TransifexAPI
 
-from lib import datepicker, wckToolTips
+import datepicker
+import wckToolTips
 import style
 
 global path
