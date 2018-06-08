@@ -16,7 +16,7 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 
-from lib import datepicker
+import datepicker
 
 global fn_voti
 global path
@@ -180,6 +180,10 @@ def Salvataggio(mode, voto, materia, data, periodo, tipo, descrizione, peso="100
                     break
         if peso == "":
             peso = "100"
+        if "+" in voto:
+            voto = str(float(voto[:-voto.count("+")]) + 0.25 * voto.count("+"))
+        elif "-" in voto:
+            voto = str(float(voto[:-voto.count("-")]) - 0.25 * voto.count("-"))
         if mode == "add":
             sql_cur.execute("INSERT INTO voti VALUES ('{}','{}','{}','{}', '{}','{}','{}','{}')".format(
                 len(list(voti.keys())) + 1, voto, materia, data, periodo, tipo, peso, descrizione))
@@ -593,12 +597,25 @@ def creaFinestra():
     li.pack()
     global lmedia
     media = getmediapesata(voti)
+    setconn = sql.connect(os.path.join(path, "settings.db"), isolation_level=None)
+    sc = setconn.cursor()
     if isinstance(media, str):
-        lmedia = Label(wv, text=_("MEDIA: {}").format(media))
+        lmedia = Label(wv, text=_("MEDIA: {}").format(media),
+                       font=sc.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0] + " bold")
     else:
-        lmedia = Label(wv, text=_("MEDIA: {:.2f}").format(media))
+        lmedia = Label(wv, text=_("MEDIA: {:.2f}").format(media),
+                       font=sc.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0] + " bold")
+    if media != _("Non è stato inserito nessun voto!"):
+        if float(media) < 5.50:
+            lmedia.configure(foreground="red")
+        elif 5.50 <= float(media) < 8:
+            lmedia.configure(foreground="black")
+        else:
+            lmedia.configure(foreground="blue")
     lmedia.pack(pady=10)
     wv.bind("<Button-3>", popup2)
     wv.focus()
     conn.close()
+    sc.close()
+    setconn.close()
     wv.mainloop()
