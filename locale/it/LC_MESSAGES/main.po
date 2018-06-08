@@ -1,137 +1,215 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-09-02 21:29+0200\n"
-"PO-Revision-Date: 2017-09-02 21:33+0200\n"
+"POT-Creation-Date: 2018-05-24 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 1.8.4\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: it\n"
 
-#: main.py:57 main.py:143
+#: main.py:67
+msgid "Lingua non impostata!"
+msgstr "Lingua non impostata!"
+
+#: main.py:68
+msgid ""
+"La lingua impostata non è stata riconosciuta. Per risolvere prova a "
+"eliminare il file in Documenti/School Life Diary/language.txt . Se il "
+"problema non si risolve, contattare lo sviluppatore. Errore: "
+msgstr ""
+"La lingua impostata non è stata riconosciuta. Per risolvere prova a "
+"eliminare il file in Documenti/School Life Diary/language.txt . Se il "
+"problema non si risolve, contattare lo sviluppatore. Errore: "
+
+#: main.py:98 main.py:319
 msgid "Informazioni"
 msgstr "Informazioni"
 
-#: main.py:64
+#: main.py:107
 msgid "sviluppato e mantenuto da maicol07"
 msgstr "sviluppato e mantenuto da maicol07"
 
-#: main.py:65
-msgid "Sito web: "
-msgstr "Sito web: "
+#: main.py:109
+msgid "Link"
+msgstr "Link"
 
-#: main.py:70
-msgid "GitHub School Life Diary: "
-msgstr "GitHub School Life Diary: "
+#: main.py:111
+msgid "Sito web"
+msgstr "Sito web"
 
-#: main.py:74
+#: main.py:113
+msgid "Pagina del progetto su GitHub"
+msgstr "Pagina del progetto su GitHub"
+
+#: main.py:116
+msgid "Sito web sviluppatore"
+msgstr "Sito web sviluppatore"
+
+#: main.py:119
 msgid ""
-"Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza "
-"Creative Commons 3.0"
+"Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale ha licenza Creative Commons BY 3.0.\n"
+"Alcune icone fatte da Pixel Buddha, Freepik, Roundicons, Dimitry Miroliubov e Smash Icons di www.flaticon.com hanno licenza Creative Commons BY 3.0"
 msgstr ""
-"Alcune icone fatte da Pixel Buddha di www.flaticon.com hanno licenza "
-"Creative Commons 3.0"
+"Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale ha licenza Creative Commons BY 3.0.\n"
+"Alcune icone fatte da Pixel Buddha, Freepik, Roundicons, Dimitry Miroliubov e Smash Icons di www.flaticon.com hanno licenza Creative Commons BY 3.0"
 
-#: main.py:76
+#: main.py:124
 msgid "Traduttori: "
 msgstr "Traduttori: "
 
-#: main.py:79
+#: main.py:128
 msgid "Vuoi diventare anche tu un traduttore?"
 msgstr "Vuoi diventare anche tu un traduttore?"
 
-#: main.py:80
+#: main.py:129
 msgid "CLICCA QUI!"
 msgstr "CLICCA QUI!"
 
-#: main.py:84
-msgid "Funzione non disponibile"
-msgstr "Funzione non disponibile"
+#: main.py:133
+msgid "Registro delle modifiche"
+msgstr "Registro delle modifiche"
 
-#: main.py:85
-msgid "LA FUNZIONE NON È ANCORA DISPONIBILE!"
-msgstr "LA FUNZIONE NON È ANCORA DISPONIBILE!"
+#: main.py:197
+msgid "Impossibile stabilire la connessione"
+msgstr "Impossibile stabilire la connessione"
 
-#: main.py:110
+#: main.py:198
+msgid ""
+"[WinError 10060] Impossibile stabilire la connessione.Risposta non corretta "
+"della parte connessa dopo l'intervallodi tempo oppure mancata risposta "
+"dall'host collegato. Riaprire l'app eriprovare."
+msgstr ""
+"[WinError 10060] Impossibile stabilire la connessione.Risposta non corretta "
+"della parte connessa dopo l'intervallodi tempo oppure mancata risposta "
+"dall'host collegato. Riaprire l'app eriprovare."
+
+#: main.py:248 main.py:268 main.py:275
+msgid "Sì"
+msgstr "Sì"
+
+#: main.py:263
 msgid "Nuova versione disponibile!"
 msgstr "Nuova versione disponibile!"
 
-#: main.py:111
+#: main.py:264
 msgid ""
-"\n"
-"Ti consigliamo di aggiornare il prima possibile per non perdere le "
-"novità, i miglioramenti e le correzioni di problemi.\n"
-"Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione"
+"È disponibile una nuova versione stabile di School Life Diary. Ti \n"
+"                                    consigliamo di aggiornare il prima possibile per non perdere le nuove funzionalità, \n"
+"                                    i miglioramenti e le correzioni di problemi. Vuoi accedere alla pagina da cui \n"
+"                                    scaricare l'aggiornamento alla versione stabile {}?"
 msgstr ""
-"\n"
-"Ti consigliamo di aggiornare il prima possibile per non perdere le "
-"novità, i miglioramenti e le correzioni di problemi.\n"
-"Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione"
+"È disponibile una nuova versione stabile di School Life Diary. Ti \n"
+"                                    consigliamo di aggiornare il prima possibile per non perdere le nuove funzionalità, \n"
+"                                    i miglioramenti e le correzioni di problemi. Vuoi accedere alla pagina da cui \n"
+"                                    scaricare l'aggiornamento alla versione stabile {}?"
 
-#: main.py:111
-msgid "È disponibile una nuova versione di School Life Diary."
-msgstr "È disponibile una nuova versione di School Life Diary."
+#: main.py:269
+msgid "Nuova versione BETA disponibile!"
+msgstr "Nuova versione BETA disponibile!"
 
-#: main.py:131
+#: main.py:270
+msgid ""
+"È disponibile una nuova versione BETA di School Life Diary. Queste \n"
+"                                    versioni non sono del tutto stabili e possono contenere alcuni problemi, \n"
+"                                    ma includono nuove funzionalità. Ricevi questo avviso poichè hai dato il tuo \n"
+"                                    consenso a ricevere le notifiche di versioni BETA Vuoi accedere alla pagina da \n"
+"                                    cui scaricare l'aggiornamento alla versione BETA {}?"
+msgstr ""
+"È disponibile una nuova versione BETA di School Life Diary. Queste \n"
+"                                    versioni non sono del tutto stabili e possono contenere alcuni problemi, \n"
+"                                    ma includono nuove funzionalità. Ricevi questo avviso poichè hai dato il tuo \n"
+"                                    consenso a ricevere le notifiche di versioni BETA Vuoi accedere alla pagina da \n"
+"                                    cui scaricare l'aggiornamento alla versione BETA {}?"
+
+#: main.py:276
+msgid "Nuova versione ALPHA disponibile!"
+msgstr "Nuova versione ALPHA disponibile!"
+
+#: main.py:277
+msgid ""
+"È disponibile una nuova versione ALPHA di School Life Diary. Queste \n"
+"                                    versioni non sono stabili e possono contenere parecchi problemi, ma includono nuove \n"
+"                                    funzionalità. Ricevi questo avviso poichè hai dato il tuo consenso a ricevere le \n"
+"                                    notifiche di nuove versioni ALPHA. Vuoi accedere alla pagina da cui scaricare \n"
+"                                    l'aggiornamento alla versione ALPHA {}?"
+msgstr ""
+"È disponibile una nuova versione ALPHA di School Life Diary. Queste \n"
+"                                    versioni non sono stabili e possono contenere parecchi problemi, ma includono nuove \n"
+"                                    funzionalità. Ricevi questo avviso poichè hai dato il tuo consenso a ricevere le \n"
+"                                    notifiche di nuove versioni ALPHA. Vuoi accedere alla pagina da cui scaricare \n"
+"                                    l'aggiornamento alla versione ALPHA {}?"
+
+#: main.py:287
+msgid "Nessuna connessione ad internet"
+msgstr "Nessuna connessione ad internet"
+
+#: main.py:288
+msgid ""
+"Non è disponibile nessuna connessione ad internet per la ricerca degli "
+"aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà "
+"riaperto il programma."
+msgstr ""
+"Non è disponibile nessuna connessione ad internet per la ricerca degli "
+"aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà "
+"riaperto il programma."
+
+#: main.py:307
 msgid "File"
 msgstr "File"
 
-#: main.py:132
+#: main.py:308
 msgid "Esci"
 msgstr "Esci"
 
-#: main.py:134
+#: main.py:310
 msgid "Opzioni"
 msgstr "Opzioni"
 
-#: main.py:135
+#: main.py:311
 msgid "Impostazioni"
 msgstr "Impostazioni"
 
-#: main.py:137
-msgid "Cambia lingua"
-msgstr "Cambia lingua"
+#: main.py:313
+msgid "Lingua"
+msgstr "Lingua"
 
-#: main.py:139
+#: main.py:315
 msgid "Aiuto"
 msgstr "Aiuto"
 
-#: main.py:140
+#: main.py:316
 msgid "Guida"
 msgstr "Guida"
 
-#: main.py:168
+#: main.py:340
 msgid "ORARIO"
 msgstr "ORARIO"
 
-#: main.py:171
+#: main.py:345
 msgid "MATERIE"
 msgstr "MATERIE"
 
-#: main.py:174
+#: main.py:349
+msgid "PROFESSORI"
+msgstr "PROFESSORI"
+
+#: main.py:352
 msgid "VOTI"
 msgstr "VOTI"
 
-#: main.py:176
-msgid "NOTE"
-msgstr "NOTE"
+#: main.py:355
+msgid "ANNOTAZIONI"
+msgstr "ANNOTAZIONI"
 
-#: main.py:178
+#: main.py:358
 msgid "AGENDA"
 msgstr "AGENDA"
-
-#: main.py:180
-msgid "IMPOSTAZIONI"
-msgstr "IMPOSTAZIONI"
-
-#: main.py:183
-msgid "ESCI"
-msgstr "ESCI"

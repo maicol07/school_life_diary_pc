@@ -1,94 +1,125 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-09-02 14:44+0200\n"
-"PO-Revision-Date: 2017-09-02 15:33+0200\n"
+"POT-Creation-Date: 2018-05-24 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 1.8.4\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: it\n"
 
-#: timetable.py:38
+#: timetable.py:94
 msgid "Successo!"
 msgstr "Successo!"
 
-#: timetable.py:39
+#: timetable.py:95
 msgid "Salvataggio effettuato con successo!"
 msgstr "Salvataggio effettuato con successo!"
 
-#: timetable.py:44
+#: timetable.py:100
 msgid "Errore!"
 msgstr "Errore!"
 
-#: timetable.py:44
-msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
+#: timetable.py:101
+msgid ""
+"Si è verificato un errore, riprovare oppure contattare lo sviluppatore.\n"
+"Errore: {}"
 msgstr ""
-"Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
+"Si è verificato un errore, riprovare oppure contattare lo sviluppatore.\n"
+"Errore: {}"
 
-#: timetable.py:51
+#: timetable.py:142
+msgid "Nessuna riga selezionata!"
+msgstr "Nessuna riga selezionata!"
+
+#: timetable.py:143
+msgid ""
+"Non è stata selezionata nessuna riga. Si prega di selezionarne una per "
+"apportare modifiche."
+msgstr ""
+"Non è stata selezionata nessuna riga. Si prega di selezionarne una per "
+"apportare modifiche."
+
+#: timetable.py:149
 msgid "Modifica Orario - Orario scolastico"
 msgstr "Modifica Orario - Orario scolastico"
 
-#: timetable.py:54
-msgid "Inserire la materia da visualizzare nell'orario la"
-msgstr "Inserire la materia da visualizzare nell'orario la"
+#: timetable.py:152
+msgid "Inserire le materie da visualizzare."
+msgstr "Inserire le materie da visualizzare."
 
-#: timetable.py:54
-msgid "° ora del"
-msgstr "° ora del"
-
-#: timetable.py:59
+#: timetable.py:160 timetable.py:315
 msgid "Nessuna materia inserita!"
 msgstr "Nessuna materia inserita!"
 
-#: timetable.py:60
+#: timetable.py:161 timetable.py:316
 msgid ""
-"Errore! Nessuna materia inserita. Inserire delle materie dalla sezione "
-"materie!"
+"Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!\n"
+"Errore specifico: {}"
 msgstr ""
-"Errore! Nessuna materia inserita. Inserire delle materie dalla sezione "
-"materie!"
+"Errore! Nessuna materia inserita. Inserire delle materie dalla sezione materie!\n"
+"Errore specifico: {}"
 
-#: timetable.py:63
-msgid "SALVA"
-msgstr "SALVA"
-
-#: timetable.py:91
-msgid "Orario scolastico"
-msgstr "Orario scolastico"
-
-#: timetable.py:102
-msgid "Giovedì"
-msgstr "Giovedì"
-
-#: timetable.py:102
+#: timetable.py:165 timetable.py:337
 msgid "Lunedì"
 msgstr "Lunedì"
 
-#: timetable.py:102
+#: timetable.py:165 timetable.py:339
 msgid "Martedì"
 msgstr "Martedì"
 
-#: timetable.py:102
+#: timetable.py:165 timetable.py:341
 msgid "Mercoledì"
 msgstr "Mercoledì"
 
-#: timetable.py:102
-msgid "Sabato"
-msgstr "Sabato"
+#: timetable.py:165 timetable.py:343
+msgid "Giovedì"
+msgstr "Giovedì"
 
-#: timetable.py:102
+#: timetable.py:165 timetable.py:345
 msgid "Venerdì"
 msgstr "Venerdì"
 
-#: timetable.py:109
-msgid "° ora"
-msgstr "° ora"
+#: timetable.py:165 timetable.py:347
+msgid "Sabato"
+msgstr "Sabato"
+
+#: timetable.py:166
+msgid "Maschera di modifica"
+msgstr "Maschera di modifica"
+
+#: timetable.py:194
+msgid "Azioni"
+msgstr "Azioni"
+
+#: timetable.py:198
+msgid "SALVA"
+msgstr "SALVA"
+
+#: timetable.py:300
+msgid "Orario scolastico"
+msgstr "Orario scolastico"
+
+#: timetable.py:329
+msgid "Modifica riga"
+msgstr "Modifica riga"
+
+#: timetable.py:353
+msgid "{}° ora"
+msgstr "{}° ora"
+
+#: timetable.py:359
+msgid ""
+"Per modificare l'orario, fai doppio click o usa il tasto destro del mouse su"
+" una riga e inserisci le materie dell'ora corrispondente."
+msgstr ""
+"Per modificare l'orario, fai doppio click o usa il tasto destro del mouse su"
+" una riga e inserisci le materie dell'ora corrispondente."

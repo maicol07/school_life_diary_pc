@@ -1,73 +1,124 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2017-09-02 14:44+0200\n"
-"PO-Revision-Date: 2017-09-02 15:33+0200\n"
+"POT-Creation-Date: 2018-05-24 23:13+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 1.8.4\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: it\n"
 
-#: subjects.py:52
+#: subjects.py:147
 msgid "Successo!"
 msgstr "Successo!"
 
-#: subjects.py:53
+#: subjects.py:148
 msgid "Salvataggio effettuato con successo!"
 msgstr "Salvataggio effettuato con successo!"
 
-#: subjects.py:57
+#: subjects.py:152
 msgid "Errore!"
 msgstr "Errore!"
 
-#: subjects.py:58
+#: subjects.py:153
 msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
-msgstr "Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
+msgstr ""
+"Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
 
-#: subjects.py:62
-msgid "Nessuna materia selezionata"
-msgstr "Nessuna materia selezionata"
+#: subjects.py:173 subjects.py:288
+msgid "Nessuna materia selezionata!"
+msgstr "Nessuna materia selezionata!"
 
-#: subjects.py:63
-msgid "ERRORE! Nessuna materia selezionata!"
-msgstr "ERRORE! Nessuna materia selezionata!"
+#: subjects.py:174 subjects.py:289
+msgid ""
+"Non è stata selezionata nessuna materia. Si prega di selezionarne una per "
+"apportare modifiche."
+msgstr ""
+"Non è stata selezionata nessuna materia. Si prega di selezionarne una per "
+"apportare modifiche."
 
-#: subjects.py:68 subjects.py:71
+#: subjects.py:178
 msgid "Conferma eliminazione"
 msgstr "Conferma eliminazione"
 
-#: subjects.py:69 subjects.py:72
-msgid "Si è sicuri di voler eliminare la materia"
-msgstr "Si è sicuri di voler eliminare la materia"
+#: subjects.py:179
+msgid "Si è sicuri di voler eliminare la materia {} ?"
+msgstr "Si è sicuri di voler eliminare la materia {} ?"
 
-#: subjects.py:80
+#: subjects.py:239
 msgid "Inserisci materia"
 msgstr "Inserisci materia"
 
-#: subjects.py:83
-msgid "Inserire la nuova materia"
-msgstr "Inserire la nuova materia"
+#: subjects.py:242
+msgid "Maschera di inserimento"
+msgstr "Maschera di inserimento"
 
-#: subjects.py:88 subjects.py:105
+#: subjects.py:244 subjects.py:301
+msgid "Materia"
+msgstr "Materia"
+
+#: subjects.py:249 subjects.py:306
+msgid "Colore"
+msgstr "Colore"
+
+#: subjects.py:254 subjects.py:311 subjects.py:423
+msgid "Professore"
+msgstr "Professore"
+
+#: subjects.py:265 subjects.py:323
 msgid "SALVA"
 msgstr "SALVA"
 
-#: subjects.py:97
+#: subjects.py:296
 msgid "Modifica materia"
 msgstr "Modifica materia"
 
-#: subjects.py:100
-msgid "Inserire la materia da modificare (Vecchia materia:"
-msgstr "Inserire la materia da modificare (Vecchia materia:"
+#: subjects.py:299
+msgid "Maschera di modifica"
+msgstr "Maschera di modifica"
 
-#: subjects.py:115
+#: subjects.py:395
 msgid "Materie"
 msgstr "Materie"
+
+#: subjects.py:403 subjects.py:411
+msgid "Aggiungi"
+msgstr "Aggiungi"
+
+#: subjects.py:405
+msgid "Modifica"
+msgstr "Modifica"
+
+#: subjects.py:407
+msgid "Elimina"
+msgstr "Elimina"
+
+#: subjects.py:417
+msgid "ID"
+msgstr "ID"
+
+#: subjects.py:419
+msgid "Nome Materia"
+msgstr "Nome Materia"
+
+#: subjects.py:421
+msgid "Colore Materia"
+msgstr "Colore Materia"
+
+#: subjects.py:432
+msgid ""
+"Per aggiungere una materia, usa il tasto destro del mouse su uno spazio vuoto della finestra.\n"
+"Per modificare una materia, fai doppio click sulla riga corrispondente.\n"
+"Per modificare o eliminare una materia, selezionare una riga e poi premere il tasto destro del mouse."
+msgstr ""
+"Per aggiungere una materia, usa il tasto destro del mouse su uno spazio vuoto della finestra.\n"
+"Per modificare una materia, fai doppio click sulla riga corrispondente.\n"
+"Per modificare o eliminare una materia, selezionare una riga e poi premere il tasto destro del mouse."
