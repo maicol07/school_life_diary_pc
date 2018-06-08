@@ -86,6 +86,7 @@ lg.install()
 
 ## FINESTRA INFORMAZIONI ##
 def info():
+    import codecs
     """
     Crea la finestra informazioni.
 
@@ -138,7 +139,7 @@ def info():
     cl.pack()
     changel = Text(cl, font="Courier 10", width=100, height=25)
     changel.pack()
-    clf = open("CHANGELOG_{}.md".format(lgcode.upper()[:2]), "r")
+    clf = codecs.open("CHANGELOG_{}.md".format(lgcode.upper()[:2]), "r", "utf-8")
     for row in clf.readlines():
         changel.insert(INSERT, row)
     changel.config(state=DISABLED)
