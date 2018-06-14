@@ -24,6 +24,7 @@ import PIL.ImageTk
 import polib
 from tkFontChooser import askfont
 from transifex.api import TransifexAPI
+from babel import Locale
 
 import datepicker
 import wckToolTips
@@ -54,13 +55,14 @@ def install_language():
     if not (os.path.exists(os.path.join(path, "language.txt"))):
         windll = ctypes.windll.kernel32
         lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lg = gettext.translation("settings", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
+        lg = gettext.translation("settings", localedir=os.path.join(path, 'locale'), languages=[lgcode])
     else:
         fl = open(os.path.join(path, "language.txt"), "r")
         lgcode = fl.readline()
         lg = gettext.translation('settings', localedir=os.path.join(path, 'locale'), languages=[lgcode])
         fl.close()
     lg.install()
+    locale.setlocale(locale.LC_ALL, lgcode)
 
 
 ## CREAZIONE DATABASE (PRIMO AVVIO) ##
@@ -179,7 +181,7 @@ def salvaLingua(cb, mode):
             for resource in resources:
                 language = tr.list_languages('school-life-diary-pc', resource + "pot")
                 for z in language:
-                    path_download = os.path.join(path, 'locale', z[:2], "LC_MESSAGES")
+                    path_download = os.path.join(path, 'locale', z, "LC_MESSAGES")
                     if not (os.path.exists(os.path.join(path_download, (resource + '.po')))):
                         if not (os.path.exists(os.path.join(path_download))):
                             os.makedirs(os.path.join(path_download))
@@ -188,24 +190,34 @@ def salvaLingua(cb, mode):
                     po_file = polib.pofile(os.path.join(path_download, (resource + '.po')))
                     po_file.save_as_mofile(os.path.join(path_download, (resource + '.mo')))
             fdata = open(os.path.join(path, r"locale/data.txt"), "w")
-            fdata.write(time.strftime("%d-%m-%Y"))
+            day = time.strftime("%c")
+            fdata.write(day)
             fdata.close()
+            tkmb.showinfo(title=_("Lingue scaricate/aggiornate"),
+                          message=_("Le lingue sono state scaricate. Puoi selezionarne una dal menu."),
+                          parent=wl)
+            languages_list = os.listdir(os.path.join(path, "locale"))
+            languages_list.remove("data.txt")
+            updatecb(cb, languages_list)
         else:
             f = open(os.path.join(path, "language.txt"), "w")
-            f.write(cb.get())
+            idx = list(langd.values()).index(cb.get())
+            f.write(list(langd.keys())[idx])
             f.close()
-        tkmb.showinfo(title=_("Salvataggio effettuato"),
-                      message=_(
-                          "La lingua scelta è stata salvata. L'applicazione ora si chiuderà, ricordati di RIAVVIARE "
-                          "per RENDERE EFFETTIVE le modifiche!!"))
-        exit()
+            tkmb.showinfo(title=_("Salvataggio effettuato"),
+                          message=_(
+                              "La lingua scelta è stata salvata. School Life Diary ora si chiuderà. "
+                              "Riapri l'applicazione per rendere effettive le modifiche."),
+                          parent=wl)
+            exit()
     except Exception as ex:
-        tkmb.showerror(title=_("Si è verificato un errore!!"),
+        tkmb.showerror(title=_("Si è verificato un errore!"),
                        message=_("È stato riscontrato un errore imprevisto. "
-                                 "Riprovare o contattare lo sviluppatore.") + "\n" + str(ex))
+                                 "Riprovare o contattare lo sviluppatore.") + "\n" + str(ex),
+                       parent=wl)
 
 
-def updatecb(cb, lang_list):
+def updatecb(cb, lang_folder_list):
     """
         Aggiorna le opzioni del menu a tendina con le lingue nella lista.
 
@@ -213,13 +225,21 @@ def updatecb(cb, lang_list):
         ----------
         :param cb : (string)
             Menu a tendina lingue.
-        :param lang_list : (string)
-            Lista delle lingue presenti.
+        :param lang_folder_list : (string)
+            Lista dei codici lingue installate.
 
         Ritorna
         -------
         Niente
         """
+    global langd
+    langd = {}
+    for code in lang_folder_list:
+        lcode = code.split("_")
+        langname = Locale(lcode[0], lcode[1]).display_name
+        langd[code] = langname.title()
+    lang_list = list(langd.values())
+    print(langd)
     cb["values"] = lang_list
 
 
@@ -236,28 +256,39 @@ def cambiaLingua():
         Niente
         """
     install_language()
+    global wl
     wl = Toplevel()
     wl.configure(background="white")
     wl.title(_("Cambia lingua") + " - School Life Diary")
     wl.iconbitmap(r"images/school_life_diary.ico")
-    wl.geometry("500x250+100+100")
-    languages_list = os.listdir(os.path.join(path, "locale"))
+    wl.geometry("500x275+100+100")
+    lang_folder_list = os.listdir(os.path.join(path, "locale"))
+    lang_folder_list.remove("data.txt")
     e1 = Label(wl, text=_("Scegliere la propria lingua: "))
-    cb = Combobox(wl, postcommand=lambda: updatecb(cb, languages_list))
-    e1.pack(padx=10, pady=10)
-    cb.pack(padx=10, pady=10)
+    e1.pack(pady=5)
+    lcb = Combobox(wl, postcommand=lambda: updatecb(lcb, lang_folder_list))
+    if os.path.exists(os.path.join(path, "language.txt")):
+        flang = open(os.path.join(path, "language.txt"))
+        lcb.set(flang.readline())
+    else:
+        windll = ctypes.windll.kernel32
+        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        lcode = lgcode.split("_")
+        langname = Locale(lcode[0], lcode[1]).display_name
+        lcb.set(langname.title())
+    lcb.pack(padx=10, pady=10)
     global ichange, idown
     pchange = PIL.Image.open(r"icons/restore.png")
     ichange = PIL.ImageTk.PhotoImage(pchange)
     pdown = PIL.Image.open(r"icons/download.png")
     idown = PIL.ImageTk.PhotoImage(pdown)
-    btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: salvaLingua(cb, "change"))
+    btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: salvaLingua(lcb, "change"))
     btn.pack(padx=10, pady=10)
     label = Label(wl, text=_("Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti "
                              "dalla nostra piattaforma di traduzione."))
     label.pack(padx=10, pady=2)
     btn1 = Button(wl, text=_("SCARICA O AGGIORNA LINGUE"), image=idown, compound=LEFT,
-                  command=lambda: salvaLingua(cb, "download"))
+                  command=lambda: salvaLingua(lcb, "download"))
     btn1.pack(padx=5, pady=10)
     if os.path.exists(os.path.join(path, r"locale/data.txt")):
         fdata = open(os.path.join(path, r"locale/data.txt"), "r")
@@ -267,6 +298,7 @@ def cambiaLingua():
         fdata.close()
     else:
         data = _("Mai scaricato")
+    global data_ult_agg
     data_ult_agg = Label(wl, text=_("Data ultimo aggiornamento: {}").format(data))
     data_ult_agg.pack(pady=10)
     wl.focus()
@@ -306,7 +338,8 @@ Puoi trovare il backup nella cartella appena aperta o al seguente percorso del t
                                           os.path.join(path, fn_bk,
                                                        "backup-{}-{}.zip".format(time.strftime("%d-%m-%Y"),
                                                                                  time.strftime(
-                                                                                     "%H-%M-%S")))))
+                                                                                     "%H-%M-%S")))),
+                  parent=ws)
 
 
 def ripristino():
@@ -327,14 +360,16 @@ def ripristino():
         bk.extractall(path)
         bk.close()
         tkmb.showinfo(title=_("Ripristino effettuato!"),
-                      message=_("Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"))
+                      message=_("Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"),
+                      parent=ws)
     except FileNotFoundError:
         return
     except Exception as ex:
         tkmb.showerror(title=_("Ripristino non riuscito"),
                        message=_(
                            "Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, "
-                           "oppure contattare lo sviluppatore.") + "\n" + ex)
+                           "oppure contattare lo sviluppatore.") + "\n" + ex,
+                       parent=ws)
 
     # ELIMINAZIONE DI TUTTI I DATI
 
@@ -358,7 +393,8 @@ def cancellatutto():
                   La cartella si aprirà dopo che hai premuto OK. 
 
 Il software si chiuderà automaticamente dopo che la cartella si è aperta, per permettere la corretta eliminazione dei 
-dati."""))
+dati."""),
+                  parent=ws)
     subprocess.Popen(r'explorer "{}"'.format(path))
     exit()
 
@@ -386,7 +422,8 @@ def salvaImpostazioni(par, val):
         # else:
         sql_cur.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(val, par))
         tkmb.showinfo(title=_("Successo!"),
-                      message=_("Parametro modificato con successo!"))
+                      message=_("Parametro modificato con successo!"),
+                      parent=ws)
         if par == "PERIODS":
             wp.destroy()
         wcv.destroy()
@@ -412,7 +449,8 @@ def salvaImpostazioni(par, val):
     except Exception as ex:
         tkmb.showerror(title=_("ERRORE!"),
                        message=_("Si è verificato un errore durante la modifica del parametro. "
-                                 "Riprovare o contattare lo sviluppatore! Errore riscontrato:\n") + str(ex))
+                                 "Riprovare o contattare lo sviluppatore! Errore riscontrato:\n") + str(ex),
+                       parent=ws)
 
 
 # noinspection PyUnusedLocal
@@ -514,7 +552,8 @@ def modifica_valore(event):
         par = item['values'][0]
     except IndexError:
         tkmb.showwarning(_("Nessun parametro selezionato!"),
-                         _("Non hai selezionato nessun parametro!! Selezionane uno e poi ripeti l'operazione!"))
+                         _("Non hai selezionato nessun parametro!! Selezionane uno e poi ripeti l'operazione!"),
+                         parent=ws)
         return
     global wcv, bts
     wcv = Toplevel()
@@ -706,7 +745,7 @@ def creaFinestra():
     ws.configure(bg="white")
     ws.title(_("Impostazioni") + " - School Life Diary")
     ws.iconbitmap(r"images/school_life_diary.ico")
-    ws.geometry("1050x400+450+250")
+    ws.geometry("1050x450+450+250")
     frame_imp = Labelframe(ws, text=_("Parametri"))
     frame_imp.pack()
     global ts
@@ -722,7 +761,7 @@ def creaFinestra():
     ts.column("descr", width=450, anchor=CENTER)
     ts.bind("<Double-Button-1>", modifica_valore)
     ts.bind("<Button-3>", popup)
-    ts.pack()
+    ts.pack(padx=10, pady=10)
     for x in range(len(list(ds))):
         e = ds[list(ds.keys())[x]]
         ts.insert("", "end", text=x + 1, values=[list(ds.keys())[x], e[0], _(e[1])])
@@ -730,12 +769,15 @@ def creaFinestra():
         "Per modificare un parametro, fai doppio click sulla riga corrispondente o tasto destro con il mouse."))
     li.pack()
     fbr = Labelframe(ws, text=_("Backup & Ripristino"))
+    fbr.pack()
     ibackup = PIL.Image.open(r"icons\download.png")
     pbackup = PIL.ImageTk.PhotoImage(ibackup)
     irestore = PIL.Image.open(r"icons\restore.png")
     prestore = PIL.ImageTk.PhotoImage(irestore)
     ideleteall = PIL.Image.open(r"icons\deleteall.png")
     pdeleteall = PIL.ImageTk.PhotoImage(ideleteall)
+    ilanguage = PIL.Image.open("icons\language.png")
+    planguage = PIL.ImageTk.PhotoImage(ilanguage)
     ifolder = PIL.Image.open(r"icons\folder.png")
     pfolder = PIL.ImageTk.PhotoImage(ifolder)
     bb = Button(fbr, text=_("ESEGUI BACKUP"), image=pbackup, compound="left",
@@ -744,14 +786,19 @@ def creaFinestra():
                 command=ripristino)
     bc = Button(fbr, text=_("CANCELLA TUTTO"), image=pdeleteall, compound=LEFT,
                 command=cancellatutto)
-    bf = Button(fbr, text=_("APRI CARTELLA LOCALE"), image=pfolder, compound=LEFT,
+    fu = Labelframe(ws, text=_("Utilità"))
+    fu.pack()
+    bl = Button(fu, text=_("APRI FINESTRA LINGUE"), image=planguage, compound=LEFT, command=cambiaLingua)
+    bf = Button(fu, text=_("APRI CARTELLA LOCALE"), image=pfolder, compound=LEFT,
                 command=lambda: subprocess.Popen(r'explorer "{}"'.format(path)))
-    fbr.pack()
     bb.grid(row=0, column=0, padx=10, pady=10)
     br.grid(row=0, column=1, padx=10, pady=10)
     bc.grid(row=0, column=2, padx=10, pady=10)
-    bf.grid(row=0, column=3, padx=10, pady=10)
+    bf.grid(row=0, column=1, padx=10, pady=10)
+    bl.grid(row=0, column=0, padx=10, pady=10)
     wckToolTips.register(bf, _("Apri la cartella dei dati di School Life Diary (con tutti i file dei database)"))
+    wckToolTips.register(bl, _("Apri la finestra per modificare la lingua in uso e/o scaricare/aggiornare le lingue dal"
+                               " server"))
     ws.focus()
     cur.close()
     connection.close()
