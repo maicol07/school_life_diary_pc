@@ -2,10 +2,11 @@
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-05-24 23:03+0200\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2018-06-14 17:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,17 +14,16 @@ msgstr ""
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.4\n"
 
-
-#: agenda.py:119
+#: agenda.py:125
 msgid "Agenda - School Life Diary"
 msgstr ""
 
-#: agenda.py:127
+#: agenda.py:133
 msgid "Visualizza tutto"
 msgstr ""
 
-#: agenda.py:132
-msgid "Nessun evento è stato pianificato."
+#: agenda.py:138
+msgid "Nessun evento Ã¨ stato pianificato."
 msgstr ""
-

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-05-24 23:13+0200\n"
+"POT-Creation-Date: 2018-06-14 17:04+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,139 +16,147 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 1.8.4\n"
 
-#: voti.py:96 voti.py:477 voti.py:546
+#: voti.py:104 voti.py:489 voti.py:558
 msgid "Tutte le materie"
 msgstr ""
 
-#: voti.py:187
+#: voti.py:199
 msgid "Successo!"
 msgstr ""
 
-#: voti.py:188
+#: voti.py:200
 msgid "Salvataggio effettuato con successo!"
 msgstr ""
 
-#: voti.py:214 voti.py:244
+#: voti.py:204
+msgid "Errore!"
+msgstr ""
+
+#: voti.py:205
+msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
+msgstr ""
+
+#: voti.py:226 voti.py:256
 msgid "Nessun voto selezionato!"
 msgstr ""
 
-#: voti.py:215 voti.py:245
+#: voti.py:227 voti.py:257
 msgid "Non è stato selezionato nessun voto. Si prega di selezionarne uno per apportare modifiche."
 msgstr ""
 
-#: voti.py:219
+#: voti.py:231
 msgid "Conferma eliminazione"
 msgstr ""
 
-#: voti.py:220
+#: voti.py:232
 msgid "Si è sicuri di voler eliminare il voto {} nella materia {}?"
 msgstr ""
 
-#: voti.py:252
+#: voti.py:264
 msgid "Modifica voto"
 msgstr ""
 
-#: voti.py:255 voti.py:321
+#: voti.py:267 voti.py:333
 msgid "Maschera di inserimento"
 msgstr ""
 
-#: voti.py:257 voti.py:323 voti.py:557
+#: voti.py:269 voti.py:335 voti.py:569
 msgid "Voto"
 msgstr ""
 
-#: voti.py:262 voti.py:328 voti.py:559
+#: voti.py:274 voti.py:340 voti.py:571
 msgid "Materia"
 msgstr ""
 
-#: voti.py:268 voti.py:333 voti.py:561
+#: voti.py:280 voti.py:345 voti.py:573
 msgid "Data"
 msgstr ""
 
-#: voti.py:277 voti.py:341 voti.py:565
+#: voti.py:289 voti.py:353 voti.py:577
 msgid "Tipo"
 msgstr ""
 
-#: voti.py:279 voti.py:343
+#: voti.py:291 voti.py:355
 msgid "Altro"
 msgstr ""
 
-#: voti.py:279 voti.py:343
+#: voti.py:291 voti.py:355
 msgid "Grafico"
 msgstr ""
 
-#: voti.py:279 voti.py:343
+#: voti.py:291 voti.py:355
 msgid "Orale"
 msgstr ""
 
-#: voti.py:279 voti.py:343
+#: voti.py:291 voti.py:355
 msgid "Pratico"
 msgstr ""
 
-#: voti.py:279 voti.py:343
+#: voti.py:291 voti.py:355
 msgid "Scritto"
 msgstr ""
 
-#: voti.py:282 voti.py:345 voti.py:567
+#: voti.py:294 voti.py:357 voti.py:579
 msgid "Peso"
 msgstr ""
 
-#: voti.py:287 voti.py:350 voti.py:569
+#: voti.py:299 voti.py:362 voti.py:581
 msgid "Descrizione"
 msgstr ""
 
-#: voti.py:294 voti.py:357
+#: voti.py:306 voti.py:369
 msgid "SALVA"
 msgstr ""
 
-#: voti.py:318
+#: voti.py:330
 msgid "Inserisci voto"
 msgstr ""
 
-#: voti.py:456
+#: voti.py:468 voti.py:609
 msgid "Non è stato inserito nessun voto!"
 msgstr ""
 
-#: voti.py:500 voti.py:590
+#: voti.py:512 voti.py:604
 msgid "MEDIA: {}"
 msgstr ""
 
-#: voti.py:502 voti.py:592
+#: voti.py:514 voti.py:607
 msgid "MEDIA: {:.2f}"
 msgstr ""
 
-#: voti.py:524
+#: voti.py:536
 msgid "Voti"
 msgstr ""
 
-#: voti.py:532 voti.py:540
+#: voti.py:544 voti.py:552
 msgid "Aggiungi"
 msgstr ""
 
-#: voti.py:534
+#: voti.py:546
 msgid "Modifica"
 msgstr ""
 
-#: voti.py:536
+#: voti.py:548
 msgid "Elimina"
 msgstr ""
 
-#: voti.py:542
+#: voti.py:554
 msgid "Visualizzazione per materia"
 msgstr ""
 
-#: voti.py:549
+#: voti.py:561
 msgid "VISUALIZZA"
 msgstr ""
 
-#: voti.py:555
+#: voti.py:567
 msgid "ID"
 msgstr ""
 
-#: voti.py:563
+#: voti.py:575
 msgid "Periodo"
 msgstr ""
 
-#: voti.py:582
+#: voti.py:594
 msgid ""
 "Per aggiungere un voto, usa il tasto destro del mouse su uno spazio vuoto della finestra.\n"
 "Per modificare un voto, fai doppio click sulla riga corrispondente.\n"
