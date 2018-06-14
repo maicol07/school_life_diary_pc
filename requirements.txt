@@ -1,3 +1,4 @@
+babel==2.6.0
 python-transifex==0.1.7
 bs4==0.0.1
 beautifulsoup4==4.6.0
