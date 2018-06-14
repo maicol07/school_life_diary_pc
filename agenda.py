@@ -73,12 +73,13 @@ def install_language():
     if not (os.path.exists(os.path.join(path, "language.txt"))):
         windll = ctypes.windll.kernel32
         lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lg = gettext.translation("agenda", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
+        lg = gettext.translation("agenda", localedir=os.path.join(path, 'locale'), languages=[lgcode])
     else:
         fl = open(os.path.join(path, "language.txt"), "r")
         lgcode = fl.readline()
         lg = gettext.translation('agenda', localedir=os.path.join(path, 'locale'), languages=[lgcode])
     lg.install()
+    locale.setlocale(locale.LC_ALL, lgcode)
 
 
 def selezione():
@@ -87,17 +88,17 @@ def selezione():
 
 def inizializza(c):
     """
-        Inizializzazione modulo agenda:
-            • Crea dizionario con tutti gli eventi, recuperati dal database
+    Inizializzazione modulo agenda:
+        • Crea dizionario con tutti gli eventi, recuperati dal file ics
 
-        Parametri
-        ----------
-        Nessuno
+    Parametri
+    ----------
+    Nessuno
 
-        Ritorna
-        -------
-        Niente
-        """
+    Ritorna
+    -------
+    Niente
+    """
     install_language()
     c.execute("SELECT name FROM sqlite_master WHERE type='table';")
     r = c.fetchall()

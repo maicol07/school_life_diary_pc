@@ -59,7 +59,7 @@ global lgcode
 if not (os.path.exists(os.path.join(path, "language.txt"))):
     windll = ctypes.windll.kernel32
     lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-    lg = gettext.translation("main", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
+    lg = gettext.translation("main", localedir=os.path.join(path, 'locale'), languages=[lgcode])
 else:
     try:
         fl = open(os.path.join(path, "language.txt"), "r")
@@ -82,6 +82,7 @@ else:
                 ex)
         w.withdraw()
 lg.install()
+locale.setlocale(locale.LC_ALL, lgcode)
 
 
 ## FINESTRA INFORMAZIONI ##
