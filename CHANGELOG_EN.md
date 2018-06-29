@@ -1,8 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
 ## Not released yet - Version 1.0 (Summer 2018)
@@ -11,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - New professors module! Insert personal info like name, surname, photo, website and email. You can also link professors to their subjects!
 - New marks module! Add your marks (also with weight) and let the software calculate your average!
+- New agenda module! Add your events, like homework, exams or memos, setting a date, a title, a description and an attachment if you want!
 - Added new inputs in subjects.
 - Themes! Too bored of the Windows native style? Now you can use your preferred theme!
 - Auto update program!! Every time you update the app, your database will be updated too automatically!
