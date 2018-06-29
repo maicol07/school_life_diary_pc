@@ -10,6 +10,7 @@ Questo formato è basato sul formato [Keep a Changelog](http://keepachangelog.co
 
 - Nuova modulo professori! Inserisci le info personali quali nome, cognome, immagine, sito web e email. Potrai poi collegarli alle loro materie!
 - Nuovo modulo VOTI! Inserisci i tuoi voti (anche con peso) e lascia che School Life Diary calcoli automaticamente la tua media!!
+- Nuovo modulo Agenda! Inserisci i tuoi eventi, tra cui compiti, verifiche, interrogazioni e promemoria, impostando la data, un titolo, una descrizione e un allegato se vuoi!
 - Aggiunte nuovi campi nelle materie.
 - Temi! Stanco dello stile nativo di Windows?? Puoi ora cambiare il tema visivo dell'app a tuo piacimento con uno dei temi disponibili.
 - Programma di aggiornamento automatico!! Ogni volta che aggiorni l'applicazione il database si aggiorna automaticamente.
