@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-06-14 17:04+0200\n"
+"POT-Creation-Date: 2018-06-29 19:33+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,16 +56,16 @@ msgstr ""
 msgid "Maschera di modifica"
 msgstr ""
 
-#: note.py:249
-msgid "Modificare il titolo dell'annotazione"
+#: note.py:249 note.py:300 note.py:476
+msgid "Titolo"
 msgstr ""
 
-#: note.py:254
-msgid "Modificare il contenuto dell'annotazione"
+#: note.py:254 note.py:305
+msgid "Contenuto"
 msgstr ""
 
-#: note.py:259
-msgid "Modificare l'allegato (opzionale)"
+#: note.py:259 note.py:309
+msgid "Allegato (opzionale)"
 msgstr ""
 
 #: note.py:264 note.py:313
@@ -86,18 +86,6 @@ msgstr ""
 
 #: note.py:298
 msgid "Maschera di inserimento"
-msgstr ""
-
-#: note.py:300
-msgid "Inserire il titolo della nuova annotazione"
-msgstr ""
-
-#: note.py:305
-msgid "Inserire il contenuto della nuova annotazione"
-msgstr ""
-
-#: note.py:309
-msgid "Inserisci un allegato (opzionale)"
 msgstr ""
 
 #: note.py:397
@@ -122,10 +110,6 @@ msgstr ""
 
 #: note.py:474
 msgid "ID"
-msgstr ""
-
-#: note.py:476
-msgid "Titolo"
 msgstr ""
 
 #: note.py:477
