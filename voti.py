@@ -126,8 +126,6 @@ def sistemaIndici(cursor):
     cursor.execute("SELECT * FROM voti")
     r = cursor.fetchall()
     for i in range(len(r)):
-        print(i)
-        print(r[i])
         if i in r[i]:
             continue
         else:
@@ -276,7 +274,6 @@ def edit():
     em = Combobox(fam, postcommand=lambda: updatecombobox(em, False))
     em.grid(row=1, column=1, padx=10, pady=10)
     em.set(selVoto["values"][1])
-    print(em["values"])
     ld = Label(fam, text=_("Data"))
     ld.grid(row=2, column=0, padx=10, pady=10)
     dd = datepicker.Datepicker(fam)
@@ -341,7 +338,6 @@ def add():
     lm.grid(row=1, column=0, padx=10, pady=10)
     em = Combobox(fam, postcommand=lambda: updatecombobox(em, False))
     em.grid(row=1, column=1, padx=10, pady=10)
-    print(em["values"])
     ld = Label(fam, text=_("Data"))
     ld.grid(row=2, column=0, padx=10, pady=10)
     dd = datepicker.Datepicker(fam)

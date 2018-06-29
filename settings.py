@@ -239,7 +239,6 @@ def updatecb(cb, lang_folder_list):
         langname = Locale(lcode[0], lcode[1]).display_name
         langd[code] = langname.title()
     lang_list = list(langd.values())
-    print(langd)
     cb["values"] = lang_list
 
 
@@ -629,7 +628,6 @@ def modifica_valore(event):
                 string = ""
                 for x in var_list:
                     string += "{} - {}; ".format(globals()["d1_{}".format(x)].get(), globals()["d2_{}".format(x)].get())
-                print(string)
                 salvaImpostazioni(par, "{}; {}".format(per, string[:-2]))
 
             global wp
