@@ -63,7 +63,7 @@ def install_language():
     locale.setlocale(locale.LC_ALL, lgcode)
 
 
-def sistemaIndici(cursor):
+def sistemaIndici(cursor, table_name, d_s):
     """
         Corregge possibili errori negli indici degli eventi, salvati nel database.
 
@@ -71,6 +71,10 @@ def sistemaIndici(cursor):
         ----------
         :param cursor : (sqlite3.Cursor)
             Cursore che effettua operazioni sul database.
+        :param table_name : (string)
+            Nome della tabella SQL
+        :param d_s : (list)
+            Lista con la data spezzettata in anno, mese e giorno
 
         Ritorna
         -------
@@ -88,9 +92,12 @@ def sistemaIndici(cursor):
                 if i in r[i]:
                     continue
                 else:
+                    print(i)
                     cursor.execute("""UPDATE `{}` SET ID={} WHERE data='{}' AND tipo='{}'
                     AND titolo='{}' AND descrizione='{}' AND materia='{}' AND tipo_verifica='{}'
-                    AND allegati='{}'""".format(x, i + 1, r[i][1], r[i][2], r[i][3], r[i][4], r[i][5], r[i][6], r[i][7])
+                    AND allegati='{}'""".format(x, "{}_{}".format(table_name,
+                                                                  len(list(ag[table_name][d_s[1]].keys())) + 1),
+                                                r[i][1], r[i][2], r[i][3], r[i][4], r[i][5], r[i][6], r[i][7])
                                    )
 
 
@@ -123,64 +130,71 @@ def Salvataggio(mode, titolo, descrizione, data, tipo, tipo_v, materia, idx=0):
         Niente
         """
     if data == "":
-        tkmb.showerror(_("Nessuna data inserita!"), _("Per proseguire è necessario inserire una data."))
+        tkmb.showerror(_("Nessuna data inserita!"), message=_("Per proseguire è necessario inserire una data."))
         return
+    if titolo == "":
+        tkmb.showerror(_("Nessun titolo inserito!"), message=_("Per proseguire è necessario inserire un titolo."))
     sql_conn = sql.connect(os.path.join(path, fn_agenda), isolation_level=None)
     sql_cur = sql_conn.cursor()
-    if mode in ["add", "del"]:
-        sistemaIndici(sql_cur)
-    try:
-        d_s = data.split("-")
-        table_name = "{}_{}".format(d_s[0], d_s[1])
-        sql_cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        res = sql_cur.fetchall()
-        table_list = []
-        for i in res:
-            for a in i:
-                if a == "sqlite_sequence":
-                    continue
-                table_list.append(a)
-        if not (table_name in table_list):
-            sql_cur.execute("""CREATE TABLE `{}` (
-        `ID`	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-        `data`	TEXT,
-        `tipo`	TEXT,
-        `titolo`	TEXT,
-        `descrizione`	TEXT,
-        `materia`	TEXT,
-        `tipo_verifica`	TEXT,
-        `allegati`	TEXT
-    );""".format(table_name))
-        if mode == "add":
-            if "sf" in globals():
-                sql_cur.execute("INSERT INTO `{}` VALUES ('{}','{}','{}','{}', '{}','{}','{}','{}')".format(
-                    table_name, len(list(ag.keys())) + 1, data, tipo, titolo, descrizione, materia, tipo_v, sf))
-            else:
-                sql_cur.execute("INSERT INTO `{}` VALUES ('{}','{}','{}','{}', '{}','{}','{}','{}')".format(
-                    table_name, len(list(ag.keys())) + 1, data, tipo, titolo, descrizione, materia, tipo_v, ""))
-            wa.destroy()
-        elif mode == "edit":
-            if "sf" in globals():
-                sql_cur.execute("""UPDATE `{}` SET data='{}', tipo='{}', titolo='{}', descrizione='{}', materia='{}',
-        tipo_v='{}', allegati='{}' WHERE ID={}""".format(table_name, data, tipo, titolo, descrizione, materia,
-                                                         tipo_v, sf, idx))
-            else:
-                sql_cur.execute("""UPDATE `{}` SET data='{}', tipo='{}', titolo='{}', descrizione='{}', materia='{}',
-                        tipo_v='{}' WHERE ID={}""".format(table_name, data, tipo, titolo, descrizione, materia, tipo_v,
-                                                          idx))
-            we.destroy()
-        elif mode == "del":
-            sql_cur.execute("DELETE FROM `{}` WHERE ID={}".format(table_name, idx))
-        tkmb.showinfo(title=_("Successo!"),
-                      message=_("Salvataggio effettuato con successo!"))
-        aw.destroy()
-        creaFinestra()
-    except Exception as ex:
+    # try:
+    d_s = data.split("-")
+    table_name = "{}_{}".format(d_s[0], d_s[1])
+    sql_cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    res = sql_cur.fetchall()
+    table_list = []
+    for i in res:
+        for a in i:
+            if a == "sqlite_sequence":
+                continue
+            table_list.append(a)
+    if not (table_name in table_list):
+        sql_cur.execute("""CREATE TABLE `{}` (
+    `ID`	TEXT PRIMARY KEY UNIQUE,
+    `data`	TEXT,
+    `tipo`	TEXT,
+    `titolo`	TEXT,
+    `descrizione`	TEXT,
+    `materia`	TEXT,
+    `tipo_verifica`	TEXT,
+    `allegati`	TEXT
+);""".format(table_name))
+    if table_name not in ag.keys():
+        ag[table_name] = {}
+    if not d_s[1] in ag[table_name].keys():
+        ag[table_name][d_s[1]] = {}
+    if mode == "add":
+        if "sf" in globals():
+            sql_cur.execute("INSERT INTO `{}` VALUES ('{}','{}','{}','{}', '{}','{}','{}','{}')".format(
+                table_name, "{}_{}".format(table_name, len(list(ag[table_name][d_s[1]].keys())) + 1), data, tipo,
+                titolo, descrizione, materia, tipo_v, sf))
+        else:
+            sql_cur.execute("INSERT INTO `{}` VALUES ('{}','{}','{}','{}', '{}','{}','{}','{}')".format(
+                table_name, "{}_{}".format(table_name, len(list(ag[table_name][d_s[1]].keys())) + 1), data, tipo,
+                titolo, descrizione, materia, tipo_v, ""))
+        wa.destroy()
+    elif mode == "edit":
+        if "sf" in globals():
+            sql_cur.execute("""UPDATE `{}` SET data='{}', tipo='{}', titolo='{}', descrizione='{}', materia='{}',
+    tipo_verifica='{}', allegati='{}' WHERE ID={}""".format(table_name, data, tipo, titolo, descrizione, materia,
+                                                            tipo_v, sf, idx))
+        else:
+            sql_cur.execute("""UPDATE `{}` SET data='{}', tipo='{}', titolo='{}', descrizione='{}', materia='{}',
+                    tipo_verifica='{}' WHERE ID={}""".format(table_name, data, tipo, titolo, descrizione, materia,
+                                                             tipo_v,
+                                                             idx))
+        we.destroy()
+    elif mode == "del":
+        sql_cur.execute("DELETE FROM `{}` WHERE ID={}".format(table_name, idx))
+    tkmb.showinfo(title=_("Successo!"),
+                  message=_("Salvataggio effettuato con successo!"))
+    aw.destroy()
+    creaFinestra()
+    '''except Exception as ex:
         tkmb.showerror(title=_("Errore!"),
                        message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore") + "\n" + str(
-                           ex))
+                           ex))'''
     if mode in ["add", "del"]:
-        sistemaIndici(sql_cur)
+        sistemaIndici(sql_cur, table_name, d_s)
 
 
 def delete():
@@ -198,17 +212,23 @@ def delete():
     global sel
     sel = tc.item(tc.focus())
     if sel["text"] == "":
-        tkmb.showwarning(title=_("Nessun voto selezionato!"),
+        tkmb.showwarning(title=_("Nessun evento selezionato!"),
                          message=_(
                              "Non è stato selezionato nessun evento. Si prega di selezionarne uno per apportare "
                              "modifiche."))
         return
-    scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
-                           message=_("Si è sicuri di voler eliminare l'evento con titolo {}, collegato alla materia "
-                                     "{}?").format(sel["values"][1], sel["values"][4]))
+    if sel["values"][4] != "":
+        scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
+                               message=_("Si è sicuri di voler eliminare l'evento con titolo {}, in data {}, "
+                                         "collegato alla materia {}?").format(sel["values"][2], sel["values"][0],
+                                                                              sel["values"][4]))
+    else:
+        scelta = tkmb.askyesno(title=_("Conferma eliminazione"),
+                               message=_("Si è sicuri di voler eliminare l'evento con titolo {}, in data {}?").format(
+                                   sel["values"][2], sel["values"][0]))
     if scelta is True:
         # noinspection PyTypeChecker
-        Salvataggio("del", None, None, None, None, None, None, sel["text"])
+        Salvataggio("del", None, None, sel["values"][0], None, None, None, sel["text"])
     else:
         return
 
@@ -342,10 +362,10 @@ def edit():
     lf.grid(row=0, column=1, padx=10, pady=2)
     psave = PIL.Image.open(r"icons/save.png")
     isave = PIL.ImageTk.PhotoImage(psave)
-    b = Button(we, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: Salvataggio("add", vart.get(),
+    b = Button(we, text=_("SALVA"), image=isave, compound=LEFT, command=lambda: Salvataggio("edit", vart.get(),
                                                                                             ec.get(1.0, END), dd.get(),
                                                                                             cbt.get(), cbtv.get(),
-                                                                                            cbe.get()))
+                                                                                            cbe.get(), idx=idx))
     b.pack(padx=10, pady=10)
     we.mainloop()
 
@@ -503,22 +523,23 @@ def visualizzadati(cba, cbm):
         for k in eventimese[i].keys():
             for x in eventimese[i][k].keys():
                 if eventimese[i][k][x]["allegati"] == "":
-                    tc.insert("", x, text=x, values=[eventimese[i][k][x]["data"],
-                                                     eventimese[i][k][x]["tipo"],
-                                                     eventimese[i][k][x]["titolo"],
-                                                     eventimese[i][k][x]["descrizione"],
-                                                     eventimese[i][k][x]["materia"],
-                                                     eventimese[i][k][x]["tipo_verifica"]])
+                    tc.insert("", int(x[x.rfind("_") + 1:]), text=x, values=[eventimese[i][k][x]["data"],
+                                                                             eventimese[i][k][x]["tipo"],
+                                                                             eventimese[i][k][x]["titolo"],
+                                                                             eventimese[i][k][x]["descrizione"],
+                                                                             eventimese[i][k][x]["materia"],
+                                                                             eventimese[i][k][x]["tipo_verifica"]])
                 else:
-                    tc.insert("", x, text=x, values=[eventimese[i][k][x]["data"],
-                                                     eventimese[i][k][x]["tipo"],
-                                                     eventimese[i][k][x]["titolo"],
-                                                     eventimese[i][k][x]["descrizione"],
-                                                     eventimese[i][k][x]["materia"],
-                                                     eventimese[i][k][x]["tipo_verifica"],
-                                                     eventimese[i][k][x]["allegati"][
-                                                     eventimese[i][k][x]["allegati"].rfind("/") + 1:
-                                                     ]],
+                    tc.insert("", int(x[x.rfind("_") + 1:]), text=x, values=[eventimese[i][k][x]["data"],
+                                                                             eventimese[i][k][x]["tipo"],
+                                                                             eventimese[i][k][x]["titolo"],
+                                                                             eventimese[i][k][x]["descrizione"],
+                                                                             eventimese[i][k][x]["materia"],
+                                                                             eventimese[i][k][x]["tipo_verifica"],
+                                                                             eventimese[i][k][x]["allegati"][
+                                                                             eventimese[i][k][x]["allegati"].rfind(
+                                                                                 "/") + 1:
+                                                                             ]],
                               image=iatt)
 
 
@@ -683,22 +704,22 @@ def creaFinestra():
             for k in ag[i].keys():
                 for x in ag[i][k].keys():
                     if ag[i][k][x]["allegati"] == "":
-                        tc.insert("", x, text=x, values=[ag[i][k][x]["data"],
-                                                         ag[i][k][x]["tipo"],
-                                                         ag[i][k][x]["titolo"],
-                                                         ag[i][k][x]["descrizione"],
-                                                         ag[i][k][x]["materia"],
-                                                         ag[i][k][x]["tipo_verifica"]])
+                        tc.insert("", int(x[x.rfind("_") + 1:]), text=x, values=[ag[i][k][x]["data"],
+                                                                                 ag[i][k][x]["tipo"],
+                                                                                 ag[i][k][x]["titolo"],
+                                                                                 ag[i][k][x]["descrizione"],
+                                                                                 ag[i][k][x]["materia"],
+                                                                                 ag[i][k][x]["tipo_verifica"]])
                     else:
-                        tc.insert("", x, text=x, values=[ag[i][k][x]["data"],
-                                                         ag[i][k][x]["tipo"],
-                                                         ag[i][k][x]["titolo"],
-                                                         ag[i][k][x]["descrizione"],
-                                                         ag[i][k][x]["materia"],
-                                                         ag[i][k][x]["tipo_verifica"],
-                                                         ag[i][k][x]["allegati"][
-                                                         ag[i][k][x]["allegati"].rfind("/") + 1:
-                                                         ]],
+                        tc.insert("", int(x[x.rfind("_") + 1:]), text=x, values=[ag[i][k][x]["data"],
+                                                                                 ag[i][k][x]["tipo"],
+                                                                                 ag[i][k][x]["titolo"],
+                                                                                 ag[i][k][x]["descrizione"],
+                                                                                 ag[i][k][x]["materia"],
+                                                                                 ag[i][k][x]["tipo_verifica"],
+                                                                                 ag[i][k][x]["allegati"][
+                                                                                 ag[i][k][x]["allegati"].rfind("/") + 1:
+                                                                                 ]],
                                   image=iatt)
 
         tc.pack(padx=10, pady=10)
