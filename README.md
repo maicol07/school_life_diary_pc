@@ -1,6 +1,6 @@
 <img src="https://apps.maicol07.tk/app/sld/img/ic_launcher.png" align="right" />
 
-# School Life Diary PC
+# School Life Diary Desktop Edition
 [![Build Status](https://travis-ci.org/maicol07/school_life_diary_pc.svg?branch=master)](https://travis-ci.org/maicol07/school_life_diary_pc)
 [![GitHub license](https://img.shields.io/github/license/maicol07/school_life_diary_pc.svg)](https://github.com/maicol07/school_life_diary_pc/blob/master/LICENSE)
 [![Inline docs](http://inch-ci.org/github/maicol07/school_life_diary_pc.svg?branch=master)](http://inch-ci.org/github/maicol07/school_life_diary_pc)
