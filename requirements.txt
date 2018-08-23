@@ -1,10 +1,10 @@
 babel==2.6.0
 python-transifex==0.1.7
 bs4==0.0.1
-beautifulsoup4==4.6.0
+beautifulsoup4==4.6.3
 requests==2.19.1
-Pillow==5.1.0
+Pillow==5.2.0
 polib==1.1.0
-ttkthemes==2.0.6
+ttkthemes==2.1.0
 feedparser==5.2.1
-tkfontchooser==2.0.1
+tkfontchooser==2.0.2

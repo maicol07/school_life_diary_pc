@@ -22,7 +22,7 @@ from zipfile import *
 import PIL.Image
 import PIL.ImageTk
 import polib
-from tkFontChooser import askfont
+from tkfontchooser import askfont
 from transifex.api import TransifexAPI
 from babel import Locale
 

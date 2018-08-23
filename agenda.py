@@ -134,6 +134,7 @@ def Salvataggio(mode, titolo, descrizione, data, tipo, tipo_v, materia, idx=0):
         return
     if titolo == "":
         tkmb.showerror(_("Nessun titolo inserito!"), message=_("Per proseguire è necessario inserire un titolo."))
+        return
     sql_conn = sql.connect(os.path.join(path, fn_agenda), isolation_level=None)
     sql_cur = sql_conn.cursor()
     # try:
