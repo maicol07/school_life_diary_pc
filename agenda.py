@@ -17,6 +17,7 @@ from tkinter.ttk import *
 import tkinter.messagebox as tkmb
 import tk_tools as tkt
 import datepicker
+import variables
 import PIL.Image
 import PIL.ImageTk
 
@@ -33,7 +34,7 @@ global fn_agenda
 global path
 fn_agenda = "agenda.db"
 
-path = os.path.expanduser(r'~\Documents\School Life Diary')
+path = variables.path
 if not (os.path.exists(os.path.join(path, fn_agenda))):
     fm = open(os.path.join(path, fn_agenda), "w")
     fm.close()

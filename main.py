@@ -30,9 +30,11 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 import feedparser
+import variables
 
-global path
-path = os.path.expanduser(r'~\Documents\School Life Diary')
+variables.path_init()
+
+path = variables.path
 
 import settings
 
@@ -40,7 +42,6 @@ import settings
 import agenda
 import note
 import prof
-import style
 import subjects
 import timetable
 import voti
@@ -226,9 +227,8 @@ def aggiornamento(prev_vers, target_version):
 
 
 ### INSTALLAZIONE STILE ###
-
-style.init()
-s = style.s
+variables.style_init()
+s = variables.s
 conn = sql.connect(os.path.join(path, "settings.db"), isolation_level=None)
 c = conn.cursor()
 s.set_theme(c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone()[0])

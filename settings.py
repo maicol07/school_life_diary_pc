@@ -28,7 +28,7 @@ from babel import Locale
 
 import datepicker
 import wckToolTips
-import style
+import variables
 
 global path
 global fn_set
@@ -36,7 +36,7 @@ global tr
 
 ## VARIABILI D'AMBIENTE ##
 fn_set = "settings.db"
-path = os.path.expanduser(r'~\Documents\School Life Diary')
+path = variables.path
 tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com/')
 
 
@@ -70,7 +70,14 @@ def install_language():
 output_filename = "settings.db"
 
 if not (os.path.exists(path)):
-    os.mkdir(path)
+    try:
+        os.mkdir(path)
+    except FileNotFoundError:
+        tkmb.showerror(title="Can't find path",
+                       message="We couldn't find the path of the app data files.\nTo fix this please type in the file "
+                               "path.txt (if it doesn't exists create it) inside the installation folder the path to "
+                               "your documents folder. To find it right click on documents folder in explorer and then "
+                               "go to path tab. Copy the path and paste inside the file.")
 if os.path.exists("locale") and not (os.path.exists(os.path.join(path, "locale"))):
     l = sorted(["main", "settings", "note", "timetable", "subjects", "agenda", "voti"])
     for i in l:
@@ -428,7 +435,7 @@ def salvaImpostazioni(par, val):
         wcv.destroy()
         ws.destroy()
         if par == "PC_THEME":
-            s = style.s
+            s = variables.s
             s.set_theme(val)
             s.configure("TFrame", background="white")
             s.configure("TButton", height=100)
@@ -440,7 +447,7 @@ def salvaImpostazioni(par, val):
             s.configure("TCheckbutton", background="white")
             s.configure(".", font=sql_cur.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0])
         if par == "PC_FONT":
-            s = style.s
+            s = variables.s
             s.configure(".", font=val)
         sql_cur.close()
         sql_conn.close()
@@ -576,7 +583,7 @@ def modifica_valore(event):
     elif par == "PC_THEME":
         etichetta1 = Label(wcv, text=_("Scegliere il valore da attribuire al parametro:"))
         etichetta1.pack(padx=10, pady=10)
-        menut = Combobox(wcv, postcommand=lambda: updateList(menut, style.s.theme_names()))
+        menut = Combobox(wcv, postcommand=lambda: updateList(menut, variables.s.theme_names()))
         menut.set(item["values"][1])
         menut.pack(padx=10, pady=10)
         bts = Button(wcv, text=_("SALVA"), image=isave, compound=LEFT,
