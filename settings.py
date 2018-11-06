@@ -69,15 +69,6 @@ def install_language():
 
 output_filename = "settings.db"
 
-if not (os.path.exists(path)):
-    try:
-        os.mkdir(path)
-    except FileNotFoundError:
-        tkmb.showerror(title="Can't find path",
-                       message="We couldn't find the path of the app data files.\nTo fix this please type in the file "
-                               "path.txt (if it doesn't exists create it) inside the installation folder the path to "
-                               "your documents folder. To find it right click on documents folder in explorer and then "
-                               "go to path tab. Copy the path and paste inside the file.")
 if os.path.exists("locale") and not (os.path.exists(os.path.join(path, "locale"))):
     l = sorted(["main", "settings", "note", "timetable", "subjects", "agenda", "voti"])
     for i in l:

@@ -15,6 +15,7 @@ Questo formato è basato sul formato [Keep a Changelog](http://keepachangelog.co
 - Temi! Stanco dello stile nativo di Windows?? Puoi ora cambiare il tema visivo dell'app a tuo piacimento con uno dei temi disponibili.
 - Programma di aggiornamento automatico!! Ogni volta che aggiorni l'applicazione il database si aggiorna automaticamente.
 - Scegli se controllare o no gli aggiornamenti dell'app all'avvio!
+- Al primo avvio sarà possibile scegliere la cartella dove viene salvato il database. Attualmente non è possibile modificare il percorso all'interno del software ma solamente dal file path.txt, previa copia dei file della cartella precedente in quella nuova.
 - Aggiunte docstring nelle funzioni del codice
 
 ### Cambiato

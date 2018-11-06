@@ -33,7 +33,6 @@ import feedparser
 import variables
 
 variables.path_init()
-
 path = variables.path
 
 import settings

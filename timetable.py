@@ -8,7 +8,7 @@ import gettext
 import locale
 import os.path
 import sqlite3 as sql
-
+import variables
 import PIL.Image
 import PIL.ImageTk
 
@@ -17,7 +17,7 @@ global fn_set
 global fn_time
 fn_set = "settings.db"
 fn_time = "timetable.db"
-path = os.path.expanduser(r'~\Documents\School Life Diary')
+path = variables.path
 if not (os.path.exists(os.path.join(path, fn_time))):
     fm = open(os.path.join(path, fn_time), "w")
     fm.close()

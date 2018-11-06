@@ -13,12 +13,14 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 
+import variables
+
 global fn_sub
 global path
 
 fn_sub = "subjects.db"
 
-path = os.path.expanduser(r'~\Documents\School Life Diary')
+path = variables.path
 if not (os.path.exists(os.path.join(path, fn_sub))):
     fm = open(os.path.join(path, fn_sub), "w")
     fm.close()

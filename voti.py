@@ -15,7 +15,7 @@ from tkinter.ttk import *
 
 import PIL.Image
 import PIL.ImageTk
-
+import variables
 import datepicker
 
 global fn_voti
@@ -23,7 +23,7 @@ global path
 
 fn_voti = "voti.db"
 
-path = os.path.expanduser(r'~\Documents\School Life Diary')
+path = variables.path
 if not (os.path.exists(os.path.join(path, fn_voti))):
     fm = open(os.path.join(path, fn_voti), "w")
     fm.close()

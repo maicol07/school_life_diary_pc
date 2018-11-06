@@ -15,6 +15,8 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 
+import variables
+
 global nt
 
 nt = {}
@@ -29,7 +31,7 @@ global fn_notes
 global path
 fn_notes = "notes.db"
 
-path = os.path.expanduser(r'~\Documents\School Life Diary')
+path = variables.path
 if not (os.path.exists(os.path.join(path, fn_notes))):
     fm = open(os.path.join(path, fn_notes), "w")
     fm.close()

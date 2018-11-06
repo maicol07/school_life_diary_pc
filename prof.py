@@ -11,6 +11,7 @@ import os.path
 import sqlite3 as sql
 import tkinter.messagebox as tkmb
 import webbrowser
+import variables
 from tkinter import *
 from tkinter import Toplevel
 from tkinter.filedialog import askopenfilename
@@ -24,7 +25,7 @@ global path
 
 fn_prof = "prof.db"
 
-path = os.path.expanduser(r'~\Documents\School Life Diary')
+path = variables.path
 if not (os.path.exists(os.path.join(path, fn_prof))):
     fm = open(os.path.join(path, fn_prof), "w")
     fm.close()
