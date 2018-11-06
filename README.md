@@ -1,4 +1,4 @@
-<img src="https://apps.maicol07.tk/app/sld/img/ic_launcher.png" align="right" />
+<img src="https://image.ibb.co/fyXJCq/diary-256x256.png" align="right" />
 
 # School Life Diary Desktop Edition
 [![Build Status](https://travis-ci.org/maicol07/school_life_diary_desktop_edition.svg?branch=master)](https://travis-ci.org/maicol07/school_life_diary_desktop_edition)
@@ -12,6 +12,10 @@
 
 [![forthebadge](http://forthebadge.com/images/badges/made-with-python.svg)](http://forthebadge.com)
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
+
+Language:
+- [Italian](#italian)
+- [English](#english)
 
 # <img src="https://i.imgur.com/ji5wfIj.png" alt="ITA" weight=24 height=24></img>Italian
 Porting dell'app android School Life Diary su PC.
@@ -27,18 +31,21 @@ Le schermate seguenti sono riferite alla versione più recente.
 
 Menu principale            |  Gestione dell'orario
 :-------------------------:|:-------------------------:
-<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_1-1.png" alt="Menu principale"/>  |  <img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_3-1.png" alt="Orario" />  
-**Gestione delle materie**          |  **Impostazioni**
-<img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_4.png" alt="Materie" /> | <img src="https://apps.maicol07.tk/wp-content/uploads/2017/03/sld_screen_4-1.png" alt="Impostazioni" />
-
+<img src="https://image.ibb.co/iUkoCq/immagine.png" alt="Menu principale"/>  |  <img src="https://image.ibb.co/hrRTCq/immagine.png" alt="Orario" />  
+**Gestione delle materie**          |  **Gestione dei professori**
+<img src="https://image.ibb.co/iYJasq/immagine.png" alt="Materie" /> | <img src="https://image.ibb.co/naOVQA/immagine.png" alt="Professori" />
+**Gestione dei voti**          |  **Gestione delle annotazioni**
+<img src="https://image.ibb.co/dGAoCq/immagine.png" alt="Voti" /> | <img src="https://image.ibb.co/duYVQA/immagine.png" alt="Annotazioni" />
+**Gestione dell'agenda**          | 
+<img src="https://image.ibb.co/j6Yx5A/immagine.png" alt="Agenda" /> |
 ## Crediti
 Sviluppato da maicol07. Copyright © 2017-2018 - maicol07
-
+Logo creato da Roundicons (flaticon.com), con licenza Creative Commons BY 3.0
 Riconoscimenti all'interno dell'applicazione.
 
-Sito web: https://www.maicol07.tk
+Sito web: https://www.maicol07.it
 
-Sito web app: https://apps.maicol07.tk
+Sito web app: https://apps.maicol07.it
 ## Segnalazione bug
 È possibile segnalare bug nella sezione issues
 ## Contribusci al progetto! [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
@@ -57,12 +64,12 @@ Port of School Life Diary Android App for PC.
 Please see above the Italian ones.
 ## Credits
 Developed by maicol07. Copyright © 2017-2018 - maicol07
-
+Logo by Roundicons (flaticon.com), licensed Creative Commons BY 3.0
 Other credits are inside the app.
 
-Website: https://www.maicol07.tk
+Website: https://www.maicol07.it
 
-App website: https://apps.maicol07.tk
+App website: https://apps.maicol07.it
 ## Bug report
 You can report bug in the [issues](https://github.com/maicol07/school_life_diary_pc/issues) tab.
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/maicol07/school_life_diary_pc/issues)
