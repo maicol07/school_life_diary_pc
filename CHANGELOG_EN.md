@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-## Not released yet - Version 1.0 (Summer 2018)
+## Version 1.0 (11/06/2018)
 
 ### Added
 
@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - Themes! Too bored of the Windows native style? Now you can use your preferred theme!
 - Auto update program!! Every time you update the app, your database will be updated too automatically!
 - You can choose if you want to receive updates for the app!
+- At first run you can choose the folder where the database is saved. Currently you can not change the path within the software but only from the file path.txt, after copying the files of the previous folder in the new one.
 - Added docstrings and functions in the code
 
 ### Changed

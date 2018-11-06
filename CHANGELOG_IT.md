@@ -4,11 +4,11 @@ Tutti i cambiamenti notabili verranno documentati in questo file
 Questo formato è basato sul formato [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) e questo progetto aderisce al [Versionamento Semantico 2.0.0](https://semver.org/lang/it/).
 
 
-## Non ancora rilasciato - Versione 1.0 (Estate 2018)
+## Versione 1.0 (06/11/2018)
 
 ### Aggiunto
 
-- Nuova modulo professori! Inserisci le info personali quali nome, cognome, immagine, sito web e email. Potrai poi collegarli alle loro materie!
+- Nuovo modulo professori! Inserisci le info personali quali nome, cognome, immagine, sito web e email. Potrai poi collegarli alle loro materie!
 - Nuovo modulo VOTI! Inserisci i tuoi voti (anche con peso) e lascia che School Life Diary calcoli automaticamente la tua media!!
 - Nuovo modulo Agenda! Inserisci i tuoi eventi, tra cui compiti, verifiche, interrogazioni e promemoria, impostando la data, un titolo, una descrizione e un allegato se vuoi!
 - Aggiunte nuovi campi nelle materie.
