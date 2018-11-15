@@ -4,25 +4,8 @@ from tkinter.filedialog import *
 from tkinter.ttk import Entry, Frame, Button
 
 from PIL import Image, ImageTk
-from ttkthemes.themed_style import *
 
-
-def style_init():
-    """
-    Inizializzazione delle variabili globali
-    :return:
-    """
-    global s
-    s = ThemedStyle()
-    s.configure("TFrame", background="white")
-    s.configure("TButton", height=100)
-    s.configure("TLabel", background="white")
-    s.configure("TPhotoimage", background="white")
-    s.configure("TLabelframe", background="white")
-    s.configure("TLabelframe.Label", background="white")
-    s.configure("TScale", background="white")
-    s.configure("TCheckbutton", background="white")
-    s.configure('.', font=('Arial', 10, "normal roman"))
+version = "1.0.0"
 
 
 def path_init():

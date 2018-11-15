@@ -15,7 +15,7 @@ from tkinter.ttk import *
 
 import PIL.Image
 import PIL.ImageTk
-import variables
+from modules import variables
 import datepicker
 
 global fn_voti
