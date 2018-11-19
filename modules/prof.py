@@ -11,7 +11,7 @@ import os.path
 import sqlite3 as sql
 import tkinter.messagebox as tkmb
 import webbrowser
-from modules import variables
+from common import variables
 from tkinter import *
 from tkinter import Toplevel
 from tkinter.filedialog import askopenfilename

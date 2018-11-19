@@ -1,15 +1,7 @@
 ### SETTINGS.PY ###
 
-
-## IMPORTAZIONE LIBRERIE ##
-import sys
-
-### IMPOSTAZIONE PERCORSO LIBRERIE ESTERNE ###
-sys.path.insert(0, 'lib')
-import ctypes
-import gettext
-import locale
-import os.path  # serve per verificare se un file è presente o no
+## IMPORT LIBRERIE ##
+import os.path
 import sqlite3 as sql
 import subprocess
 import time
@@ -22,139 +14,27 @@ from zipfile import *
 import PIL.Image
 import PIL.ImageTk
 import polib
+from babel import Locale
 from tkfontchooser import askfont
 from transifex.api import TransifexAPI
-from babel import Locale
 
-import datepicker
-import wckToolTips
-from modules import variables
+from common import init, variables
+from lib import datepicker, wckToolTips
 
 global path
 global fn_set
 global tr
 
 ## VARIABILI D'AMBIENTE ##
-fn_set = "settings.db"
+module_name = __name__.replace("_", "")
+if "." in module_name:
+    module_name = module_name[module_name.find(".") + 1:]
 path = variables.path
 tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com/')
 
+lang = init.Language(module_name)
 
-def install_language():
-    """
-    Installa la lingua del modulo impostazioni.
-
-    Parametri
-    ----------
-    Nessuno
-
-    Ritorna
-    -------
-    Niente
-    """
-    if not (os.path.exists(os.path.join(path, "language.txt"))):
-        windll = ctypes.windll.kernel32
-        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lg = gettext.translation("settings", localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    else:
-        fl = open(os.path.join(path, "language.txt"), "r")
-        lgcode = fl.readline()
-        lg = gettext.translation('settings', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-        fl.close()
-    lg.install()
-    locale.setlocale(locale.LC_ALL, lgcode)
-
-
-## CREAZIONE DATABASE (PRIMO AVVIO) ##
-
-output_filename = "settings.db"
-
-if os.path.exists("locale") and not (os.path.exists(os.path.join(path, "locale"))):
-    l = sorted(["main", "settings", "note", "timetable", "subjects", "agenda", "voti"])
-    for i in l:
-        lang = tr.list_languages('school-life-diary-pc', i + "pot")
-        for y in lang:
-            pathdl = os.path.join(path, 'locale', y[:2], "LC_MESSAGES")
-            if not (os.path.exists(os.path.join(pathdl, (i + '.po')))):
-                if not (os.path.exists(os.path.join(pathdl))):
-                    os.makedirs(os.path.join(pathdl))
-            tr.get_translation('school-life-diary-pc', i + "pot", y, os.path.join(pathdl, (i + '.po')))
-            po = polib.pofile(os.path.join(pathdl, (i + '.po')))
-            po.save_as_mofile(os.path.join(pathdl, (i + '.mo')))
-install_language()
-if not (os.path.exists(os.path.join(path, fn_set))):
-    if os.path.exists(os.path.join(path, "settings.npy")):
-        w.deiconify()
-        tkmb.showwarning(title=_("Attenzione! Database non presente!"),
-                         message=_(
-                             "Non hai effettuato la migrazione del database. Il programma si avvierà, ma non saranno "
-                             "visualizzati i tuoi dati fino a che non effettuerai la migrazione."))
-        rd = tkmb.askokcancel(title=_("Conferma download strumento migrazione database"),
-                              message=_("Vuoi scaricare lo strumento di migrazione del database?"))
-        w.iconify()
-        if rd is True:
-            webbrowser.open("https://github.com/maicol07/school_life_diary_pc/releases")
-    fs = open(os.path.join(path, fn_set), "w")
-    fs.close()
-    conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
-    c = conn.cursor()
-    c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
-                                                   `value` TEXT,
-                                                   `descr` TEXT);""")
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(
-        _("Numero di ore massime per giornate da visualizzare nell'orario")))
-    if "win" == sys.platform[:3]:
-        th = 'vista'
-    elif "darwin" in sys.platform:
-        th = 'clam'
-    else:
-        th = 'clam'
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","{}", "{}"); """.format(th, _(
-        "Tema visivo dell'applicazione")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(_("Sì"), _(
-        "Consenso a ricevere notifiche di versioni alpha")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
-        "Consenso a ricevere notifiche di versioni beta")))
-    c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format("Trebuchet", _(
-        "Carattere utilizzato in tutti i testi dell'applicazione")))
-    c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("CHECK_UPDATES", "{}", "{}");""".format(_(
-        "Sì"), _("Consenso a controllare all'avvio dell'app se sono disponibili aggiornamenti.")))
-    c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("PERIODS", "{}", "{}")""".format(
-        "2 - 2018-09-15 - 2019-06-07", _("Periodi scolastici")))
-else:
-    conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='settings';")
-    ris = c.fetchall()
-    if not (len(ris) == 1):
-        c.execute("""CREATE TABLE `settings` ( `setting` TEXT,
-                                                   `value` TEXT,
-                                                   `descr` TEXT);""")
-    c.execute("SELECT * FROM settings")
-    r = c.fetchall()
-    if len(ris) == 0:
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ORE_MAX_GIORNATA","5", "{}"); """.format(
-            _("Numero di ore massime per giornate da visualizzare nell'orario")))
-        if "win" == platform[:3]:
-            th = 'vista'
-        elif "darwin" in platform:
-            th = 'clam'
-        else:
-            th = 'clam'
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("PC_THEME","{}", "{}"); """.format(th, _(
-            "Tema visivo dell'applicazione")))
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("ALPHA_VERS", "{}", "{}");""".format(0, _(
-            "Consenso a ricevere notifiche di versioni alpha")))
-        c.execute("""INSERT INTO settings (setting,value,descr) VALUES ("BETA_VERS", "{}", "{}");""".format(_("No"), _(
-            "Consenso a ricevere notifiche di versioni beta")))
-        c.execute(
-            """INSERT INTO settings (setting,value,descr) VALUES ("PC_FONT", "{}", "{}");""".format(
-                "Arial 10 normal roman", _("Carattere utilizzato in tutti i testi dell'applicazione")))
-        c.execute("""INSERT INTO settings (setting, value, descr) VALUES ("PERIODS", "{}", "{}")""".format(
-            "2; 15/09/2018 - 23/12/2018; 09/01/2019 - 07/06/2019", _("Periodi scolastici")))
-
-conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
-c = conn.cursor()
+conn, c = init.connect_database()
 
 
 def salvaLingua(cb, mode):

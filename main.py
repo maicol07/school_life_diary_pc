@@ -11,34 +11,27 @@ print("CARICAMENTO IN CORSO...")
 module_name = __name__.replace("_", "")
 ### START MAIN ###
 
-import sys
-
-### IMPOSTAZIONE PERCORSO LIBRERIE ESTERNE ###
-sys.path.insert(0, 'lib')
-
-import os.path
 import webbrowser
 from tkinter import *
 from tkinter.ttk import *
-from ttkthemes import *
+
 import PIL.Image
 import PIL.ImageTk
-from modules import variables
+from ttkthemes import *
 
-variables.path_init()
+from common import variables, init
+
 path = variables.path
-
-from common import init
 
 ## IMPORTAZIONE MODULI APPLICAZIONE ##
 
 from modules import settings, note, voti, timetable, subjects, agenda, prof
 
 ## INSTALLAZIONE LINGUA ##
-init.Language(module_name)
+lang = init.Language(module_name)
 
 ## CONNESSIONE AL DATABASE ##
-conn, c = init.create_database("settings")
+conn, c = init.connect_database()
 
 ## CREAZIONE FINESTRA MENU PRINCIPALE ##
 global w
@@ -71,7 +64,8 @@ def info():
     f1.pack()
     infotitle = Label(f1, text="School Life Diary", font=("Comic Sans MS", 25, "bold italic"))
     infotitle.pack()
-    subtitle1 = Label(f1, text="{} Anniversary Update".format(v), font=("Times New Roman", 18, "bold italic"))
+    subtitle1 = Label(f1, text="{} Anniversary Update".format(variables.version),
+                      font=("Times New Roman", 18, "bold italic"))
     subtitle1.pack()
     subtitle = Label(f1, text=_("sviluppato e mantenuto da maicol07"))
     subtitle.pack(padx=10, pady=2)
@@ -103,7 +97,7 @@ def info():
     cl.pack()
     changel = Text(cl, font="Courier 10", width=100, height=25)
     changel.pack()
-    clf = codecs.open("CHANGELOG_{}.md".format(lgcode.upper()[:2]), "r", "utf-8")
+    clf = codecs.open("CHANGELOG_{}.md".format(lang.lgcode.upper()[:2]), "r", "utf-8")
     for row in clf.readlines():
         changel.insert(INSERT, row)
     changel.config(state=DISABLED)

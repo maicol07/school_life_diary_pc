@@ -15,7 +15,7 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 
-from modules import variables
+from common import variables
 
 global nt
 

@@ -8,7 +8,7 @@ import gettext
 import locale
 import os.path
 import sqlite3 as sql
-from modules import variables
+from common import variables
 import PIL.Image
 import PIL.ImageTk
 

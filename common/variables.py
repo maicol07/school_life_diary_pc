@@ -31,10 +31,10 @@ def path_init():
         w.mainloop()
         path = var.get()
         txt = open("path.txt", "w")
-        txt.write(path)
+        txt.write(path + "\School Life Diary")
         txt.close()
         txt = open("path.txt", "r")
-        path = txt.read() + "\School Life Diary"
+        path = txt.read()
         txt.close()
     else:
         txt = open("path.txt", "r")
