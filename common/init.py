@@ -5,7 +5,12 @@ import os.path
 import shutil
 import sqlite3 as sql
 import sys
+import time
 import tkinter.messagebox as tkmb
+
+import polib
+from babel import Locale
+from transifex.api import TransifexAPI
 
 from common import variables
 
@@ -18,17 +23,21 @@ path = variables.path
 
 class Language(object):
     def __init__(self, domain):
+        if not (os.path.exists(os.path.join(path, "locale"))):
+            self.download_languages()
         if not (os.path.exists(os.path.join(path, "language.txt"))):
-            windll = ctypes.windll.kernel32
-            lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+            lgcode = self.auto_recognize_language()
             lg = gettext.translation(domain, localedir=os.path.join(path, 'locale'), languages=[lgcode])
         else:
             try:
                 fl = open(os.path.join(path, "language.txt"), "r")
                 lgcode = fl.readline()
-                lg = gettext.translation(domain, localedir=os.path.join(path, 'locale'), languages=[lgcode])
+                if lgcode == "":
+                    lgcode = self.auto_recognize_language()
+                    lg = gettext.translation(domain, localedir=os.path.join(path, 'locale'), languages=[lgcode])
+                else:
+                    lg = gettext.translation(domain, localedir=os.path.join(path, 'locale'), languages=[lgcode])
             except Exception as ex:
-                w.deiconify()
                 try:
                     tkmb.showerror(title=_("Lingua non impostata!"),
                                    message=_(
@@ -39,23 +48,113 @@ class Language(object):
                     tkmb.showerror(title="Can't install the language!",
                                    message=r"Can't recognize the set language. To fix this try to delete the file in "
                                            r"Documents/School Life Diary/language.txt . If the problem still occurs, "
-                                           r"contact the developer. Error: ") + str(
-                        ex)
+                                           r"contact the developer. Error: " + str(ex))
                 w.withdraw()
         lg.install()
         locale.setlocale(locale.LC_ALL, lgcode)
         self.lgcode = lgcode
 
+    def auto_recognize_language(self):
+        windll = ctypes.windll.kernel32
+        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
+        return lgcode
 
-def connect_database(module_name="data"):
-    conn = sql.connect(os.path.join(variables.path, "{}.db".format(module_name)), isolation_level=None)
-    c = conn.cursor()
-    return conn, c
+    def download_languages(self, cb=None):
+        try:
+            tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com/')
+            resources = tr.list_resources("school-life-diary-pc")
+            resources_slugs = []
+            for i in resources:
+                resources_slugs.append(i["slug"])
+            for i in resources_slugs:
+                lang = tr.list_languages('school-life-diary-pc', i)
+                i = i.replace("pot", "")
+                for y in lang:
+                    pathdl = os.path.join(path, 'locale', y, "LC_MESSAGES")
+                    if not (os.path.exists(os.path.join(pathdl, (i + '.po')))):
+                        if not (os.path.exists(os.path.join(pathdl))):
+                            os.makedirs(os.path.join(pathdl))
+                    tr.get_translation('school-life-diary-pc', i + "pot", y, os.path.join(pathdl, (i + '.po')))
+                    po = polib.pofile(os.path.join(pathdl, (i + '.po')))
+                    po.save_as_mofile(os.path.join(pathdl, (i + '.mo')))
+            fdata = open(os.path.join(path, r"last_update_lang.txt"), "w")
+            day = time.strftime("%c")
+            fdata.write(day)
+            fdata.close()
+            if cb is not None:
+                tkmb.showinfo(title=_("Lingue scaricate/aggiornate"),
+                              message=_("Le lingue sono state scaricate. Puoi selezionarne una dal menu."))
+                languages_list = os.listdir(os.path.join(path, "locale"))
+                self.updatecb(cb, languages_list)
+        except ConnectionError as ex:
+            if os.path.exists("locale"):
+                shutil.copy("locale", path)
+            else:
+                tkmb.showerror(title="Can't download languages!",
+                               message="There is no internet connection, so School Life Diary can't download "
+                                       "translations. Reopen the app and retry with an internet connection available."
+                                       "\nError: " + str(ex))
 
+    def get_language_name(self, lgcode=None):
+        if lgcode is None:
+            lgcode = self.auto_recognize_language()
+        lcode = lgcode.split("_")
+        langname = Locale(lcode[0], lcode[1]).display_name
+        return langname
 
-def close_database(conn, c):
-    c.close()
-    conn.close()
+    def updatecb(self, cb, lang_folder_list):
+        """
+            Aggiorna le opzioni del menu a tendina con le lingue nella lista.
+
+            Parametri
+            ----------
+            :param cb : (string)
+                Menu a tendina lingue.
+            :param lang_folder_list : (string)
+                Lista dei codici lingue installate.
+
+            Ritorna
+            -------
+            Niente
+            """
+        global langd
+        langd = {}
+        for code in lang_folder_list:
+            langd[code] = lang.get_language_name(code)
+        lang_list = list(langd.values())
+        cb["values"] = lang_list
+
+    def saveLanguage(self, cb, mode):
+        """
+            MODALITA' 1: Salva la lingua scelta
+            MODALITA' 2: Scarica le lingue aggiornate dal server di traduzione (Transifex)
+
+            Parametri
+            ----------
+            :param cb : (Tkinter Combobox)
+                Menu a tendina lingue.
+            :param mode : (string)
+                Modalità di avvio.
+
+            Ritorna
+            -------
+            Niente
+            """
+        try:
+            f = open(os.path.join(path, "language.txt"), "w")
+            idx = list(langd.values()).index(cb.get())
+            f.write(list(langd.keys())[idx])
+            f.close()
+            tkmb.showinfo(title=_("Salvataggio effettuato"),
+                          message=_(
+                              "La lingua scelta è stata salvata. School Life Diary ora si chiuderà. "
+                              "Riapri l'applicazione per rendere effettive le modifiche."),
+                          parent=wl)
+            exit()
+        except Exception as ex:
+            tkmb.showerror(title=_("Si è verificato un errore!"),
+                           message=_("È stato riscontrato un errore imprevisto. "
+                                     "Riprovare o contattare lo sviluppatore.") + "\n" + str(ex))
 
 
 class Update(object):
@@ -84,8 +183,8 @@ class Update(object):
                 elif vs == "beta":
                     tkmb.showwarning(_("Versione BETA non stabile rilevata!"),
                                      message=_(
-                                         "La versione che stai utilizzando è una versione ALPHA non stabile, che può"
-                                         "contenere piccoli bug e problemi. Puoi usare questa versione in ambito"
+                                         "La versione che stai utilizzando è una versione BETA non stabile, che può "
+                                         "contenere piccoli bug e problemi. Puoi usare questa versione in ambito "
                                          "produttivo, ma segnala i bug, se dovessi incontrarne uno, in vista del "
                                          "rilascio stabile."))
                 self.upgrade(pv, v)
@@ -227,20 +326,6 @@ class FirstRun(object):
             self.create_db()
             self.download_languages()
 
-    def download_languages(self):
-        if os.path.exists("locale") and not (os.path.exists(os.path.join(path, "locale"))):
-            l = sorted(["main", "settings", "note", "timetable", "subjects", "agenda", "voti"])
-            for i in l:
-                lang = tr.list_languages('school-life-diary-pc', i + "pot")
-                for y in lang:
-                    pathdl = os.path.join(path, 'locale', y[:2], "LC_MESSAGES")
-                    if not (os.path.exists(os.path.join(pathdl, (i + '.po')))):
-                        if not (os.path.exists(os.path.join(pathdl))):
-                            os.makedirs(os.path.join(pathdl))
-                    tr.get_translation('school-life-diary-pc', i + "pot", y, os.path.join(pathdl, (i + '.po')))
-                    po = polib.pofile(os.path.join(pathdl, (i + '.po')))
-                    po.save_as_mofile(os.path.join(pathdl, (i + '.mo')))
-
     def create_db(self):
         if os.path.exists(os.path.join(path, "settings.npy")):
             w.deiconify()
@@ -305,7 +390,7 @@ class FirstRun(object):
             _("Consenso a ricevere notifiche di versioni alpha"),
             _("No"),
             _("Consenso a ricevere notifiche di versioni beta"),
-            "Trebuchet",
+            "TkDefaultFont",
             _("Carattere utilizzato in tutti i testi dell'applicazione"),
             _("Sì"),
             _("Consenso a controllare all'avvio dell'app se sono disponibili aggiornamenti."),
@@ -315,5 +400,16 @@ class FirstRun(object):
         close_database(conn, c)
 
 
-# lang = Language("init")
+def connect_database(module_name="data"):
+    conn = sql.connect(os.path.join(variables.path, "{}.db".format(module_name)), isolation_level=None)
+    c = conn.cursor()
+    return conn, c
+
+
+def close_database(conn, c):
+    c.close()
+    conn.close()
+
+
+lang = Language("init")
 FirstRun()

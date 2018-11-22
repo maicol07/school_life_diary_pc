@@ -2,9 +2,7 @@
 
 ## IMPORT LIBRERIE ##
 import os.path
-import sqlite3 as sql
 import subprocess
-import time
 import tkinter.messagebox as tkmb
 from tkinter import *
 from tkinter import filedialog, Toplevel
@@ -13,111 +11,19 @@ from zipfile import *
 
 import PIL.Image
 import PIL.ImageTk
-import polib
-from babel import Locale
 from tkfontchooser import askfont
-from transifex.api import TransifexAPI
 
 from common import init, variables
 from lib import datepicker, wckToolTips
 
 global path
 global fn_set
-global tr
 
 ## VARIABILI D'AMBIENTE ##
 module_name = __name__.replace("_", "")
 if "." in module_name:
     module_name = module_name[module_name.find(".") + 1:]
 path = variables.path
-tr = TransifexAPI('sld', 'sld2017', 'https://www.transifex.com/')
-
-lang = init.Language(module_name)
-
-conn, c = init.connect_database()
-
-
-def salvaLingua(cb, mode):
-    """
-        MODALITA' 1: Salva la lingua scelta
-        MODALITA' 2: Scarica le lingue aggiornate dal server di traduzione (Transifex)
-
-        Parametri
-        ----------
-        :param cb : (Tkinter Combobox)
-            Menu a tendina lingue.
-        :param mode : (string)
-            Modalità di avvio.
-
-        Ritorna
-        -------
-        Niente
-        """
-    try:
-        if mode == "download":
-            resources = sorted(["main", "settings", "note", "timetable", "subjects", "agenda", "voti"])
-            for resource in resources:
-                language = tr.list_languages('school-life-diary-pc', resource + "pot")
-                for z in language:
-                    path_download = os.path.join(path, 'locale', z, "LC_MESSAGES")
-                    if not (os.path.exists(os.path.join(path_download, (resource + '.po')))):
-                        if not (os.path.exists(os.path.join(path_download))):
-                            os.makedirs(os.path.join(path_download))
-                    tr.get_translation('school-life-diary-pc', resource + "pot", z,
-                                       os.path.join(path_download, (resource + '.po')))
-                    po_file = polib.pofile(os.path.join(path_download, (resource + '.po')))
-                    po_file.save_as_mofile(os.path.join(path_download, (resource + '.mo')))
-            fdata = open(os.path.join(path, r"locale/data.txt"), "w")
-            day = time.strftime("%c")
-            fdata.write(day)
-            fdata.close()
-            tkmb.showinfo(title=_("Lingue scaricate/aggiornate"),
-                          message=_("Le lingue sono state scaricate. Puoi selezionarne una dal menu."),
-                          parent=wl)
-            languages_list = os.listdir(os.path.join(path, "locale"))
-            languages_list.remove("data.txt")
-            updatecb(cb, languages_list)
-        else:
-            f = open(os.path.join(path, "language.txt"), "w")
-            idx = list(langd.values()).index(cb.get())
-            f.write(list(langd.keys())[idx])
-            f.close()
-            tkmb.showinfo(title=_("Salvataggio effettuato"),
-                          message=_(
-                              "La lingua scelta è stata salvata. School Life Diary ora si chiuderà. "
-                              "Riapri l'applicazione per rendere effettive le modifiche."),
-                          parent=wl)
-            exit()
-    except Exception as ex:
-        tkmb.showerror(title=_("Si è verificato un errore!"),
-                       message=_("È stato riscontrato un errore imprevisto. "
-                                 "Riprovare o contattare lo sviluppatore.") + "\n" + str(ex),
-                       parent=wl)
-
-
-def updatecb(cb, lang_folder_list):
-    """
-        Aggiorna le opzioni del menu a tendina con le lingue nella lista.
-
-        Parametri
-        ----------
-        :param cb : (string)
-            Menu a tendina lingue.
-        :param lang_folder_list : (string)
-            Lista dei codici lingue installate.
-
-        Ritorna
-        -------
-        Niente
-        """
-    global langd
-    langd = {}
-    for code in lang_folder_list:
-        lcode = code.split("_")
-        langname = Locale(lcode[0], lcode[1]).display_name
-        langd[code] = langname.title()
-    lang_list = list(langd.values())
-    cb["values"] = lang_list
 
 
 def cambiaLingua():
@@ -132,7 +38,9 @@ def cambiaLingua():
         -------
         Niente
         """
-    install_language()
+    if "lang" not in globals():
+        global lang
+        lang = init.Language(module_name)
     global wl
     wl = Toplevel()
     wl.configure(background="white")
@@ -140,18 +48,15 @@ def cambiaLingua():
     wl.iconbitmap(r"images/school_life_diary.ico")
     wl.geometry("500x275+100+100")
     lang_folder_list = os.listdir(os.path.join(path, "locale"))
-    lang_folder_list.remove("data.txt")
     e1 = Label(wl, text=_("Scegliere la propria lingua: "))
     e1.pack(pady=5)
-    lcb = Combobox(wl, postcommand=lambda: updatecb(lcb, lang_folder_list))
+    lcb = Combobox(wl, postcommand=lambda: lang.updatecb(lcb, lang_folder_list))
     if os.path.exists(os.path.join(path, "language.txt")):
         flang = open(os.path.join(path, "language.txt"))
-        lcb.set(flang.readline())
+        langname = lang.get_language_name(flang.readline())
+        lcb.set(langname.title())
     else:
-        windll = ctypes.windll.kernel32
-        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lcode = lgcode.split("_")
-        langname = Locale(lcode[0], lcode[1]).display_name
+        langname = lang.get_language_name()
         lcb.set(langname.title())
     lcb.pack(padx=10, pady=10)
     global ichange, idown
@@ -159,16 +64,16 @@ def cambiaLingua():
     ichange = PIL.ImageTk.PhotoImage(pchange)
     pdown = PIL.Image.open(r"icons/download.png")
     idown = PIL.ImageTk.PhotoImage(pdown)
-    btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: salvaLingua(lcb, "change"))
+    btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: lang.saveLanguage(lcb, "change"))
     btn.pack(padx=10, pady=10)
     label = Label(wl, text=_("Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti "
                              "dalla nostra piattaforma di traduzione."))
     label.pack(padx=10, pady=2)
     btn1 = Button(wl, text=_("SCARICA O AGGIORNA LINGUE"), image=idown, compound=LEFT,
-                  command=lambda: salvaLingua(lcb, "download"))
+                  command=lambda: lang.download_languages(lcb))
     btn1.pack(padx=5, pady=10)
-    if os.path.exists(os.path.join(path, r"locale/data.txt")):
-        fdata = open(os.path.join(path, r"locale/data.txt"), "r")
+    if os.path.exists(os.path.join(path, r"last_update_lang.txt")):
+        fdata = open(os.path.join(path, r"last_update_lang.txt"), "r")
         data = fdata.readline()
         if data == "":
             data = "N/A"
@@ -182,98 +87,96 @@ def cambiaLingua():
     wl.mainloop()
 
 
-def backup():
-    """
-        Backup dei dati dell'applicazione
-
-        Parametri
-        ----------
-        Nessuno
-
-        Ritorna
-        -------
-        Niente
+class BackupRestore(object):
+    def backup(self):
         """
-    fn_bk = "backups"
-    if not (os.path.exists(os.path.join(path, fn_bk))):
-        os.mkdir(os.path.join(path, fn_bk))
-    bzip = ZipFile(os.path.join(path,
-                                fn_bk,
-                                "backup-" + time.strftime("%d-%m-%Y") + "-" + time.strftime("%H-%M-%S") + ".zip"),
-                   "w", ZIP_DEFLATED)
-    filelist = [f for f in os.listdir(path) if f.endswith(".db")]
-    for f in filelist:
-        bzip.write(os.path.join(path, f), os.path.basename(os.path.join(path, f)))
-    bzip.close()
-    subprocess.Popen(r'explorer /select,"' + os.path.join(path,
-                                                          fn_bk,
-                                                          "backup-" + time.strftime("%d-%m-%Y") + "-" + time.strftime(
-                                                              "%H-%M-%S") + ".zip") + '"')
-    tkmb.showinfo(title=_("Backup effettuato!"),
-                  message="{0}{1}".format(_("""Backup creato con successo!
-Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: """),
-                                          os.path.join(path, fn_bk,
-                                                       "backup-{}-{}.zip".format(time.strftime("%d-%m-%Y"),
-                                                                                 time.strftime(
-                                                                                     "%H-%M-%S")))),
-                  parent=ws)
+            Backup dei dati dell'applicazione
 
+            Parametri
+            ----------
+            Nessuno
 
-def ripristino():
-    """
-        Ripristino dei dati da un file di backup.
-
-        Parametri
-        ----------
-        Nessuno
-
-        Ritorna
-        -------
-        Niente
-        """
-    try:
-        bkpath = filedialog.askopenfilename()
-        bk = ZipFile(bkpath, "r")
-        bk.extractall(path)
-        bk.close()
-        tkmb.showinfo(title=_("Ripristino effettuato!"),
-                      message=_("Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"),
+            Ritorna
+            -------
+            Niente
+            """
+        fn_bk = "backups"
+        if not (os.path.exists(os.path.join(path, fn_bk))):
+            os.mkdir(os.path.join(path, fn_bk))
+        bzip = ZipFile(os.path.join(path,
+                                    fn_bk,
+                                    "backup-" + time.strftime("%d-%m-%Y") + "-" + time.strftime("%H-%M-%S") + ".zip"),
+                       "w", ZIP_DEFLATED)
+        filelist = [f for f in os.listdir(path) if f.endswith(".db")]
+        for f in filelist:
+            bzip.write(os.path.join(path, f), os.path.basename(os.path.join(path, f)))
+        bzip.close()
+        subprocess.Popen(r'explorer /select,"' + os.path.join(path,
+                                                              fn_bk,
+                                                              "backup-" + time.strftime(
+                                                                  "%d-%m-%Y") + "-" + time.strftime(
+                                                                  "%H-%M-%S") + ".zip") + '"')
+        tkmb.showinfo(title=_("Backup effettuato!"),
+                      message="{0}{1}".format(_("""Backup creato con successo!
+    Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: """),
+                                              os.path.join(path, fn_bk,
+                                                           "backup-{}-{}.zip".format(time.strftime("%d-%m-%Y"),
+                                                                                     time.strftime(
+                                                                                         "%H-%M-%S")))),
                       parent=ws)
-    except FileNotFoundError:
-        return
-    except Exception as ex:
-        tkmb.showerror(title=_("Ripristino non riuscito"),
-                       message=_(
-                           "Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, "
-                           "oppure contattare lo sviluppatore.") + "\n" + ex,
-                       parent=ws)
 
-    # ELIMINAZIONE DI TUTTI I DATI
-
-
-def cancellatutto():
-    """
-        Cancella tutti i dati dell'applicazione.
-
-        Parametri
-        ----------
-        Nessuno
-
-        Ritorna
-        -------
-        Niente
+    def ripristino(self):
         """
-    tkmb.showinfo(title=_("Come cancellare i dati?"),
-                  message=_("""Dalla versione 1.0 di School Life Diary, con il cambiamento del database da file a 
-                  SQLite, non è più possibile cancellare i dati all'interno dell'app. È possibile, tuttavia, 
-                  cancellare i file .db che trovi nella cartella dell'applicazione (in Documenti\School Life Diary). 
-                  La cartella si aprirà dopo che hai premuto OK. 
+            Ripristino dei dati da un file di backup.
 
-Il software si chiuderà automaticamente dopo che la cartella si è aperta, per permettere la corretta eliminazione dei 
-dati."""),
-                  parent=ws)
-    subprocess.Popen(r'explorer "{}"'.format(path))
-    exit()
+            Parametri
+            ----------
+            Nessuno
+
+            Ritorna
+            -------
+            Niente
+            """
+        try:
+            bkpath = filedialog.askopenfilename()
+            bk = ZipFile(bkpath, "r")
+            bk.extractall(path)
+            bk.close()
+            tkmb.showinfo(title=_("Ripristino effettuato!"),
+                          message=_("Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"),
+                          parent=ws)
+        except FileNotFoundError:
+            return
+        except Exception as ex:
+            tkmb.showerror(title=_("Ripristino non riuscito"),
+                           message=_(
+                               "Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, "
+                               "oppure contattare lo sviluppatore.") + "\n" + ex,
+                           parent=ws)
+
+    def cancellatutto(self):
+        """
+            Cancella tutti i dati dell'applicazione.
+
+            Parametri
+            ----------
+            Nessuno
+
+            Ritorna
+            -------
+            Niente
+            """
+        tkmb.showinfo(title=_("Come cancellare i dati?"),
+                      message=_("""Dalla versione 1.0 di School Life Diary, con il cambiamento del database da file a 
+                      SQLite, non è più possibile cancellare i dati all'interno dell'app. È possibile, tuttavia, 
+                      cancellare i file .db che trovi nella cartella dell'applicazione (in Documenti\School Life Diary). 
+                      La cartella si aprirà dopo che hai premuto OK. 
+    
+    Il software si chiuderà automaticamente dopo che la cartella si è aperta, per permettere la corretta eliminazione dei 
+    dati."""),
+                      parent=ws)
+        subprocess.Popen(r'explorer "{}"'.format(path))
+        exit()
 
 
 def salvaImpostazioni(par, val):
@@ -292,12 +195,11 @@ def salvaImpostazioni(par, val):
         Niente
         """
     try:
-        sql_conn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
-        sql_cur = sql_conn.cursor()
+        conn, c = init.connect_database()
         # if par == "ORE_MAX_GIORNATA":
         # c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(str(int(val)), par))
         # else:
-        sql_cur.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(val, par))
+        c.execute("""UPDATE settings SET value = ? WHERE setting=?;""", (val, par))
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Parametro modificato con successo!"),
                       parent=ws)
@@ -365,7 +267,8 @@ def inizializza(cursor):
         -------
         Niente
         """
-    install_language()
+    global lang
+    lang = init.Language(module_name)
     global ds
     ds = {}
     cursor.execute("SELECT * FROM settings")
@@ -613,9 +516,8 @@ def creaFinestra():
         -------
         Niente
         """
-    connection = sql.connect(os.path.join(path, fn_set), isolation_level=None)
-    cur = connection.cursor()
-    inizializza(cur)
+    conn, c = init.connect_database()
+    inizializza(c)
     global ws
     ws = Toplevel()
     ws.configure(bg="white")
@@ -657,11 +559,11 @@ def creaFinestra():
     ifolder = PIL.Image.open(r"icons\folder.png")
     pfolder = PIL.ImageTk.PhotoImage(ifolder)
     bb = Button(fbr, text=_("ESEGUI BACKUP"), image=pbackup, compound="left",
-                command=backup)
+                command=BackupRestore.backup)
     br = Button(fbr, text=_("ESEGUI RIPRISTINO"), image=prestore, compound=LEFT,
-                command=ripristino)
+                command=BackupRestore.ripristino)
     bc = Button(fbr, text=_("CANCELLA TUTTO"), image=pdeleteall, compound=LEFT,
-                command=cancellatutto)
+                command=BackupRestore.cancellatutto)
     fu = Labelframe(ws, text=_("Utilità"))
     fu.pack()
     bl = Button(fu, text=_("APRI FINESTRA LINGUE"), image=planguage, compound=LEFT, command=cambiaLingua)
@@ -676,10 +578,5 @@ def creaFinestra():
     wckToolTips.register(bl, _("Apri la finestra per modificare la lingua in uso e/o scaricare/aggiornare le lingue dal"
                                " server"))
     ws.focus()
-    cur.close()
-    connection.close()
+    init.close_database(conn, c)
     ws.mainloop()
-
-
-c.close()
-conn.close()

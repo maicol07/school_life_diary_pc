@@ -35,7 +35,10 @@ conn, c = init.connect_database()
 
 ## CREAZIONE FINESTRA MENU PRINCIPALE ##
 global w
-w = ThemedTk(background="white", theme=c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone()[0])
+# DA SOSTITUIRE CON TK, Reinserire ThemedStyle.
+w = ThemedTk(background="white",
+             theme=c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone()[0])
+# Style().configure(".", font=c.execute("SELECT value FROM settings WHERE setting='PC_FONT'"))
 w.withdraw()
 w.title("School Life Diary")
 w.iconbitmap(r"images/school_life_diary.ico")
