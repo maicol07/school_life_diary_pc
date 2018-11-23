@@ -1,0 +1,164 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-11-19 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: modules\voti.py:104 modules\voti.py:485 modules\voti.py:554
+msgid "Tutte le materie"
+msgstr ""
+
+#: modules\voti.py:197
+msgid "Successo!"
+msgstr ""
+
+#: modules\voti.py:198
+msgid "Salvataggio effettuato con successo!"
+msgstr ""
+
+#: modules\voti.py:202
+msgid "Errore!"
+msgstr ""
+
+#: modules\voti.py:203
+msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
+msgstr ""
+
+#: modules\voti.py:224 modules\voti.py:254
+msgid "Nessun voto selezionato!"
+msgstr ""
+
+#: modules\voti.py:225 modules\voti.py:255
+msgid "Non è stato selezionato nessun voto. Si prega di selezionarne uno per apportare modifiche."
+msgstr ""
+
+#: modules\voti.py:229
+msgid "Conferma eliminazione"
+msgstr ""
+
+#: modules\voti.py:230
+msgid "Si è sicuri di voler eliminare il voto {} nella materia {}?"
+msgstr ""
+
+#: modules\voti.py:262
+msgid "Modifica voto"
+msgstr ""
+
+#: modules\voti.py:265 modules\voti.py:330
+msgid "Maschera di inserimento"
+msgstr ""
+
+#: modules\voti.py:267 modules\voti.py:332 modules\voti.py:565
+msgid "Voto"
+msgstr ""
+
+#: modules\voti.py:272 modules\voti.py:337 modules\voti.py:567
+msgid "Materia"
+msgstr ""
+
+#: modules\voti.py:277 modules\voti.py:341 modules\voti.py:569
+msgid "Data"
+msgstr ""
+
+#: modules\voti.py:286 modules\voti.py:349 modules\voti.py:573
+msgid "Tipo"
+msgstr ""
+
+#: modules\voti.py:288 modules\voti.py:351
+msgid "Altro"
+msgstr ""
+
+#: modules\voti.py:288 modules\voti.py:351
+msgid "Grafico"
+msgstr ""
+
+#: modules\voti.py:288 modules\voti.py:351
+msgid "Orale"
+msgstr ""
+
+#: modules\voti.py:288 modules\voti.py:351
+msgid "Pratico"
+msgstr ""
+
+#: modules\voti.py:288 modules\voti.py:351
+msgid "Scritto"
+msgstr ""
+
+#: modules\voti.py:291 modules\voti.py:353 modules\voti.py:575
+msgid "Peso"
+msgstr ""
+
+#: modules\voti.py:296 modules\voti.py:358 modules\voti.py:577
+msgid "Descrizione"
+msgstr ""
+
+#: modules\voti.py:303 modules\voti.py:365
+msgid "SALVA"
+msgstr ""
+
+#: modules\voti.py:327
+msgid "Inserisci voto"
+msgstr ""
+
+#: modules\voti.py:464 modules\voti.py:605
+msgid "Non è stato inserito nessun voto!"
+msgstr ""
+
+#: modules\voti.py:508 modules\voti.py:600
+msgid "MEDIA: {}"
+msgstr ""
+
+#: modules\voti.py:510 modules\voti.py:603
+msgid "MEDIA: {:.2f}"
+msgstr ""
+
+#: modules\voti.py:532
+msgid "Voti"
+msgstr ""
+
+#: modules\voti.py:540 modules\voti.py:548
+msgid "Aggiungi"
+msgstr ""
+
+#: modules\voti.py:542
+msgid "Modifica"
+msgstr ""
+
+#: modules\voti.py:544
+msgid "Elimina"
+msgstr ""
+
+#: modules\voti.py:550
+msgid "Visualizzazione per materia"
+msgstr ""
+
+#: modules\voti.py:557
+msgid "VISUALIZZA"
+msgstr ""
+
+#: modules\voti.py:563
+msgid "ID"
+msgstr ""
+
+#: modules\voti.py:571
+msgid "Periodo"
+msgstr ""
+
+#: modules\voti.py:590
+msgid ""
+"Per aggiungere un voto, usa il tasto destro del mouse su uno spazio vuoto della finestra.\n"
+"Per modificare un voto, fai doppio click sulla riga corrispondente.\n"
+"Per modificare o eliminare un voto, selezionare una riga e poi premere il tasto destro del mouse."
+msgstr ""
+

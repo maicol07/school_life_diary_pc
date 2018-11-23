@@ -1,0 +1,136 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-11-19 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: modules\note.py:165
+msgid "Successo!"
+msgstr ""
+
+#: modules\note.py:166
+msgid "Salvataggio effettuato con successo!"
+msgstr ""
+
+#: modules\note.py:170
+msgid "Errore!"
+msgstr ""
+
+#: modules\note.py:171
+msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore."
+msgstr ""
+
+#: modules\note.py:190 modules\note.py:239
+msgid "Nessuna annotazione selezionata"
+msgstr ""
+
+#: modules\note.py:191 modules\note.py:240
+msgid "Non è stata selezionata nessuna annotazione. Si prega di selezionarne una per apportarne le modifiche."
+msgstr ""
+
+#: modules\note.py:194
+msgid "Conferma eliminazione"
+msgstr ""
+
+#: modules\note.py:195
+msgid "Si è sicuri di voler eliminare la annotazione con titolo {}?"
+msgstr ""
+
+#: modules\note.py:245
+msgid "Modifica annotazione"
+msgstr ""
+
+#: modules\note.py:249
+msgid "Maschera di modifica"
+msgstr ""
+
+#: modules\note.py:251 modules\note.py:302 modules\note.py:478
+msgid "Titolo"
+msgstr ""
+
+#: modules\note.py:256 modules\note.py:307
+msgid "Contenuto"
+msgstr ""
+
+#: modules\note.py:261 modules\note.py:311
+msgid "Allegato (opzionale)"
+msgstr ""
+
+#: modules\note.py:266 modules\note.py:315
+msgid "Nessun file selezionato"
+msgstr ""
+
+#: modules\note.py:272 modules\note.py:318
+msgid "SCEGLI FILE"
+msgstr ""
+
+#: modules\note.py:277 modules\note.py:323
+msgid "SALVA"
+msgstr ""
+
+#: modules\note.py:297
+msgid "Inserisci annotazione"
+msgstr ""
+
+#: modules\note.py:300
+msgid "Maschera di inserimento"
+msgstr ""
+
+#: modules\note.py:399
+msgid "Apri Allegato"
+msgstr ""
+
+#: modules\note.py:450
+msgid "Annotazioni"
+msgstr ""
+
+#: modules\note.py:461 modules\note.py:469
+msgid "Aggiungi"
+msgstr ""
+
+#: modules\note.py:463
+msgid "Modifica"
+msgstr ""
+
+#: modules\note.py:465
+msgid "Elimina"
+msgstr ""
+
+#: modules\note.py:476
+msgid "ID"
+msgstr ""
+
+#: modules\note.py:479
+msgid "Descrizione"
+msgstr ""
+
+#: modules\note.py:480
+msgid "Data Creazione"
+msgstr ""
+
+#: modules\note.py:482
+msgid "Data Ultima Modifica"
+msgstr ""
+
+#: modules\note.py:484
+msgid "Allegati"
+msgstr ""
+
+#: modules\note.py:501
+msgid ""
+"Per aggiungere una annotazione, usa il tasto destro del mouse su uno spazio vuoto della finestra.\n"
+"Per aprire l'allegato di una annotazione, fai doppio click sulla riga corrispondente.\n"
+"Per modificare o eliminare una annotazione, selezionare una riga e poi premere il tasto destro del mouse"
+msgstr ""
+

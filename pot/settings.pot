@@ -1,0 +1,308 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-11-19 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: modules\settings.py:74
+msgid "Lingue scaricate/aggiornate"
+msgstr ""
+
+#: modules\settings.py:75
+msgid "Le lingue sono state scaricate. Puoi selezionarne una dal menu."
+msgstr ""
+
+#: modules\settings.py:85
+msgid "Salvataggio effettuato"
+msgstr ""
+
+#: modules\settings.py:86
+msgid "La lingua scelta è stata salvata. School Life Diary ora si chiuderà. Riapri l'applicazione per rendere effettive le modifiche."
+msgstr ""
+
+#: modules\settings.py:92
+msgid "Si è verificato un errore!"
+msgstr ""
+
+#: modules\settings.py:93
+msgid "È stato riscontrato un errore imprevisto. Riprovare o contattare lo sviluppatore."
+msgstr ""
+
+#: modules\settings.py:139
+msgid "Cambia lingua"
+msgstr ""
+
+#: modules\settings.py:144
+msgid "Scegliere la propria lingua: "
+msgstr ""
+
+#: modules\settings.py:162
+msgid "CAMBIA"
+msgstr ""
+
+#: modules\settings.py:164
+msgid ""
+"Scarica lingue non presenti nella lista\n"
+" o aggiorna quelle esistenti dalla nostra piattaforma di traduzione."
+msgstr ""
+
+#: modules\settings.py:167
+msgid "SCARICA O AGGIORNA LINGUE"
+msgstr ""
+
+#: modules\settings.py:177
+msgid "Mai scaricato"
+msgstr ""
+
+#: modules\settings.py:179
+msgid "Data ultimo aggiornamento: {}"
+msgstr ""
+
+#: modules\settings.py:212
+msgid "Backup effettuato!"
+msgstr ""
+
+#: modules\settings.py:213
+msgid ""
+"Backup creato con successo!\n"
+"Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: "
+msgstr ""
+
+#: modules\settings.py:239
+msgid "Ripristino effettuato!"
+msgstr ""
+
+#: modules\settings.py:240
+msgid "Backup ripristinato con successo! Riavvia per rendere effettive le modifiche!"
+msgstr ""
+
+#: modules\settings.py:245
+msgid "Ripristino non riuscito"
+msgstr ""
+
+#: modules\settings.py:246
+msgid "Purtroppo il ripristino non è riuscito. Riprova, anche con un backup diverso, oppure contattare lo sviluppatore."
+msgstr ""
+
+#: modules\settings.py:266
+msgid "Come cancellare i dati?"
+msgstr ""
+
+#: modules\settings.py:267
+msgid ""
+"Dalla versione 1.0 di School Life Diary, con il cambiamento del database da file a \n"
+"                  SQLite, non è più possibile cancellare i dati all'interno dell'app. È possibile, tuttavia, \n"
+"                  cancellare i file .db che trovi nella cartella dell'applicazione (in Documenti\\School Life Diary). \n"
+"                  La cartella si aprirà dopo che hai premuto OK. \n"
+"\n"
+"Il software si chiuderà automaticamente dopo che la cartella si è aperta, per permettere la corretta eliminazione dei \n"
+"dati."
+msgstr ""
+
+#: modules\settings.py:301
+msgid "Successo!"
+msgstr ""
+
+#: modules\settings.py:302
+msgid "Parametro modificato con successo!"
+msgstr ""
+
+#: modules\settings.py:327
+msgid "ERRORE!"
+msgstr ""
+
+#: modules\settings.py:328
+msgid ""
+"Si è verificato un errore durante la modifica del parametro. Riprovare o contattare lo sviluppatore! Errore riscontrato:\n"
+msgstr ""
+
+#: modules\settings.py:376 modules\settings.py:470
+msgid "Sì"
+msgstr ""
+
+#: modules\settings.py:378
+msgid "No"
+msgstr ""
+
+#: modules\settings.py:399
+msgid "Selettore carattere"
+msgstr ""
+
+#: modules\settings.py:409
+msgid "Carattere selezionato: {}"
+msgstr ""
+
+#: modules\settings.py:431
+msgid "Nessun parametro selezionato!"
+msgstr ""
+
+#: modules\settings.py:432
+msgid "Non hai selezionato nessun parametro!! Selezionane uno e poi ripeti l'operazione!"
+msgstr ""
+
+#: modules\settings.py:438
+msgid "Cambia valore - Impostazioni"
+msgstr ""
+
+#: modules\settings.py:444 modules\settings.py:455
+msgid "Scegliere il valore da attribuire al parametro:"
+msgstr ""
+
+#: modules\settings.py:452 modules\settings.py:460 modules\settings.py:489
+#: modules\settings.py:501 modules\settings.py:536
+msgid "SALVA"
+msgstr ""
+
+#: modules\settings.py:464
+msgid "Modifica il consenso per ricevere versioni non stabili:"
+msgstr ""
+
+#: modules\settings.py:466
+msgid "Modifica il consenso per controllare gli aggiornamenti all'avvio dell'applicazione."
+msgstr ""
+
+#: modules\settings.py:475
+msgid ""
+"Le versioni Alpha sono poco stabili e non adatte all'uso\n"
+"quotidiano. Possono contenere parecchi problemi, ma vengono\n"
+"aggiornate più frequentemente rispetto alle versioni beta e stabili."
+msgstr ""
+
+#: modules\settings.py:479
+msgid "Ricevi versioni alpha"
+msgstr ""
+
+#: modules\settings.py:481
+msgid ""
+"Le versioni Beta sono abbastanza stabili e abbastanza adatte all'uso\n"
+"quotidiano. Possono contenere alcuni problemi, ma vengono\n"
+"aggiornate più frequentemente rispetto alle versioni stabili."
+msgstr ""
+
+#: modules\settings.py:485
+msgid "Ricevi versioni beta"
+msgstr ""
+
+#: modules\settings.py:487
+msgid "Controlla aggiornamenti all'avvio di School Life Diary"
+msgstr ""
+
+#: modules\settings.py:492
+msgid "Scegli il carattere da utilizzare: "
+msgstr ""
+
+#: modules\settings.py:494
+msgid "Carattere attuale: {}"
+msgstr ""
+
+#: modules\settings.py:499
+msgid "Scegli carattere"
+msgstr ""
+
+#: modules\settings.py:515
+msgid "Cambia valore - Periodi - Impostazioni"
+msgstr ""
+
+#: modules\settings.py:517
+msgid "Imposta le date di inizio/fine dei due periodi scolastici"
+msgstr ""
+
+#: modules\settings.py:522
+msgid "Periodo n. {}"
+msgstr ""
+
+#: modules\settings.py:524
+msgid "Data di inizio"
+msgstr ""
+
+#: modules\settings.py:525
+msgid "Data di fine"
+msgstr ""
+
+#: modules\settings.py:541
+msgid "Imposta il numero di periodi"
+msgstr ""
+
+#: modules\settings.py:550
+msgid "OK"
+msgstr ""
+
+#: modules\settings.py:593
+msgid "Modifica"
+msgstr ""
+
+#: modules\settings.py:622
+msgid "Impostazioni"
+msgstr ""
+
+#: modules\settings.py:625
+msgid "Parametri"
+msgstr ""
+
+#: modules\settings.py:630
+msgid "ID"
+msgstr ""
+
+#: modules\settings.py:632
+msgid "Parametro"
+msgstr ""
+
+#: modules\settings.py:634
+msgid "Valore attuale"
+msgstr ""
+
+#: modules\settings.py:636
+msgid "Descrizione"
+msgstr ""
+
+#: modules\settings.py:644
+msgid "Per modificare un parametro, fai doppio click sulla riga corrispondente o tasto destro con il mouse."
+msgstr ""
+
+#: modules\settings.py:647
+msgid "Backup & Ripristino"
+msgstr ""
+
+#: modules\settings.py:659
+msgid "ESEGUI BACKUP"
+msgstr ""
+
+#: modules\settings.py:661
+msgid "ESEGUI RIPRISTINO"
+msgstr ""
+
+#: modules\settings.py:663
+msgid "CANCELLA TUTTO"
+msgstr ""
+
+#: modules\settings.py:665
+msgid "Utilità"
+msgstr ""
+
+#: modules\settings.py:667
+msgid "APRI FINESTRA LINGUE"
+msgstr ""
+
+#: modules\settings.py:668
+msgid "APRI CARTELLA LOCALE"
+msgstr ""
+
+#: modules\settings.py:675
+msgid "Apri la cartella dei dati di School Life Diary (con tutti i file dei database)"
+msgstr ""
+
+#: modules\settings.py:676
+msgid "Apri la finestra per modificare la lingua in uso e/o scaricare/aggiornare le lingue dal server"
+msgstr ""
+
