@@ -1,71 +1,30 @@
-import sys
-
-### IMPOSTAZIONE PERCORSO LIBRERIE ESTERNE ###
-sys.path.insert(0, 'lib')
-
-import ctypes
-import gettext
-import locale
 import os.path
 import sqlite3 as sql
-from common import variables
+
 import PIL.Image
 import PIL.ImageTk
 
+from common import variables, init
+
 global path
-global fn_set
-global fn_time
-fn_set = "settings.db"
-fn_time = "timetable.db"
 path = variables.path
-if not (os.path.exists(os.path.join(path, fn_time))):
-    fm = open(os.path.join(path, fn_time), "w")
+module_name = __name__.replace("_", "")
+if "." in module_name:
+    module_name = module_name[module_name.find(".") + 1:]
+
+if not (os.path.exists(os.path.join(path, "data.db"))):
+    fm = open(os.path.join(path, "data.db"), "w")
     fm.close()
-    conn = sql.connect(os.path.join(path, fn_time), isolation_level=None)
+    conn = sql.connect(os.path.join(path, "data.db"), isolation_level=None)
     c = conn.cursor()
     c.execute(
         """CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, 
         `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
-else:
-    conn = sql.connect(os.path.join(path, fn_time), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='timetable';")
-    ris = c.fetchall()
-    if not (len(ris) == 1):
-        c.execute(
-            """CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, 
-            `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
 
-    # Importazione di Tkinter
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import Toplevel
 import tkinter.messagebox as tkmb
-
-
-def install_language():
-    """
-    Installa la lingua del modulo orario.
-
-    Parametri
-    ----------
-    Nessuno
-
-    Ritorna
-    -------
-    Niente
-    """
-    if not (os.path.exists(os.path.join(path, "language.txt"))):
-        windll = ctypes.windll.kernel32
-        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lg = gettext.translation("timetable", localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    else:
-        fl = open(os.path.join(path, "language.txt"), "r")
-        lgcode = fl.readline()
-        lg = gettext.translation('timetable', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    lg.install()
-    locale.setlocale(locale.LC_ALL, lgcode)
-
 
 def Salvataggio(matl, matm, matmm, matg, matv, mats):
     """
@@ -91,8 +50,7 @@ def Salvataggio(matl, matm, matmm, matg, matv, mats):
         Niente
             """
     try:
-        connection = sql.connect(os.path.join(path, fn_time), isolation_level=None)
-        cur = connection.cursor()
+        connection, cur = conn, c
         gg = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab"]
         mat = [matl, matm, matmm, matg, matv, mats]
         for i in range(len(mat)):
@@ -151,15 +109,14 @@ def cambia_orario():
         return
     global wtc, matconn, matc
     wtc = Toplevel()
-    wtc.configure(bg="white")
+    variables.change_window_bg(wtc)
     wtc.title(_("Modifica Orario - Orario scolastico") + " - School Life Diary")
     wtc.iconbitmap(r"images/school_life_diary.ico")
     wtc.geometry("700x200+600+250")
     l = Label(wtc, text=_("Inserire le materie da visualizzare."))
     l.pack(padx=10, pady=10)
     try:
-        matconn = sql.connect(os.path.join(path, "subjects.db"), isolation_level=None)
-        matc = matconn.cursor()
+        matconn, matc = conn, c
         matc.execute("SELECT * FROM subjects")
         mat = matc.fetchall()
     except Exception as ex:
@@ -204,12 +161,10 @@ def cambia_orario():
     b = Button(f, text=_("SALVA"), image=isave, compound=LEFT,
                command=lambda: Salvataggio(el.get(), em.get(), emm.get(), eg.get(), ev.get(), es.get()))
     b.grid(row=0, column=0, padx=10, pady=10)
-    matc.close()
-    matconn.close()
     wtc.mainloop()
 
 
-def inizializza(cursor):
+def inizializza():
     """
         Inizializzazione modulo orario:
             • Crea dizionario con tutte l'orario, recuperate dal database.
@@ -217,24 +172,23 @@ def inizializza(cursor):
 
         Parametri
         ----------
-        :param cursor : (sqlite3.Cursor)
-            Cursore per la connessione al database SQLite
+        Nessuno
 
         Ritorna
         -------
         Niente
         """
+    ## INSTALLAZIONE LINGUA ##
+    lang = init.Language(module_name)
     global ds
     global dt
     ds = {}
-    sconn = sql.connect(os.path.join(path, fn_set), isolation_level=None)
-    sc = sconn.cursor()
-    sc.execute("SELECT * FROM settings")
-    sr = sc.fetchall()
+    c.execute("SELECT * FROM settings")
+    sr = c.fetchall()
     for row in sr:
         ds[row[0]] = (row[1], row[2])
-    cursor.execute("SELECT * FROM timetable")
-    r = cursor.fetchall()
+    c.execute("SELECT * FROM timetable")
+    r = c.fetchall()
     dt = {}
     # Struttura dizionario: {0:[MatLun,MatMar,MatMer,...],1:[...]}
     if not (r == []):
@@ -255,8 +209,6 @@ def inizializza(cursor):
                 for x in range(6):
                     l.append("")
                 dt[i] = l
-    sc.close()
-    sconn.close()
     return dt
 
 
@@ -296,13 +248,13 @@ def creaFinestra():
         -------
         Niente
         """
-    connection = sql.connect(os.path.join(path, fn_time), isolation_level=None)
-    cur = connection.cursor()
+    global conn, c
+    conn, c = init.connect_database()
     global dt
-    dt = inizializza(cur)
+    dt = inizializza()
     global wt
     wt = Toplevel()
-    wt.configure(bg="white")
+    variables.change_window_bg(wt)
     wt.title(_("Orario scolastico") + " - School Life Diary")
     wt.iconbitmap(r"images/school_life_diary.ico")
     wt.geometry("700x300+600+250")
@@ -366,7 +318,6 @@ def creaFinestra():
         "Per modificare l'orario, fai doppio click o usa il tasto destro del mouse su una riga e inserisci le materie "
         "dell'ora corrispondente."))
     li.pack()
-    cur.close()
-    connection.close()
     wt.focus()
     wt.mainloop()
+    init.close_database(conn, c)
