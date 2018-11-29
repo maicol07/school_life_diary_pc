@@ -43,6 +43,7 @@ def cambiaLingua():
         lang = init.Language(module_name)
     global wl
     wl = Toplevel()
+    variables.change_window_bg(wl)
     wl.title(_("Cambia lingua") + " - School Life Diary")
     wl.iconbitmap(r"images/school_life_diary.ico")
     wl.geometry("500x275+100+100")
