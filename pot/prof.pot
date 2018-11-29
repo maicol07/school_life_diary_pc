@@ -1,0 +1,144 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-11-19 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: modules\prof.py:189
+msgid "Salvataggio effettuato con successo!"
+msgstr ""
+
+#: modules\prof.py:189
+msgid "Successo!"
+msgstr ""
+
+#: modules\prof.py:193
+msgid "Errore!"
+msgstr ""
+
+#: modules\prof.py:194
+msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore. Errore riscontrato:"
+msgstr ""
+
+#: modules\prof.py:215 modules\prof.py:340
+msgid "Nessun professore selezionato!"
+msgstr ""
+
+#: modules\prof.py:216
+msgid "Non è stato selezionato nessun professore. Si prega di selezionarne uno per eliminarlo."
+msgstr ""
+
+#: modules\prof.py:219
+msgid "Conferma eliminazione"
+msgstr ""
+
+#: modules\prof.py:247
+msgid "File Immagini"
+msgstr ""
+
+#: modules\prof.py:251 modules\prof.py:302 modules\prof.py:365
+msgid "Seleziona immagine"
+msgstr ""
+
+#: modules\prof.py:285
+msgid "Inserisci professore"
+msgstr ""
+
+#: modules\prof.py:288
+msgid "Maschera di inserimento"
+msgstr ""
+
+#: modules\prof.py:290 modules\prof.py:353
+msgid "Nome:"
+msgstr ""
+
+#: modules\prof.py:296 modules\prof.py:359
+msgid "Cognome:"
+msgstr ""
+
+#: modules\prof.py:300 modules\prof.py:363
+msgid "Immagine:"
+msgstr ""
+
+#: modules\prof.py:305 modules\prof.py:385
+msgid "Sito web:"
+msgstr ""
+
+#: modules\prof.py:310 modules\prof.py:397
+msgid "Email:"
+msgstr ""
+
+#: modules\prof.py:316 modules\prof.py:410
+msgid "SALVA"
+msgstr ""
+
+#: modules\prof.py:341
+msgid "Non è stato selezionato nessun professore. Si prega di selezionarne uno per apportare modifiche."
+msgstr ""
+
+#: modules\prof.py:348
+msgid "Modifica professore"
+msgstr ""
+
+#: modules\prof.py:351
+msgid "Maschera di modifica"
+msgstr ""
+
+#: modules\prof.py:483
+msgid "Professori"
+msgstr ""
+
+#: modules\prof.py:491 modules\prof.py:499
+msgid "Aggiungi"
+msgstr ""
+
+#: modules\prof.py:493
+msgid "Modifica"
+msgstr ""
+
+#: modules\prof.py:495
+msgid "Elimina"
+msgstr ""
+
+#: modules\prof.py:505
+msgid "ID"
+msgstr ""
+
+#: modules\prof.py:507
+msgid "Nome"
+msgstr ""
+
+#: modules\prof.py:509
+msgid "Cognome"
+msgstr ""
+
+#: modules\prof.py:511
+msgid "Sito web"
+msgstr ""
+
+#: modules\prof.py:513
+msgid "Email"
+msgstr ""
+
+#: modules\prof.py:538
+msgid "Immagine non esistente!"
+msgstr ""
+
+#: modules\prof.py:544
+msgid ""
+"Per aggiungere un professore, usa il tasto destro del mouse su uno spazio vuoto della finestra.\n"
+"Per modificare un professore, fai doppio click sulla riga corrispondente.\n"
+"Per modificare o eliminare un professore, selezionare una riga e poi premere il tasto destro del mouse"
+msgstr ""
+

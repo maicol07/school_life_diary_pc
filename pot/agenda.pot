@@ -1,0 +1,256 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-11-19 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: modules\agenda.py:134
+msgid "Nessuna data inserita!"
+msgstr ""
+
+#: modules\agenda.py:134
+msgid "Per proseguire è necessario inserire una data."
+msgstr ""
+
+#: modules\agenda.py:137
+msgid "Nessun titolo inserito!"
+msgstr ""
+
+#: modules\agenda.py:137
+msgid "Per proseguire è necessario inserire un titolo."
+msgstr ""
+
+#: modules\agenda.py:190
+msgid "Successo!"
+msgstr ""
+
+#: modules\agenda.py:191
+msgid "Salvataggio effettuato con successo!"
+msgstr ""
+
+#: modules\agenda.py:217
+msgid "Nessun evento selezionato!"
+msgstr ""
+
+#: modules\agenda.py:218
+msgid "Non è stato selezionato nessun evento. Si prega di selezionarne uno per apportare modifiche."
+msgstr ""
+
+#: modules\agenda.py:223 modules\agenda.py:228
+msgid "Conferma eliminazione"
+msgstr ""
+
+#: modules\agenda.py:224
+msgid "Si è sicuri di voler eliminare l'evento con titolo {}, in data {}, collegato alla materia {}?"
+msgstr ""
+
+#: modules\agenda.py:229
+msgid "Si è sicuri di voler eliminare l'evento con titolo {}, in data {}?"
+msgstr ""
+
+#: modules\agenda.py:255 modules\agenda.py:331 modules\agenda.py:414
+msgid "Verifica"
+msgstr ""
+
+#: modules\agenda.py:299
+msgid "Nessun evento selezionato"
+msgstr ""
+
+#: modules\agenda.py:300
+msgid "Non è stato selezionato nessun evento. Si prega di selezionarne uno per apportarne le modifiche."
+msgstr ""
+
+#: modules\agenda.py:306
+msgid "Modifica evento"
+msgstr ""
+
+#: modules\agenda.py:309
+msgid "Maschera di modifica"
+msgstr ""
+
+#: modules\agenda.py:311 modules\agenda.py:395 modules\agenda.py:696
+msgid "Titolo"
+msgstr ""
+
+#: modules\agenda.py:316 modules\agenda.py:400 modules\agenda.py:698
+msgid "Descrizione"
+msgstr ""
+
+#: modules\agenda.py:321 modules\agenda.py:404 modules\agenda.py:692
+msgid "Data"
+msgstr ""
+
+#: modules\agenda.py:326 modules\agenda.py:701
+msgid "Tipo verifica"
+msgstr ""
+
+#: modules\agenda.py:327 modules\agenda.py:411
+msgid "Interrogazione"
+msgstr ""
+
+#: modules\agenda.py:327 modules\agenda.py:411
+msgid "Verifica scritta"
+msgstr ""
+
+#: modules\agenda.py:329 modules\agenda.py:412
+msgid "Tipo evento"
+msgstr ""
+
+#: modules\agenda.py:331 modules\agenda.py:414
+msgid "Compito"
+msgstr ""
+
+#: modules\agenda.py:331 modules\agenda.py:414
+msgid "Promemoria"
+msgstr ""
+
+#: modules\agenda.py:335 modules\agenda.py:417 modules\agenda.py:699
+msgid "Materia"
+msgstr ""
+
+#: modules\agenda.py:348 modules\agenda.py:429
+msgid "Allegato (opzionale)"
+msgstr ""
+
+#: modules\agenda.py:352 modules\agenda.py:433
+msgid "Nessun file selezionato"
+msgstr ""
+
+#: modules\agenda.py:362 modules\agenda.py:436
+msgid "SCEGLI FILE"
+msgstr ""
+
+#: modules\agenda.py:367 modules\agenda.py:441
+msgid "SALVA"
+msgstr ""
+
+#: modules\agenda.py:390
+msgid "Inserisci evento"
+msgstr ""
+
+#: modules\agenda.py:393
+msgid "Maschera di inserimento"
+msgstr ""
+
+#: modules\agenda.py:410
+msgid "Tipo Verifica"
+msgstr ""
+
+#: modules\agenda.py:508 modules\agenda.py:672
+msgid "Aprile"
+msgstr ""
+
+#: modules\agenda.py:508 modules\agenda.py:672
+msgid "Febbraio"
+msgstr ""
+
+#: modules\agenda.py:508 modules\agenda.py:672
+msgid "Gennaio"
+msgstr ""
+
+#: modules\agenda.py:508 modules\agenda.py:672
+msgid "Giugno"
+msgstr ""
+
+#: modules\agenda.py:508 modules\agenda.py:672
+msgid "Luglio"
+msgstr ""
+
+#: modules\agenda.py:508 modules\agenda.py:672
+msgid "Maggio"
+msgstr ""
+
+#: modules\agenda.py:508 modules\agenda.py:672
+msgid "Marzo"
+msgstr ""
+
+#: modules\agenda.py:509 modules\agenda.py:673
+msgid "Agosto"
+msgstr ""
+
+#: modules\agenda.py:509 modules\agenda.py:673
+msgid "Dicembre"
+msgstr ""
+
+#: modules\agenda.py:509 modules\agenda.py:673
+msgid "Novembre"
+msgstr ""
+
+#: modules\agenda.py:509 modules\agenda.py:673
+msgid "Ottobre"
+msgstr ""
+
+#: modules\agenda.py:509 modules\agenda.py:673
+msgid "Settembre"
+msgstr ""
+
+#: modules\agenda.py:511 modules\agenda.py:680
+msgid "Tutto l'anno"
+msgstr ""
+
+#: modules\agenda.py:591
+msgid "Apri Allegato"
+msgstr ""
+
+#: modules\agenda.py:645
+msgid "Agenda - School Life Diary"
+msgstr ""
+
+#: modules\agenda.py:651 modules\agenda.py:666
+msgid "Aggiungi"
+msgstr ""
+
+#: modules\agenda.py:668
+msgid "Modifica"
+msgstr ""
+
+#: modules\agenda.py:670
+msgid "Elimina"
+msgstr ""
+
+#: modules\agenda.py:676
+msgid "Visualizzazione per mese"
+msgstr ""
+
+#: modules\agenda.py:684
+msgid "VISUALIZZA"
+msgstr ""
+
+#: modules\agenda.py:690
+msgid "ID"
+msgstr ""
+
+#: modules\agenda.py:694
+msgid "Tipo"
+msgstr ""
+
+#: modules\agenda.py:703
+msgid "Allegati"
+msgstr ""
+
+#: modules\agenda.py:730
+msgid ""
+"Per aggiungere un evento occorre premere con il tasto destro o su uno spazio vuoto della finestra e premere Aggiungi.\n"
+"Per modificare un evento clicca con il tasto destro su un evento nella tabella eseleziona Modifica.\n"
+"Per eliminare un evento clicca con il tasto destro su un evento nella tabella eseleziona Elimina."
+msgstr ""
+
+#: modules\agenda.py:738
+msgid "Nessun evento è stato pianificato."
+msgstr ""
+
+#: modules\agenda.py:740
+msgid "Per aggiungere un evento occorre premere con il tasto destro su uno spazio vuoto della finestra e premere Aggiungi."
+msgstr ""
+

@@ -1,0 +1,133 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2018-11-19 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 1.8.4\n"
+
+#: common\init.py:33
+msgid "Lingua non impostata!"
+msgstr ""
+
+#: common\init.py:34
+msgid "La lingua impostata non è stata riconosciuta. Per risolvere prova a eliminare il file in Documenti/School Life Diary/language.txt . Se il problema non si risolve, contattare lo sviluppatore. Errore: "
+msgstr ""
+
+#: common\init.py:79
+msgid "Versione non stabile rilevata!"
+msgstr ""
+
+#: common\init.py:80
+msgid "La versione che stai utilizzando è una versione ALPHA non stabile, che può contenere bug e problemi vari, anche gravi. Ti consigliamo di non usare questa versione in ambito produttivo."
+msgstr ""
+
+#: common\init.py:85
+msgid "Versione BETA non stabile rilevata!"
+msgstr ""
+
+#: common\init.py:86
+msgid "La versione che stai utilizzando è una versione BETA non stabile, che può contenere piccoli bug e problemi. Puoi usare questa versione in ambito produttivo, ma segnala i bug, se dovessi incontrarne uno, in vista del rilascio stabile."
+msgstr ""
+
+#: common\init.py:96 common\init.py:117 common\init.py:125 common\init.py:310
+msgid "Sì"
+msgstr ""
+
+#: common\init.py:111
+msgid "Nuova versione disponibile!"
+msgstr ""
+
+#: common\init.py:112
+msgid "È disponibile una nuova versione stabile di School Life Diary. Ti consigliamo di aggiornare il prima possibile per non perdere le nuove funzionalità, i miglioramenti e le correzioni di problemi. Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione stabile {}?"
+msgstr ""
+
+#: common\init.py:118
+msgid "Nuova versione BETA disponibile!"
+msgstr ""
+
+#: common\init.py:119
+msgid "È disponibile una nuova versione BETA di School Life Diary. Queste versioni non sono del tutto stabili e possono contenere alcuni problemi, ma includono nuove funzionalità. Ricevi questo avviso perchè hai dato il tuo consenso a ricevere le notifiche di versioni BETA Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione BETA {}?"
+msgstr ""
+
+#: common\init.py:126
+msgid "Nuova versione ALPHA disponibile!"
+msgstr ""
+
+#: common\init.py:127
+msgid "È disponibile una nuova versione ALPHA di School Life Diary. Queste versioni non sono stabili e possono contenere parecchi problemi, ma includono nuove funzionalità. Ricevi questo avviso perchè hai dato il tuo consenso a ricevere le notifiche di nuove versioni ALPHA. Vuoi accedere alla pagina da cui scaricare l'aggiornamento alla versione ALPHA {}?"
+msgstr ""
+
+#: common\init.py:138
+msgid "Nessuna connessione ad internet"
+msgstr ""
+
+#: common\init.py:139
+msgid "Non è disponibile nessuna connessione ad internet per la ricerca degli aggiornamenti. La ricerca verrà ritentata la prossima volta che sarà riaperto il programma."
+msgstr ""
+
+#: common\init.py:199
+msgid "Impossibile stabilire la connessione"
+msgstr ""
+
+#: common\init.py:200
+msgid "[WinError 10060] Impossibile stabilire la connessione.Risposta non corretta della parte connessa dopo l'intervallo di tempo oppure mancata risposta dall'host collegato. Riaprire l'app e riprovare."
+msgstr ""
+
+#: common\init.py:247
+msgid "Attenzione! Database non presente!"
+msgstr ""
+
+#: common\init.py:248
+msgid "Non hai effettuato la migrazione del database. Il programma si avvierà, ma non saranno visualizzati i tuoi dati fino a che non effettuerai la migrazione."
+msgstr ""
+
+#: common\init.py:251
+msgid "Conferma download strumento migrazione database"
+msgstr ""
+
+#: common\init.py:252
+msgid "Vuoi scaricare lo strumento di migrazione del database?"
+msgstr ""
+
+#: common\init.py:301
+msgid "Numero di ore massime per giornate da visualizzare nell'orario"
+msgstr ""
+
+#: common\init.py:303
+msgid "Tema visivo dell'applicazione"
+msgstr ""
+
+#: common\init.py:304 common\init.py:306
+msgid "No"
+msgstr ""
+
+#: common\init.py:305
+msgid "Consenso a ricevere notifiche di versioni alpha"
+msgstr ""
+
+#: common\init.py:307
+msgid "Consenso a ricevere notifiche di versioni beta"
+msgstr ""
+
+#: common\init.py:309
+msgid "Carattere utilizzato in tutti i testi dell'applicazione"
+msgstr ""
+
+#: common\init.py:311
+msgid "Consenso a controllare all'avvio dell'app se sono disponibili aggiornamenti."
+msgstr ""
+
+#: common\init.py:313
+msgid "Periodi scolastici"
+msgstr ""

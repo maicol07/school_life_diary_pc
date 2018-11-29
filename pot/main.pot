@@ -1,0 +1,115 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-11-19 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: main.py:60 main.py:133
+msgid "Informazioni"
+msgstr ""
+
+#: main.py:70
+msgid "sviluppato e mantenuto da maicol07"
+msgstr ""
+
+#: main.py:72
+msgid "Link"
+msgstr ""
+
+#: main.py:74
+msgid "Sito web"
+msgstr ""
+
+#: main.py:76
+msgid "Pagina del progetto su GitHub"
+msgstr ""
+
+#: main.py:79
+msgid "Sito web sviluppatore"
+msgstr ""
+
+#: main.py:82
+msgid ""
+"Si ringrazia Roundicons di flaticon.com per l'icona principale dell'applicazione, la quale ha licenza Creative Commons BY 3.0.\n"
+"Alcune icone fatte da Pixel Buddha, Freepik, Roundicons, Dimitry Miroliubov e Smash Icons di www.flaticon.com hanno licenza Creative Commons BY 3.0"
+msgstr ""
+
+#: main.py:87
+msgid "Traduttori: "
+msgstr ""
+
+#: main.py:91
+msgid "Vuoi diventare anche tu un traduttore?"
+msgstr ""
+
+#: main.py:92
+msgid "CLICCA QUI!"
+msgstr ""
+
+#: main.py:96
+msgid "Registro delle modifiche"
+msgstr ""
+
+#: main.py:121
+msgid "File"
+msgstr ""
+
+#: main.py:122
+msgid "Esci"
+msgstr ""
+
+#: main.py:124
+msgid "Opzioni"
+msgstr ""
+
+#: main.py:125
+msgid "Impostazioni"
+msgstr ""
+
+#: main.py:127
+msgid "Lingua"
+msgstr ""
+
+#: main.py:129
+msgid "Aiuto"
+msgstr ""
+
+#: main.py:130
+msgid "Guida"
+msgstr ""
+
+#: main.py:154
+msgid "ORARIO"
+msgstr ""
+
+#: main.py:159
+msgid "MATERIE"
+msgstr ""
+
+#: main.py:163
+msgid "PROFESSORI"
+msgstr ""
+
+#: main.py:166
+msgid "VOTI"
+msgstr ""
+
+#: main.py:169
+msgid "ANNOTAZIONI"
+msgstr ""
+
+#: main.py:172
+msgid "AGENDA"
+msgstr ""
+

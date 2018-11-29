@@ -1,0 +1,116 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-11-19 15:51+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=cp1252\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: modules\subjects.py:149
+msgid "Successo!"
+msgstr ""
+
+#: modules\subjects.py:150
+msgid "Salvataggio effettuato con successo!"
+msgstr ""
+
+#: modules\subjects.py:154
+msgid "Errore!"
+msgstr ""
+
+#: modules\subjects.py:155
+msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore"
+msgstr ""
+
+#: modules\subjects.py:175 modules\subjects.py:290
+msgid "Nessuna materia selezionata!"
+msgstr ""
+
+#: modules\subjects.py:176 modules\subjects.py:291
+msgid "Non è stata selezionata nessuna materia. Si prega di selezionarne una per apportare modifiche."
+msgstr ""
+
+#: modules\subjects.py:180
+msgid "Conferma eliminazione"
+msgstr ""
+
+#: modules\subjects.py:181
+msgid "Si è sicuri di voler eliminare la materia {} ?"
+msgstr ""
+
+#: modules\subjects.py:241
+msgid "Inserisci materia"
+msgstr ""
+
+#: modules\subjects.py:244
+msgid "Maschera di inserimento"
+msgstr ""
+
+#: modules\subjects.py:246 modules\subjects.py:303
+msgid "Materia"
+msgstr ""
+
+#: modules\subjects.py:251 modules\subjects.py:308
+msgid "Colore"
+msgstr ""
+
+#: modules\subjects.py:256 modules\subjects.py:313 modules\subjects.py:425
+msgid "Professore"
+msgstr ""
+
+#: modules\subjects.py:267 modules\subjects.py:325
+msgid "SALVA"
+msgstr ""
+
+#: modules\subjects.py:298
+msgid "Modifica materia"
+msgstr ""
+
+#: modules\subjects.py:301
+msgid "Maschera di modifica"
+msgstr ""
+
+#: modules\subjects.py:397
+msgid "Materie"
+msgstr ""
+
+#: modules\subjects.py:405 modules\subjects.py:413
+msgid "Aggiungi"
+msgstr ""
+
+#: modules\subjects.py:407
+msgid "Modifica"
+msgstr ""
+
+#: modules\subjects.py:409
+msgid "Elimina"
+msgstr ""
+
+#: modules\subjects.py:419
+msgid "ID"
+msgstr ""
+
+#: modules\subjects.py:421
+msgid "Nome Materia"
+msgstr ""
+
+#: modules\subjects.py:423
+msgid "Colore Materia"
+msgstr ""
+
+#: modules\subjects.py:434
+msgid ""
+"Per aggiungere una materia, usa il tasto destro del mouse su uno spazio vuoto della finestra.\n"
+"Per modificare una materia, fai doppio click sulla riga corrispondente.\n"
+"Per modificare o eliminare una materia, selezionare una riga e poi premere il tasto destro del mouse."
+msgstr ""
+
