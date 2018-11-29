@@ -22,6 +22,8 @@ path = variables.path
 
 
 class Language(object):
+    languages = []
+
     def __init__(self, domain):
         if not (os.path.exists(os.path.join(path, "locale"))):
             self.download_languages()
@@ -37,6 +39,9 @@ class Language(object):
                     lg = gettext.translation(domain, localedir=os.path.join(path, 'locale'), languages=[lgcode])
                 else:
                     lg = gettext.translation(domain, localedir=os.path.join(path, 'locale'), languages=[lgcode])
+            except FileNotFoundError:
+                lgcode = self.auto_recognize_language()
+                lg = gettext.translation(domain, localedir=os.path.join(path, 'locale'), languages=[lgcode])
             except Exception as ex:
                 try:
                     tkmb.showerror(title=_("Lingua non impostata!"),
@@ -49,7 +54,6 @@ class Language(object):
                                    message=r"Can't recognize the set language. To fix this try to delete the file in "
                                            r"Documents/School Life Diary/language.txt . If the problem still occurs, "
                                            r"contact the developer. Error: " + str(ex))
-                w.withdraw()
         lg.install()
         locale.setlocale(locale.LC_ALL, lgcode)
         self.lgcode = lgcode
@@ -84,8 +88,7 @@ class Language(object):
             if cb is not None:
                 tkmb.showinfo(title=_("Lingue scaricate/aggiornate"),
                               message=_("Le lingue sono state scaricate. Puoi selezionarne una dal menu."))
-                languages_list = os.listdir(os.path.join(path, "locale"))
-                self.updatecb(cb, languages_list)
+                self.updatecb(cb)
         except ConnectionError as ex:
             if os.path.exists("locale"):
                 shutil.copy("locale", path)
@@ -102,7 +105,7 @@ class Language(object):
         langname = Locale(lcode[0], lcode[1]).display_name
         return langname
 
-    def updatecb(self, cb, lang_folder_list):
+    def updatecb(self, cb):
         """
             Aggiorna le opzioni del menu a tendina con le lingue nella lista.
 
@@ -110,8 +113,6 @@ class Language(object):
             ----------
             :param cb : (string)
                 Menu a tendina lingue.
-            :param lang_folder_list : (string)
-                Lista dei codici lingue installate.
 
             Ritorna
             -------
@@ -119,15 +120,16 @@ class Language(object):
             """
         global langd
         langd = {}
+        lang_folder_list = os.listdir(os.path.join(path, "locale"))
         for code in lang_folder_list:
             langd[code] = lang.get_language_name(code)
         lang_list = list(langd.values())
+        self.languages = langd
         cb["values"] = lang_list
 
-    def saveLanguage(self, cb, mode):
+    def saveLanguage(self, cb):
         """
-            MODALITA' 1: Salva la lingua scelta
-            MODALITA' 2: Scarica le lingue aggiornate dal server di traduzione (Transifex)
+            Salva la lingua scelta
 
             Parametri
             ----------
@@ -141,16 +143,17 @@ class Language(object):
             Niente
             """
         try:
+            codes = list(self.languages.keys())
+            lang_names = [x.lower() for x in list(self.languages.values())]
+            newlang = codes[lang_names.index(cb.get().lower())]
             f = open(os.path.join(path, "language.txt"), "w")
-            idx = list(langd.values()).index(cb.get())
-            f.write(list(langd.keys())[idx])
+            f.write(newlang)
             f.close()
-            tkmb.showinfo(title=_("Salvataggio effettuato"),
-                          message=_(
-                              "La lingua scelta è stata salvata. School Life Diary ora si chiuderà. "
-                              "Riapri l'applicazione per rendere effettive le modifiche."),
-                          parent=wl)
-            exit()
+            restart = tkmb.showinfo(title=_("Salvataggio effettuato"),
+                                    message=_("La lingua scelta è stata salvata. Vuoi riavviare School Life Diary per "
+                                              "applicare le modifiche?"))
+            if restart is True:
+                os.execl(sys.executable, sys.executable, *sys.argv)
         except Exception as ex:
             tkmb.showerror(title=_("Si è verificato un errore!"),
                            message=_("È stato riscontrato un errore imprevisto. "

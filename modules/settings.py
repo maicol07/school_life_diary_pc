@@ -43,28 +43,31 @@ def cambiaLingua():
         lang = init.Language(module_name)
     global wl
     wl = Toplevel()
-    wl.configure(background="white")
     wl.title(_("Cambia lingua") + " - School Life Diary")
     wl.iconbitmap(r"images/school_life_diary.ico")
     wl.geometry("500x275+100+100")
-    lang_folder_list = os.listdir(os.path.join(path, "locale"))
     e1 = Label(wl, text=_("Scegliere la propria lingua: "))
     e1.pack(pady=5)
-    lcb = Combobox(wl, postcommand=lambda: lang.updatecb(lcb, lang_folder_list))
+    lcb = Combobox(wl, postcommand=lambda: lang.updatecb(lcb))
     if os.path.exists(os.path.join(path, "language.txt")):
         flang = open(os.path.join(path, "language.txt"))
-        langname = lang.get_language_name(flang.readline())
+        file_lang = flang.readline()
+        if file_lang == "":
+            langname = lang.get_language_name()
+        else:
+            langname = lang.get_language_name(file_lang)
         lcb.set(langname.title())
     else:
         langname = lang.get_language_name()
         lcb.set(langname.title())
     lcb.pack(padx=10, pady=10)
+    lang.updatecb(lcb)
     global ichange, idown
     pchange = PIL.Image.open(r"icons/restore.png")
     ichange = PIL.ImageTk.PhotoImage(pchange)
     pdown = PIL.Image.open(r"icons/download.png")
     idown = PIL.ImageTk.PhotoImage(pdown)
-    btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: lang.saveLanguage(lcb, "change"))
+    btn = Button(wl, text=_("CAMBIA"), image=ichange, compound=LEFT, command=lambda: lang.saveLanguage(lcb))
     btn.pack(padx=10, pady=10)
     label = Label(wl, text=_("Scarica lingue non presenti nella lista\n o aggiorna quelle esistenti "
                              "dalla nostra piattaforma di traduzione."))
@@ -88,7 +91,7 @@ def cambiaLingua():
 
 
 class BackupRestore(object):
-    def backup(self):
+    def backup(self=None):
         """
             Backup dei dati dell'applicazione
 
@@ -117,15 +120,16 @@ class BackupRestore(object):
                                                                   "%d-%m-%Y") + "-" + time.strftime(
                                                                   "%H-%M-%S") + ".zip") + '"')
         tkmb.showinfo(title=_("Backup effettuato!"),
-                      message="{0}{1}".format(_("""Backup creato con successo!
-    Puoi trovare il backup nella cartella appena aperta o al seguente percorso del tuo computer: """),
+                      message="{0}{1}".format(_("Backup creato con successo!"
+                                                "Puoi trovare il backup nella cartella appena aperta o al seguente "
+                                                "percorso del tuo computer: "),
                                               os.path.join(path, fn_bk,
                                                            "backup-{}-{}.zip".format(time.strftime("%d-%m-%Y"),
                                                                                      time.strftime(
                                                                                          "%H-%M-%S")))),
                       parent=ws)
 
-    def ripristino(self):
+    def ripristino(self=None):
         """
             Ripristino dei dati da un file di backup.
 
@@ -167,13 +171,12 @@ class BackupRestore(object):
             Niente
             """
         tkmb.showinfo(title=_("Come cancellare i dati?"),
-                      message=_("""Dalla versione 1.0 di School Life Diary, con il cambiamento del database da file a 
-                      SQLite, non è più possibile cancellare i dati all'interno dell'app. È possibile, tuttavia, 
-                      cancellare i file .db che trovi nella cartella dell'applicazione (in Documenti\School Life Diary). 
-                      La cartella si aprirà dopo che hai premuto OK. 
-    
-    Il software si chiuderà automaticamente dopo che la cartella si è aperta, per permettere la corretta eliminazione dei 
-    dati."""),
+                      message=_("Dalla versione 1.0 di School Life Diary, con il cambiamento del database da file a "
+                                "SQLite, non è più possibile cancellare i dati all'interno dell'app. È possibile, "
+                                "tuttavia, cancellare i file .db che trovi nella cartella dell'applicazione "
+                                "(in Documenti\School Life Diary). La cartella si aprirà dopo che hai premuto OK. "
+                                "Il software si chiuderà automaticamente dopo che la cartella si è aperta, per "
+                                "permettere la corretta eliminazione dei dati."),
                       parent=ws)
         subprocess.Popen(r'explorer "{}"'.format(path))
         exit()
@@ -196,9 +199,6 @@ def salvaImpostazioni(par, val):
         """
     try:
         conn, c = init.connect_database()
-        # if par == "ORE_MAX_GIORNATA":
-        # c.execute("""UPDATE settings SET value = '{}' WHERE setting='{}';""".format(str(int(val)), par))
-        # else:
         c.execute("""UPDATE settings SET value = ? WHERE setting=?;""", (val, par))
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Parametro modificato con successo!"),
@@ -208,22 +208,16 @@ def salvaImpostazioni(par, val):
         wcv.destroy()
         ws.destroy()
         if par == "PC_THEME":
-            s = variables.s
-            s.set_theme(val)
-            s.configure("TFrame", background="white")
-            s.configure("TButton", height=100)
-            s.configure("TLabel", background="white")
-            s.configure("TPhotoimage", background="white")
-            s.configure("TLabelframe", background="white")
-            s.configure("TLabelframe.Label", background="white")
-            s.configure("TScale", background="white")
-            s.configure("TCheckbutton", background="white")
-            s.configure(".", font=sql_cur.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0])
+            variables.update_style(val)
+            restart = tkmb.askyesno(title=_("Tema cambiato"),
+                                    message=_("Il tema è stato cambiato. Vuoi riavviare School Life Diary per "
+                                              "applicare le modifiche?"))
+            if restart is True:
+                os.execl(sys.executable, sys.executable, *sys.argv)
         if par == "PC_FONT":
             s = variables.s
             s.configure(".", font=val)
-        sql_cur.close()
-        sql_conn.close()
+        init.close_database(conn, c)
         creaFinestra()
     except Exception as ex:
         tkmb.showerror(title=_("ERRORE!"),
@@ -337,7 +331,7 @@ def modifica_valore(event):
         return
     global wcv, bts
     wcv = Toplevel()
-    wcv.configure(background="white")
+    variables.change_window_bg(wcv)
     wcv.title(_("Cambia valore - Impostazioni") + " - School Life Diary")
     wcv.iconbitmap(r"images/school_life_diary.ico")
     wcv.geometry("400x200+600+250")
@@ -520,7 +514,7 @@ def creaFinestra():
     inizializza(c)
     global ws
     ws = Toplevel()
-    ws.configure(bg="white")
+    variables.change_window_bg(ws)
     ws.title(_("Impostazioni") + " - School Life Diary")
     ws.iconbitmap(r"images/school_life_diary.ico")
     ws.geometry("1050x450+450+250")
