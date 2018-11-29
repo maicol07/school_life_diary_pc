@@ -17,7 +17,6 @@ from tkinter.ttk import *
 
 import PIL.Image
 import PIL.ImageTk
-from ttkthemes import *
 
 from common import variables, init
 
@@ -35,11 +34,9 @@ conn, c = init.connect_database()
 
 ## CREAZIONE FINESTRA MENU PRINCIPALE ##
 global w
-# DA SOSTITUIRE CON TK, Reinserire ThemedStyle.
-w = ThemedTk(background="white",
-             theme=c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone()[0])
-# Style().configure(".", font=c.execute("SELECT value FROM settings WHERE setting='PC_FONT'"))
+w = Tk()
 w.withdraw()
+variables.style_init(c, w)
 w.title("School Life Diary")
 w.iconbitmap(r"images/school_life_diary.ico")
 
@@ -59,7 +56,6 @@ def info():
     Niente
     """
     wi = Toplevel()
-    wi.configure(bg="white")
     wi.title(_("Informazioni") + " - School Life Diary")
     wi.iconbitmap(r"images\school_life_diary.ico")
     wi.geometry("850x750+250+50")

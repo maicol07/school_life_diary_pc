@@ -4,6 +4,7 @@ from tkinter.filedialog import *
 from tkinter.ttk import Entry, Frame, Button
 
 from PIL import Image, ImageTk
+from ttkthemes import ThemedStyle
 
 version = "1.0.0"
 
@@ -50,3 +51,38 @@ def path_init():
                                        "folder in explorer and then go to path tab. Copy the path and paste inside it "
                                        "the file.")
         txt.close()
+
+
+def style_init(c=None, w=None):
+    """
+        Inizializzazione delle variabili globali
+        :return:
+        """
+    global s
+    s = ThemedStyle()
+    if c is not None:
+        s.configure('.', font=c.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0])
+        theme = c.execute("SELECT value FROM settings WHERE setting='PC_THEME'").fetchone()[0]
+    update_style(theme)
+    if w is not None:
+        change_window_bg(w)
+
+
+def change_window_bg(w):
+    w.configure(background=color)
+
+
+def update_style(newtheme=None):
+    global color
+    s.set_theme(newtheme)
+    color = s.lookup("TButton", "background", default="white")
+    if color == "SystemButtonFace":
+        color = "white"
+    s.configure("TFrame", background=color)
+    s.configure("TButton", height=100)
+    s.configure("TLabel", background=color)
+    s.configure("TPhotoimage", background=color)
+    s.configure("TLabelframe", background=color)
+    s.configure("TLabelframe.Label", background=color)
+    s.configure("TScale", background=color)
+    s.configure("TCheckbutton", background=color)
