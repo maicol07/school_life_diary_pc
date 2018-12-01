@@ -3,6 +3,16 @@ Tutti i cambiamenti notabili verranno documentati in questo file
 
 Questo formato è basato sul formato [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) e questo progetto aderisce al [Versionamento Semantico 2.0.0](https://semver.org/lang/it/).
 
+## Non ancora rilasciata - Versione 1.1 (??/12/2018)
+### Aggiunto
+- Installazione automatica delle librerie esterne richieste se l'utente non sta usando una versione precompilata dell'applicazione (per versione precompilata si intende un installer automatico (file .exe))
+
+### Cambiato
+- Riscrittura del programma con l'utilizzo delle classi e utilizzando una struttura più modulare
+- Miglioramenti generali e ottimizzazioni alle prestazioni
+
+### Risolto
+- Corretto problema dello sfondo bianco utilizzando temi scuri
 
 ## Versione 1.0 (06/11/2018)
 

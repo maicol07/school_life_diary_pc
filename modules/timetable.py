@@ -12,19 +12,23 @@ module_name = __name__.replace("_", "")
 if "." in module_name:
     module_name = module_name[module_name.find(".") + 1:]
 
-if not (os.path.exists(os.path.join(path, "data.db"))):
-    fm = open(os.path.join(path, "data.db"), "w")
-    fm.close()
-    conn = sql.connect(os.path.join(path, "data.db"), isolation_level=None)
-    c = conn.cursor()
+conn, c = init.connect_database()
+c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='timetable';")
+ris = c.fetchall()
+if not (len(ris) == 1):
+    if not (os.path.exists(os.path.join(path, "data.db"))):
+        fm = open(os.path.join(path, "data.db"), "w")
+        fm.close()
     c.execute(
         """CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, 
         `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
+init.close_database(conn, c)
 
 from tkinter import *
 from tkinter.ttk import *
 from tkinter import Toplevel
 import tkinter.messagebox as tkmb
+
 
 def Salvataggio(matl, matm, matmm, matg, matv, mats):
     """
@@ -179,7 +183,7 @@ def inizializza():
         Niente
         """
     ## INSTALLAZIONE LINGUA ##
-    lang = init.Language(module_name)
+    init.Language(module_name)
     global ds
     global dt
     ds = {}
@@ -320,4 +324,3 @@ def creaFinestra():
     li.pack()
     wt.focus()
     wt.mainloop()
-    init.close_database(conn, c)

@@ -1,9 +1,5 @@
 # IMPORTAZIONE MODULI E LIBRERIE
-import ctypes
-import gettext
-import locale
 import os.path
-import sqlite3 as sql
 import tkinter.messagebox as tkmb
 from tkinter import *
 from tkinter import Toplevel
@@ -13,50 +9,27 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 
+from common import init
 from common import variables
 
-global fn_sub
 global path
 
-fn_sub = "subjects.db"
+module_name = __name__.replace("_", "")
+if "." in module_name:
+    module_name = module_name[module_name.find(".") + 1:]
 
 path = variables.path
-if not (os.path.exists(os.path.join(path, fn_sub))):
-    fm = open(os.path.join(path, fn_sub), "w")
-    fm.close()
-    conn = sql.connect(os.path.join(path, fn_sub), isolation_level=None)
-    c = conn.cursor()
-    c.execute("""CREATE TABLE "subjects" ( `ID` INTEGER, `name` TEXT, `colour` TEXT, `prof` TEXT);""")
-else:
-    conn = sql.connect(os.path.join(path, fn_sub), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='subjects';")
-    ris = c.fetchall()
-    if not (len(ris) == 1):
-        c.execute("""CREATE TABLE "subjects" ( `ID` INTEGER, `name` TEXT, `colour` TEXT, `prof` TEXT);""")
 
-
-def install_language():
-    """
-    Installa la lingua del modulo materie.
-
-    Parametri
-    ----------
-    Nessuno
-
-    Ritorna
-    -------
-    Niente
-    """
-    if not (os.path.exists(os.path.join(path, "language.txt"))):
-        windll = ctypes.windll.kernel32
-        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lg = gettext.translation("subjects", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
-    else:
-        fl = open(os.path.join(path, "language.txt"), "r")
-        lgcode = fl.readline()
-        lg = gettext.translation('subjects', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    lg.install()
+conn, c = init.connect_database()
+c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='subjects';")
+ris = c.fetchall()
+if not (len(ris) == 1):
+    if not (os.path.exists(os.path.join(path, "data.db"))):
+        fm = open(os.path.join(path, "data.db"), "w")
+        fm.close()
+    c.execute(
+        """CREATE TABLE "subjects" ( `ID` INTEGER, `name` TEXT, `colour` TEXT, `prof` TEXT);""")
+init.close_database(conn, c)
 
 
 def inizializza():
@@ -72,13 +45,13 @@ def inizializza():
         -------
         Niente
         """
-    install_language()
+    init.Language(module_name)
+    global conn, c
+    conn, c = init.connect_database()
     global m
     m = {}
-    connection = sql.connect(os.path.join(path, fn_sub), isolation_level=None)
-    cur = connection.cursor()
-    cur.execute("SELECT * FROM subjects")
-    sr = cur.fetchall()
+    c.execute("SELECT * FROM subjects")
+    sr = c.fetchall()
     for row in sr:
         m[row[0]] = {"nome": row[1], "colore": row[2], "prof": row[3]}
     for r in m:
@@ -87,26 +60,25 @@ def inizializza():
                 m[r][i] = ""
 
 
-def sistemaIndici(cursor):
+def sistemaIndici():
     """
         Corregge possibili negli indici delle materie, salvate nel database.
 
         Parametri
         ----------
-        :param cursor : (sqlite3.Cursor)
-            Cursore che effettua operazioni sul database.
+        Nessuno
 
         Ritorna
         -------
         Niente
             """
-    cursor.execute("SELECT * FROM subjects")
-    r = cursor.fetchall()
+    c.execute("SELECT * FROM subjects")
+    r = c.fetchall()
     for i in range(len(r)):
         if i in r[i]:
             continue
         else:
-            cursor.execute("""UPDATE subjects SET ID={} WHERE name='{}' AND colour='{}'
+            c.execute("""UPDATE subjects SET ID={} WHERE name='{}' AND colour='{}'
             AND prof='{}'""".format(i + 1, r[i][1], r[i][2], r[i][3]))
 
 
@@ -132,20 +104,18 @@ def Salvataggio(mode, name, col, prof, idx=0):
         -------
         Niente
         """
-    sql_conn = sql.connect(os.path.join(path, fn_sub), isolation_level=None)
-    sql_cur = sql_conn.cursor()
-    sistemaIndici(sql_cur)
+    sistemaIndici()
     try:
         if mode == "add":
-            sql_cur.execute(
+            c.execute(
                 "INSERT INTO subjects VALUES ('{}','{}','{}','{}')".format(len(list(m.keys())) + 1, name, col, prof))
             wa.destroy()
         elif mode == "edit":
-            sql_cur.execute(
+            c.execute(
                 """UPDATE subjects SET name='{}', colour='{}', prof='{}' WHERE ID={}""".format(name, col, prof, idx))
             we.destroy()
         elif mode == "del":
-            sql_cur.execute("DELETE FROM subjects WHERE ID={}".format(idx))
+            c.execute("DELETE FROM subjects WHERE ID={}".format(idx))
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Salvataggio effettuato con successo!"))
         wim.destroy()
@@ -154,7 +124,7 @@ def Salvataggio(mode, name, col, prof, idx=0):
         tkmb.showerror(title=_("Errore!"),
                        message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore") + "\n" + str(
                            ex))
-    sistemaIndici(sql_cur)
+    sistemaIndici()
 
 
 def delete():
@@ -237,7 +207,7 @@ def add():
         """
     global wa
     wa = Toplevel()
-    wa.configure(background="white")
+    variables.change_window_bg(wa)
     wa.title(_("Inserisci materia") + " - School Life Diary")
     wa.iconbitmap(r"images/school_life_diary.ico")
     wa.geometry("350x300+600+200")
@@ -257,19 +227,18 @@ def add():
     lp.grid(row=3, column=0, padx=1, pady=5)
     ep = Combobox(fam)
     ep.grid(row=3, column=1, padx=1, pady=5)
-    pconn = sql.connect(os.path.join(path, "prof.db"), isolation_level=None)
-    cur = pconn.cursor()
-    cur.execute("SELECT * FROM prof")
-    listaprof = cur.fetchall()
-    updatecb(ep, listaprof)
+    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='prof';")
+    ris = c.fetchall()
+    if len(ris) == 1:
+        c.execute("SELECT * FROM prof")
+        listaprof = c.fetchall()
+        updatecb(ep, listaprof)
     psave = PIL.Image.open(r"icons/save.png")
     isave = PIL.ImageTk.PhotoImage(psave)
     b = Button(wa, text=_("SALVA"), image=isave, compound=LEFT,
                command=lambda: Salvataggio("add", var.get(), cc["background"], ep.get()))
     b.pack(padx=10, pady=10)
     wa.mainloop()
-    pconn.close()
-    cur.close()
 
 
 def edit():
@@ -294,7 +263,7 @@ def edit():
         return
     global we
     we = Toplevel()
-    we.configure(background="white")
+    variables.change_window_bg(we)
     we.title(_("Modifica materia") + " - School Life Diary")
     we.iconbitmap(r"images/school_life_diary.ico")
     we.geometry("350x300+600+200")
@@ -314,11 +283,12 @@ def edit():
     lp.grid(row=3, column=0, padx=1, pady=5)
     ep = Combobox(fam, )
     ep.grid(row=3, column=1, padx=1, pady=5)
-    pconn = sql.connect(os.path.join(path, "prof.db"), isolation_level=None)
-    cur = pconn.cursor()
-    cur.execute("SELECT * FROM prof")
-    listaprof = cur.fetchall()
-    updatecb(ep, listaprof)
+    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='prof';")
+    ris = c.fetchall()
+    if len(ris) == 1:
+        c.execute("SELECT * FROM prof")
+        listaprof = c.fetchall()
+        updatecb(ep, listaprof)
     ep.set(selMat["values"][2])
     psave = PIL.Image.open(r"icons/save.png")
     isave = PIL.ImageTk.PhotoImage(psave)
@@ -326,8 +296,6 @@ def edit():
                command=lambda: Salvataggio("edit", var.get(), cc["background"], ep.get(), selMat["text"]))
     b.pack(padx=10, pady=10)
     we.mainloop()
-    pconn.close()
-    cur.close()
 
 
 def popup(event):
@@ -392,7 +360,7 @@ def creaFinestra():
         """
     global wim
     wim = Toplevel()
-    wim.configure(background="white")
+    variables.change_window_bg(wim)
     inizializza()
     wim.title(_("Materie") + " - School Life Diary")
     wim.iconbitmap(r"images/school_life_diary.ico")
@@ -438,5 +406,4 @@ def creaFinestra():
     li.pack()
     wim.bind("<Button-3>", popup2)
     wim.focus()
-    conn.close()
     wim.mainloop()

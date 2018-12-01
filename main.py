@@ -3,12 +3,32 @@
 #    SCHOOL LIFE    #
 #       DIARY       #
 #                   #
-#    PC VERSION     #
+#  DESKTOP EDITION  #
 #                   #
 #####################
 
 print("CARICAMENTO IN CORSO...")
 module_name = __name__.replace("_", "")
+import os.path
+## VERIFICA SE LE LIBRERIE RICHIESTE SONO GIA' INSTALLATE ##
+import subprocess
+import sys
+
+if os.path.splitext(os.path.basename(__file__))[1] == ".py":
+    try:
+        cmd = subprocess.check_output([sys.executable, '-m', 'pip', 'install', '-r' 'requirements.txt'],
+                                      stderr=subprocess.PIPE)
+    except subprocess.CalledProcessError as ex:
+        import tkinter.messagebox as tkmb
+
+        tkmb.showerror(title="Can't install modules",
+                       message="External modules can't be installed. Check if you have installed pip with Python or you"
+                               "are connected to an internet connection or else install them manually "
+                               "(file: requirements.txt). For more info check the error:\n\n"
+                               + ex.stderr.decode("UTF-8"))
+        exit()
+
+
 ### START MAIN ###
 
 import webbrowser
@@ -178,7 +198,7 @@ bv.grid(row=0, column=3, padx=5)
 ban.grid(row=0, column=4, padx=5)
 bag.grid(row=0, column=5, padx=5)
 w.deiconify()
-init.close_database(conn, c)
 w.mainloop()
+init.close_database(conn, c)
 if "rFile" in globals():
     os.remove(rFile)
