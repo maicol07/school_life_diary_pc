@@ -17,7 +17,6 @@ from common import init, variables
 from lib import datepicker, wckToolTips
 
 global path
-global fn_set
 
 ## VARIABILI D'AMBIENTE ##
 module_name = __name__.replace("_", "")
@@ -248,15 +247,14 @@ def accept_whole_number_only(sv, e=None):
         sv.set(int(round(value)))
 
 
-def inizializza(cursor):
+def inizializza():
     """
         Inizializzazione modulo annotazioni:
             • Crea dizionario con tutte le annotazioni, recuperate dal database
 
         Parametri
         ----------
-        :param cursor : (sqlite3.Cursor)
-            Cursore per la connessione al database.
+        Nessuno
 
         Ritorna
         -------
@@ -266,8 +264,8 @@ def inizializza(cursor):
     lang = init.Language(module_name)
     global ds
     ds = {}
-    cursor.execute("SELECT * FROM settings")
-    sr = cursor.fetchall()
+    c.execute("SELECT * FROM settings")
+    sr = c.fetchall()
     for row in sr:
         if row[0] == "ALPHA_VERS" or row[0] == "BETA_VERS" or row[0] == "CHECK_UPDATES":
             if row[1] == "1":
@@ -511,8 +509,9 @@ def creaFinestra():
         -------
         Niente
         """
+    global conn, c
     conn, c = init.connect_database()
-    inizializza(c)
+    inizializza()
     global ws
     ws = Toplevel()
     variables.change_window_bg(ws)

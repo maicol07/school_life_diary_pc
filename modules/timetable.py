@@ -1,6 +1,3 @@
-import os.path
-import sqlite3 as sql
-
 import PIL.Image
 import PIL.ImageTk
 
@@ -16,9 +13,6 @@ conn, c = init.connect_database()
 c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='timetable';")
 ris = c.fetchall()
 if not (len(ris) == 1):
-    if not (os.path.exists(os.path.join(path, "data.db"))):
-        fm = open(os.path.join(path, "data.db"), "w")
-        fm.close()
     c.execute(
         """CREATE TABLE "timetable" ( `ID` INTEGER UNIQUE, `Lun` TEXT, `Mar` TEXT, `Mer` TEXT, `Gio` TEXT, 
         `Ven` TEXT, `Sab` TEXT, PRIMARY KEY(`ID`) );""")
@@ -54,11 +48,10 @@ def Salvataggio(matl, matm, matmm, matg, matv, mats):
         Niente
             """
     try:
-        connection, cur = conn, c
         gg = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab"]
         mat = [matl, matm, matmm, matg, matv, mats]
         for i in range(len(mat)):
-            cur.execute("""UPDATE timetable SET {} = '{}' WHERE ID={}; """.format(gg[i], mat[i], sel["text"][0]))
+            c.execute("""UPDATE timetable SET {} = '{}' WHERE ID={}; """.format(gg[i], mat[i], sel["text"][0]))
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Salvataggio effettuato con successo!"))
         wtc.destroy()
@@ -206,7 +199,7 @@ def inizializza():
             dt[i[0]] = l
     else:
         for i in range(9):
-            cursor.execute("""INSERT INTO timetable (Lun, Mar, Mer, Gio, Ven, Sab)
+            c.execute("""INSERT INTO timetable (Lun, Mar, Mer, Gio, Ven, Sab)
             VALUES ("", "", "", "", "", ""); """)
             for a in range(9):
                 l = []
@@ -265,10 +258,8 @@ def creaFinestra():
     ft = Frame(wt)
     ft.pack()
     try:
-        mat_conn = sql.connect(os.path.join(path, "subjects.db"), isolation_level=None)
-        mat_cur = mat_conn.cursor()
-        mat_cur.execute("SELECT * FROM subjects")
-        mat = mat_cur.fetchall()
+        c.execute("SELECT * FROM subjects")
+        mat = c.fetchall()
         listmat = []
         for i in mat:
             listmat.append(i[1])

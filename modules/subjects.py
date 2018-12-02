@@ -1,5 +1,4 @@
 # IMPORTAZIONE MODULI E LIBRERIE
-import os.path
 import tkinter.messagebox as tkmb
 from tkinter import *
 from tkinter import Toplevel
@@ -24,9 +23,6 @@ conn, c = init.connect_database()
 c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='subjects';")
 ris = c.fetchall()
 if not (len(ris) == 1):
-    if not (os.path.exists(os.path.join(path, "data.db"))):
-        fm = open(os.path.join(path, "data.db"), "w")
-        fm.close()
     c.execute(
         """CREATE TABLE "subjects" ( `ID` INTEGER, `name` TEXT, `colour` TEXT, `prof` TEXT);""")
 init.close_database(conn, c)
@@ -228,8 +224,8 @@ def add():
     ep = Combobox(fam)
     ep.grid(row=3, column=1, padx=1, pady=5)
     c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='prof';")
-    ris = c.fetchall()
-    if len(ris) == 1:
+    result = c.fetchall()
+    if len(result) == 1:
         c.execute("SELECT * FROM prof")
         listaprof = c.fetchall()
         updatecb(ep, listaprof)
@@ -284,8 +280,8 @@ def edit():
     ep = Combobox(fam, )
     ep.grid(row=3, column=1, padx=1, pady=5)
     c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='prof';")
-    ris = c.fetchall()
-    if len(ris) == 1:
+    result = c.fetchall()
+    if len(result) == 1:
         c.execute("SELECT * FROM prof")
         listaprof = c.fetchall()
         updatecb(ep, listaprof)

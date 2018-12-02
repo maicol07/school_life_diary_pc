@@ -1,9 +1,4 @@
-import ctypes
-import gettext
-import locale
 import os
-import os.path
-import sqlite3 as sql
 import time
 import tkinter.messagebox as tkmb
 from tkinter import *
@@ -15,7 +10,7 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 
-from common import variables
+from common import init, variables
 
 global nt
 
@@ -27,85 +22,49 @@ Ogni nota ha un corrispondente ID numerico (la chiave) e l valore è un altro
 dizionario che rappresentano i valori delle colonne.
 '''
 
-global fn_notes
 global path
-fn_notes = "notes.db"
 
 path = variables.path
-if not (os.path.exists(os.path.join(path, fn_notes))):
-    fm = open(os.path.join(path, fn_notes), "w")
-    fm.close()
-    conn = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
-    c = conn.cursor()
+
+module_name = __name__.replace("_", "")
+if "." in module_name:
+    module_name = module_name[module_name.find(".") + 1:]
+
+conn, c = init.connect_database()
+c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='notes';")
+ris = c.fetchall()
+if not (len(ris) == 1):
     c.execute("""CREATE TABLE `notes` (
-	`ID`	INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
-	`nome`	TEXT NOT NULL,
-	`descrizione`	TEXT,
-	`data_creazione`	TEXT,
-	`data_modifica`	TEXT,
-	`allegati`	TEXT,
-	`URIallegato`	TEXT
-);""")
-else:
-    conn = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='notes';")
-    ris = c.fetchall()
-    if not (len(ris) == 1):
-        c.execute("""CREATE TABLE `notes` (
-	`ID`	INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
-	`nome`	TEXT NOT NULL,
-	`descrizione`	TEXT,
-	`data_creazione`	TEXT,
-	`data_modifica`	TEXT,
-	`allegati`	TEXT,
-	`URIallegato`	TEXT
-);""")
+    	`ID`	INTEGER NOT NULL UNIQUE PRIMARY KEY AUTOINCREMENT,
+    	`nome`	TEXT NOT NULL,
+    	`descrizione`	TEXT,
+    	`data_creazione`	TEXT,
+    	`data_modifica`	TEXT,
+    	`allegati`	TEXT,
+    	`URIallegato`	TEXT
+    );""")
+init.close_database(conn, c)
 
 
-def install_language():
-    """
-    Installa la lingua del modulo annotazioni.
-
-    Parametri
-    ----------
-    Nessuno
-
-    Ritorna
-    -------
-    Niente
-    """
-    if not (os.path.exists(os.path.join(path, "language.txt"))):
-        windll = ctypes.windll.kernel32
-        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lg = gettext.translation("note", localedir=os.path.join(path, 'locale'), languages=[lgcode[0:2]])
-    else:
-        fl = open(os.path.join(path, "language.txt"), "r")
-        lgcode = fl.readline()
-        lg = gettext.translation('note', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    lg.install()
-
-
-def sistemaIndici(cur):
+def sistemaIndici():
     """
         Corregge possibili negli indici delle annotazioni, salvate nel database.
 
         Parametri
         ----------
-        :param cur : (sqlite3.Cursor)
-            Cursore che effettua operazioni sul database.
+        Nessuno
 
         Ritorna
         -------
         Niente
         """
-    cur.execute("SELECT * FROM notes")
-    r = cur.fetchall()
+    c.execute("SELECT * FROM notes")
+    r = c.fetchall()
     for i in range(len(r)):
         if i in r[i]:
             continue
         else:
-            cur.execute("""UPDATE notes SET ID={} WHERE nome='{}' AND descrizione='{}'
+            c.execute("""UPDATE notes SET ID={} WHERE nome='{}' AND descrizione='{}'
             AND data_creazione='{}' AND data_modifica='{}' AND allegati='{}' AND URIallegato='{}'""".format(i + 1,
                                                                                                             r[i][1],
                                                                                                             r[i][2],
@@ -133,35 +92,31 @@ def Salvataggio(mode, titolo, descrizione):
         Niente
         """
     try:
-        sql_conn = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
-        sql_cur = sql_conn.cursor()
-        sistemaIndici(sql_cur)
+        sistemaIndici()
         if mode == "add":
             if "fs" in globals():
-                sql_cur.execute("INSERT INTO notes VALUES ('{}','{}','{}','{}', '{}', '{}', '{}');".format(
+                c.execute("INSERT INTO notes VALUES ('{}','{}','{}','{}', '{}', '{}', '{}');".format(
                     len(list(nt.keys())) + 1, titolo.get(), descrizione.get(1.0, END), time.strftime("%d/%m/%Y"),
                     time.strftime("%d/%m/%Y"), fs[len(fs) - 1],
                     sf))
             else:
-                sql_cur.execute("INSERT INTO notes VALUES ('{}','{}','{}','{}', '{}', '{}', '{}');".format(
+                c.execute("INSERT INTO notes VALUES ('{}','{}','{}','{}', '{}', '{}', '{}');".format(
                     len(list(nt.keys())) + 1, titolo.get(), descrizione.get(1.0, END), time.strftime("%d/%m/%Y"),
                     time.strftime("%d/%m/%Y"), "", ""))
             wa.destroy()
         elif mode == "edit":
             if "fs" in globals() and "lfe" in globals():
-                sql_cur.execute("""UPDATE notes SET nome='{}', descrizione='{}', data_modifica='{}', allegati='{}',
+                c.execute("""UPDATE notes SET nome='{}', descrizione='{}', data_modifica='{}', allegati='{}',
     URIallegato='{}' WHERE ID={};""".format(titolo.get(), descrizione.get(1.0, END), time.strftime(
                     "%d/%m/%Y"), fs[len(fs) - 1], sf, selItem["text"]))
             else:
-                sql_cur.execute(
+                c.execute(
                     """UPDATE notes SET nome='{}', descrizione='{}', data_modifica='{}' WHERE ID={};""".format(
                         titolo.get(), descrizione.get(1.0, END), time.strftime("%d/%m/%Y"), selItem["text"]))
             we.destroy()
         elif mode == "del":
-            sql_cur.execute("DELETE FROM notes WHERE ID={}".format(selItem["text"]))
-        sistemaIndici(sql_cur)
-        sql_cur.close()
-        sql_conn.close()
+            c.execute("DELETE FROM notes WHERE ID={}".format(selItem["text"]))
+        sistemaIndici()
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Salvataggio effettuato con successo!"))
         wn.destroy()
@@ -245,7 +200,7 @@ def edit():
     we.title(_("Modifica annotazione") + " - School Life Diary")
     we.iconbitmap(r"images/school_life_diary.ico")
     we.geometry("750x325+600+200")
-    we.configure(bg="white")
+    variables.change_window_bg(we)
     f = LabelFrame(we, text=_("Maschera di modifica"))
     f.pack()
     l = Label(f, text=_("Titolo"))
@@ -293,7 +248,7 @@ def add():
         """
     global wa
     wa = Toplevel()
-    wa.configure(bg="white")
+    variables.change_window_bg(wa)
     wa.title(_("Inserisci annotazione") + " - School Life Diary")
     wa.iconbitmap(r"images/school_life_diary.ico")
     wa.geometry("750x325+600+200")
@@ -339,12 +294,13 @@ def inizializza():
         -------
         Niente
         """
+    init.Language(module_name)
     global nt
     nt = {}
-    connection = sql.connect(os.path.join(path, fn_notes), isolation_level=None)
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM notes")
-    sr = cursor.fetchall()
+    global conn, c
+    conn, c = init.connect_database()
+    c.execute("SELECT * FROM notes")
+    sr = c.fetchall()
     for row in sr:
         nt[row[0]] = {"nome": row[1], "descrizione": row[2], "data_creazione": row[3], "data_modifica": row[4],
                       "allegati": row[5], "URIallegato": row[6]}
@@ -352,7 +308,6 @@ def inizializza():
         for i in nt[r]:
             if nt[r][i] is None:
                 nt[r][i] = ""
-    cursor.close()
 
 
 def on_double_click(event):
@@ -449,7 +404,7 @@ def creaFinestra():
     inizializza()
     wn.title(_("Annotazioni") + " - School Life Diary")
     wn.iconbitmap(r"images/school_life_diary.ico")
-    wn.configure(bg="white")
+    variables.change_window_bg(wn)
     wn.geometry("850x350+600+200")
     i_add = PhotoImage(file=r"icons/add.png")
     i_edit = PhotoImage(file=r"icons/edit.png")

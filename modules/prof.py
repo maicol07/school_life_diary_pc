@@ -1,17 +1,7 @@
 # IMPORTAZIONE MODULI E LIBRERIE
-import sys
-
-### IMPOSTAZIONE PERCORSO LIBRERIE ESTERNE ###
-sys.path.insert(0, 'lib')
-
-import ctypes
-import gettext
-import locale
 import os.path
-import sqlite3 as sql
 import tkinter.messagebox as tkmb
 import webbrowser
-from common import variables
 from tkinter import *
 from tkinter import Toplevel
 from tkinter.filedialog import askopenfilename
@@ -20,66 +10,30 @@ from tkinter.ttk import *
 import PIL.Image
 import PIL.ImageTk
 
-global fn_prof
+from common import init, variables
+
 global path
-
-fn_prof = "prof.db"
-
 path = variables.path
-if not (os.path.exists(os.path.join(path, fn_prof))):
-    fm = open(os.path.join(path, fn_prof), "w")
-    fm.close()
-    conn = sql.connect(os.path.join(path, fn_prof), isolation_level=None)
-    c = conn.cursor()
+
+module_name = __name__.replace("_", "")
+if "." in module_name:
+    module_name = module_name[module_name.find(".") + 1:]
+
+conn, c = init.connect_database()
+c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='prof';")
+ris = c.fetchall()
+if not (len(ris) == 1):
     c.execute("""CREATE TABLE `prof` (
-	`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-	`nome`	TEXT,
-	`cognome`	TEXT NOT NULL,
-	`imageURI`	TEXT,
-	`web`	TEXT,
-	`email`	TEXT
-);""")
-else:
-    conn = sql.connect(os.path.join(path, fn_prof), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='prof';")
-    ris = c.fetchall()
-    if not (len(ris) == 1):
-        c.execute("""CREATE TABLE `prof` (
-            `ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
-            `nome`	TEXT,
-            `cognome`	TEXT NOT NULL,
-            `imageURI`	TEXT,
-            `web`	TEXT,
-            `email`	TEXT
+    	`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+    	`nome`	TEXT,
+    	`cognome`	TEXT NOT NULL,
+    	`imageURI`	TEXT,
+    	`web`	TEXT,
+    	`email`	TEXT
     );""")
+init.close_database(conn, c)
 
 
-def install_language():
-    """
-    Installa la lingua del modulo professori.
-
-    Parametri
-    ----------
-    Nessuno
-
-    Ritorna
-    -------
-    Niente
-    """
-    if not (os.path.exists(os.path.join(path, "language.txt"))):
-        windll = ctypes.windll.kernel32
-        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lg = gettext.translation("subjects", localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    else:
-        fl = open(os.path.join(path, "language.txt"), "r")
-        lgcode = fl.readline()
-        lg = gettext.translation('subjects', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    lg.install()
-    locale.setlocale(locale.LC_ALL, lgcode)
-
-
-# INIZIALIZZA DATI
 def inizializza():
     """
         Inizializzazione modulo professori:
@@ -93,42 +47,40 @@ def inizializza():
         -------
         Niente
         """
-    install_language()
+    init.Language(module_name)
     global prof
     prof = {}
-    connection = sql.connect(os.path.join(path, fn_prof), isolation_level=None)
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM prof")
-    sr = cursor.fetchall()
+    global conn, c
+    conn, c = init.connect_database()
+    c.execute("SELECT * FROM prof")
+    sr = c.fetchall()
     for row in sr:
         prof[row[0]] = {"nome": row[1], "cognome": row[2], "imageURI": row[3], "web": row[4], "email": row[5]}
     for r in prof:
         for i in prof[r]:
             if prof[r][i] is None:
                 prof[r][i] = ""
-    cursor.close()
 
 
-def sistemaIndici(cursor):
+def sistemaIndici():
     """
         Corregge possibili negli indici dei professori, salvate nel database.
 
         Parametri
         ----------
-        :param cursor : (sqlite3.Cursor)
-            Cursore che effettua operazioni sul database.
+        Nessuno
 
         Ritorna
         -------
         Niente
             """
-    cursor.execute("SELECT * FROM prof")
-    r = cursor.fetchall()
+    c.execute("SELECT * FROM prof")
+    r = c.fetchall()
     for i in range(len(r)):
         if i in r[i]:
             continue
         else:
-            cursor.execute("""UPDATE prof SET ID={} WHERE nome='{}' AND cognome='{}'
+            c.execute("""UPDATE prof SET ID={} WHERE nome='{}' AND cognome='{}'
             AND imageURI='{}' AND web='{}' AND email='{}'""".format(i + 1, r[i][1], r[i][2], r[i][3], r[i][4], r[i][5]))
 
 
@@ -157,35 +109,33 @@ def Salvataggio(mode, nome=None, cognome=None, sitoweb=None, email=None, idx=0):
         Niente
         """
     try:
-        sql_conn = sql.connect(os.path.join(path, fn_prof), isolation_level=None)
-        cur = sql_conn.cursor()
-        sistemaIndici(cur)
+        sistemaIndici()
         if mode == "add":
-            cur.execute("SELECT * FROM prof")
+            c.execute("SELECT * FROM prof")
             if "fImage" in globals() and not (fImage is None):
-                cur.execute(
+                c.execute(
                     "INSERT INTO prof VALUES ('{}','{}','{}','{}','{}','{}')".format(len(prof.keys()) + 1, nome.get(),
                                                                                      cognome.get(), fImage,
                                                                                      sitoweb.get(), email.get()))
             else:
-                cur.execute(
+                c.execute(
                     "INSERT INTO prof VALUES ('{}','{}','{}','{}','{}','{}')".format(len(prof.keys()) + 1, nome.get(),
                                                                                      cognome.get(), "", sitoweb.get(),
                                                                                      email.get()))
             wa.destroy()
         elif mode == "edit":
             if "fImage" in globals() and not (fImage is None):
-                cur.execute("""UPDATE prof
+                c.execute("""UPDATE prof
                           SET nome = '{}', cognome = '{}', imageURI='{}', web='{}', email='{}'
                           WHERE ID={}; """.format(nome.get(), cognome.get(), fImage, sitoweb.get(), email.get(), idx))
             else:
-                cur.execute("""UPDATE prof
+                c.execute("""UPDATE prof
                           SET nome = '{}', cognome = '{}', imageURI='', web='{}', email='{}'
                           WHERE ID={}; """.format(nome.get(), cognome.get(), sitoweb.get(), email.get(), idx))
             we.destroy()
         elif mode == "del":
-            cur.execute("""DELETE FROM prof WHERE ID={};""".format(idx))
-        sistemaIndici(cur)
+            c.execute("""DELETE FROM prof WHERE ID={};""".format(idx))
+        sistemaIndici()
         tkmb.showinfo(title=_("Successo!"), message=_("Salvataggio effettuato con successo!"))
         wip.destroy()
         creaFinestra()
@@ -281,7 +231,7 @@ def add():
         """
     global wa
     wa = Toplevel()
-    wa.configure(background="white")
+    variables.change_window_bg(wa)
     wa.title(_("Inserisci professore") + " - School Life Diary")
     wa.iconbitmap(r"images/school_life_diary.ico")
     wa.geometry("350x300+600+200")
@@ -344,7 +294,7 @@ def edit():
         return
     global we
     we = Toplevel()
-    we.configure(background="white")
+    variables.change_window_bg(we)
     we.title(_("Modifica professore") + " - School Life Diary")
     we.iconbitmap(r"images/school_life_diary.ico")
     we.geometry("350x350+600+200")
@@ -478,7 +428,7 @@ def creaFinestra():
         """
     global wip
     wip = Toplevel()
-    wip.configure(background="white")
+    variables.change_window_bg(wip)
     inizializza()
     wip.title(_("Professori") + " - School Life Diary")
     wip.iconbitmap(r"images/school_life_diary.ico")

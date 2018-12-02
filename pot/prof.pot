@@ -2,10 +2,11 @@
 # Copyright (C) YEAR ORGANIZATION
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-11-19 15:51+0100\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2018-12-02 15:11+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=cp1252\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-
+"X-Generator: Poedit 1.8.4\n"
 
 #: modules\prof.py:189
 msgid "Salvataggio effettuato con successo!"
@@ -28,7 +29,7 @@ msgid "Errore!"
 msgstr ""
 
 #: modules\prof.py:194
-msgid "Si è verificato un errore, riprovare oppure contattare lo sviluppatore. Errore riscontrato:"
+msgid "Si Ã¨ verificato un errore, riprovare oppure contattare lo sviluppatore. Errore riscontrato:"
 msgstr ""
 
 #: modules\prof.py:215 modules\prof.py:340
@@ -36,7 +37,7 @@ msgid "Nessun professore selezionato!"
 msgstr ""
 
 #: modules\prof.py:216
-msgid "Non è stato selezionato nessun professore. Si prega di selezionarne uno per eliminarlo."
+msgid "Non Ã¨ stato selezionato nessun professore. Si prega di selezionarne uno per eliminarlo."
 msgstr ""
 
 #: modules\prof.py:219
@@ -84,7 +85,7 @@ msgid "SALVA"
 msgstr ""
 
 #: modules\prof.py:341
-msgid "Non è stato selezionato nessun professore. Si prega di selezionarne uno per apportare modifiche."
+msgid "Non Ã¨ stato selezionato nessun professore. Si prega di selezionarne uno per apportare modifiche."
 msgstr ""
 
 #: modules\prof.py:348
@@ -141,4 +142,3 @@ msgid ""
 "Per modificare un professore, fai doppio click sulla riga corrispondente.\n"
 "Per modificare o eliminare un professore, selezionare una riga e poi premere il tasto destro del mouse"
 msgstr ""
-

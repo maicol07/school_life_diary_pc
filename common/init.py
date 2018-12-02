@@ -327,7 +327,7 @@ class FirstRun(object):
     def __init__(self):
         if not (os.path.exists(os.path.join(path, "data.db"))):
             self.create_db()
-            self.download_languages()
+            Language().download_languages()
 
     def create_db(self):
         if os.path.exists(os.path.join(path, "settings.npy")):
@@ -404,6 +404,9 @@ class FirstRun(object):
 
 
 def connect_database(module_name="data"):
+    if not (os.path.exists(os.path.join(path, "{}.db".format(module_name)))):
+        fm = open(os.path.join(path, "{}.db".format(module_name)), "w")
+        fm.close()
     conn = sql.connect(os.path.join(variables.path, "{}.db".format(module_name)), isolation_level=None)
     c = conn.cursor()
     return conn, c

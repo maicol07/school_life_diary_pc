@@ -1,13 +1,3 @@
-import sys
-
-### IMPOSTAZIONE PERCORSO LIBRERIE ESTERNE ###
-sys.path.insert(0, 'lib')
-
-import ctypes
-import gettext
-import locale
-import os.path
-import sqlite3 as sql
 import tkinter.messagebox as tkmb
 from tkinter import *
 from tkinter import Toplevel
@@ -15,70 +5,32 @@ from tkinter.ttk import *
 
 import PIL.Image
 import PIL.ImageTk
-from common import variables
-import datepicker
 
-global fn_voti
+from common import init, variables
+from lib import datepicker
+
 global path
-
-fn_voti = "voti.db"
-
 path = variables.path
-if not (os.path.exists(os.path.join(path, fn_voti))):
-    fm = open(os.path.join(path, fn_voti), "w")
-    fm.close()
-    conn = sql.connect(os.path.join(path, fn_voti), isolation_level=None)
-    c = conn.cursor()
+
+module_name = __name__.replace("_", "")
+if "." in module_name:
+    module_name = module_name[module_name.find(".") + 1:]
+
+conn, c = init.connect_database()
+c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='voti';")
+ris = c.fetchall()
+if not (len(ris) == 1):
     c.execute("""CREATE TABLE `voti` (
-	`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`voto`	REAL NOT NULL,
-	`materia`	TEXT NOT NULL,
-	`data`	TEXT,
-	`periodo`	INTEGER,
-	`tipo`	TEXT,
-	`peso`	INTEGER,
-	`descrizione`	TEXT
-);""")
-else:
-    conn = sql.connect(os.path.join(path, fn_voti), isolation_level=None)
-    c = conn.cursor()
-    c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='voti';")
-    ris = c.fetchall()
-    if not (len(ris) == 1):
-        c.execute("""CREATE TABLE `voti` (
-	`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`voto`	REAL NOT NULL,
-	`materia`	TEXT NOT NULL,
-	`data`	TEXT,
-	`periodo`	INTEGER,
-	`tipo`	TEXT,
-	`peso`	INTEGER,
-	`descrizione`	TEXT
-);""")
-
-
-def install_language():
-    """
-    Installa la lingua del modulo voti.
-
-    Parametri
-    ----------
-    Nessuno
-
-    Ritorna
-    -------
-    Niente
-    """
-    if not (os.path.exists(os.path.join(path, "language.txt"))):
-        windll = ctypes.windll.kernel32
-        lgcode = locale.windows_locale[windll.GetUserDefaultUILanguage()]
-        lg = gettext.translation("voti", localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    else:
-        fl = open(os.path.join(path, "language.txt"), "r")
-        lgcode = fl.readline()
-        lg = gettext.translation('voti', localedir=os.path.join(path, 'locale'), languages=[lgcode])
-    lg.install()
-    locale.setlocale(locale.LC_ALL, lgcode)
+    	`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    	`voto`	REAL NOT NULL,
+    	`materia`	TEXT NOT NULL,
+    	`data`	TEXT,
+    	`periodo`	INTEGER,
+    	`tipo`	TEXT,
+    	`peso`	INTEGER,
+    	`descrizione`	TEXT
+    );""")
+init.close_database(conn, c)
 
 
 def updatecombobox(cb, tt=True):
@@ -96,10 +48,8 @@ def updatecombobox(cb, tt=True):
     --------
     Niente
     """
-    matconn = sql.connect(os.path.join(path, "subjects.db"), isolation_level=None)
-    matc = matconn.cursor()
-    matc.execute("SELECT * FROM subjects")
-    r = matc.fetchall()
+    c.execute("SELECT * FROM subjects")
+    r = c.fetchall()
     if tt is True:
         l = [_("Tutte le materie")]
     else:
@@ -110,26 +60,25 @@ def updatecombobox(cb, tt=True):
     cb["values"] = l
 
 
-def sistemaIndici(cursor):
+def sistemaIndici():
     """
         Corregge possibili errori negli indici dei voti, salvati nel database.
 
         Parametri
         ----------
-        :param cursor : (sqlite3.Cursor)
-            Cursore che effettua operazioni sul database.
+        Nessuno
 
         Ritorna
         -------
         Niente
             """
-    cursor.execute("SELECT * FROM voti")
-    r = cursor.fetchall()
+    c.execute("SELECT * FROM voti")
+    r = c.fetchall()
     for i in range(len(r)):
         if i in r[i]:
             continue
         else:
-            cursor.execute("""UPDATE voti SET ID={} WHERE voto='{}' AND materia='{}'
+            c.execute("""UPDATE voti SET ID={} WHERE voto='{}' AND materia='{}'
             AND data='{}' AND tipo='{}' AND peso='{}' AND descrizione='{}'""".format(i + 1, r[i][1], r[i][2], r[i][3],
                                                                                      r[i][5], r[i][6], r[i][7]))
 
@@ -164,10 +113,8 @@ def Salvataggio(mode, voto, materia, data, periodo, tipo, descrizione, peso="100
         -------
         Niente
         """
-    sql_conn = sql.connect(os.path.join(path, fn_voti), isolation_level=None)
-    sql_cur = sql_conn.cursor()
     if mode in ["add", "del"]:
-        sistemaIndici(sql_cur)
+        sistemaIndici()
     try:
         if mode in ["add", "edit"]:
             for i in periodo.split(";"):
@@ -184,16 +131,16 @@ def Salvataggio(mode, voto, materia, data, periodo, tipo, descrizione, peso="100
         elif "-" in voto:
             voto = str(float(voto[:-voto.count("-")]) - 0.25 * voto.count("-"))
         if mode == "add":
-            sql_cur.execute("INSERT INTO voti VALUES ('{}','{}','{}','{}', '{}','{}','{}','{}')".format(
+            c.execute("INSERT INTO voti VALUES ('{}','{}','{}','{}', '{}','{}','{}','{}')".format(
                 len(list(voti.keys())) + 1, voto, materia, data, periodo, tipo, peso, descrizione))
             wa.destroy()
         elif mode == "edit":
-            sql_cur.execute(
+            c.execute(
                 """UPDATE voti SET voto='{}', materia='{}', data='{}', periodo='{}', tipo='{}', peso='{}',
     descrizione='{}' WHERE ID={}""".format(voto, materia, data, periodo, tipo, peso, descrizione, idx))
             we.destroy()
         elif mode == "del":
-            sql_cur.execute("DELETE FROM voti WHERE ID={}".format(idx))
+            c.execute("DELETE FROM voti WHERE ID={}".format(idx))
         tkmb.showinfo(title=_("Successo!"),
                       message=_("Salvataggio effettuato con successo!"))
         wv.destroy()
@@ -203,7 +150,7 @@ def Salvataggio(mode, voto, materia, data, periodo, tipo, descrizione, peso="100
                        message=_("Si è verificato un errore, riprovare oppure contattare lo sviluppatore") + "\n" + str(
                            ex))
     if mode in ["add", "del"]:
-        sistemaIndici(sql_cur)
+        sistemaIndici()
 
 
 def delete():
@@ -279,10 +226,8 @@ def edit():
     dd = datepicker.Datepicker(fam)
     dd.grid(row=2, column=1, padx=10, pady=10)
     dd.date_var.set(selVoto["values"][2])
-    setconn = sql.connect(os.path.join(path, "settings.db"), isolation_level=None)
-    setc = setconn.cursor()
-    setc.execute("SELECT * from settings WHERE setting='PERIODS'")
-    periods = setc.fetchone()[1]
+    c.execute("SELECT * from settings WHERE setting='PERIODS'")
+    periods = c.fetchone()[1]
     lp = Label(fam, text=_("Tipo"))
     lp.grid(row=3, column=0, padx=10, pady=10)
     tc = Combobox(fam, values=[_("Scritto"), _("Orale"), _("Pratico"), _("Grafico"), _("Altro")])
@@ -304,8 +249,6 @@ def edit():
                command=lambda: Salvataggio("edit", vvar.get(), em.get(), dd.date_var.get(), periods, tc.get(),
                                            var_descr.get(), var_peso.get(), selVoto["text"]))
     b.pack(padx=10, pady=10)
-    setc.close()
-    setconn.close()
     we.mainloop()
 
 
@@ -342,10 +285,8 @@ def add():
     ld.grid(row=2, column=0, padx=10, pady=10)
     dd = datepicker.Datepicker(fam)
     dd.grid(row=2, column=1, padx=10, pady=10)
-    setconn = sql.connect(os.path.join(path, "settings.db"), isolation_level=None)
-    setc = setconn.cursor()
-    setc.execute("SELECT * from settings WHERE setting='PERIODS'")
-    periods = setc.fetchone()[1]
+    c.execute("SELECT * from settings WHERE setting='PERIODS'")
+    periods = c.fetchone()[1]
     lp = Label(fam, text=_("Tipo"))
     lp.grid(row=3, column=0, padx=10, pady=10)
     tc = Combobox(fam, values=[_("Scritto"), _("Orale"), _("Pratico"), _("Grafico"), _("Altro")])
@@ -366,8 +307,6 @@ def add():
                command=lambda: Salvataggio("add", vvar.get(), em.get(), dd.date_var.get(), periods, tc.get(),
                                            var_descr.get(), var_peso.get()))
     b.pack(padx=10, pady=10)
-    setc.close()
-    setconn.close()
     wa.mainloop()
 
 
@@ -384,11 +323,13 @@ def inizializza():
         -------
         Niente
         """
-    install_language()
+    init.Language(module_name)
+    global conn, c
+    conn, c = init.connect_database()
     global voti
     voti = {}
-    cur.execute("SELECT * FROM voti")
-    sr = cur.fetchall()
+    c.execute("SELECT * FROM voti")
+    sr = c.fetchall()
     for row in sr:
         voti[row[0]] = {"voto": row[1], "materia": row[2], "data": row[3], "periodo": row[4], "tipo": row[5],
                         "peso": row[6], "descrizione": row[7]}
@@ -483,11 +424,11 @@ def visualizzadati(cb):
     """
     tv.delete(*tv.get_children())
     if cb.get() == _("Tutte le materie"):
-        cur.execute("SELECT * FROM voti")
+        c.execute("SELECT * FROM voti")
     else:
-        cur.execute("SELECT * FROM voti WHERE materia='{}'".format(cb.get()))
+        c.execute("SELECT * FROM voti WHERE materia='{}'".format(cb.get()))
     votimat = {}
-    sr = cur.fetchall()
+    sr = c.fetchall()
     for row in sr:
         votimat[row[0]] = {"voto": row[1], "materia": row[2], "data": row[3], "periodo": row[4], "tipo": row[5],
                            "peso": row[6], "descrizione": row[7]}
@@ -524,10 +465,7 @@ def creaFinestra():
         """
     global wv
     wv = Toplevel()
-    wv.configure(background="white")
-    connection = sql.connect(os.path.join(path, fn_voti), isolation_level=None)
-    global cur
-    cur = connection.cursor()
+    variables.change_window_bg(wv)
     inizializza()
     wv.title(_("Voti") + " - School Life Diary")
     wv.iconbitmap(r"images/school_life_diary.ico")
@@ -594,14 +532,12 @@ def creaFinestra():
     li.pack()
     global lmedia
     media = getmediapesata(voti)
-    setconn = sql.connect(os.path.join(path, "settings.db"), isolation_level=None)
-    sc = setconn.cursor()
     if isinstance(media, str):
         lmedia = Label(wv, text=_("MEDIA: {}").format(media),
-                       font=sc.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0] + " bold")
+                       font=c.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0] + " bold")
     else:
         lmedia = Label(wv, text=_("MEDIA: {:.2f}").format(media),
-                       font=sc.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0] + " bold")
+                       font=c.execute("SELECT value FROM settings WHERE setting='PC_FONT'").fetchone()[0] + " bold")
     if media != _("Non è stato inserito nessun voto!"):
         if float(media) < 5.50:
             lmedia.configure(foreground="red")
@@ -612,7 +548,4 @@ def creaFinestra():
     lmedia.pack(pady=10)
     wv.bind("<Button-3>", popup2)
     wv.focus()
-    conn.close()
-    sc.close()
-    setconn.close()
     wv.mainloop()
