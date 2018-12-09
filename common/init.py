@@ -55,7 +55,11 @@ class Language(object):
                                            r"Documents/School Life Diary/language.txt . If the problem still occurs, "
                                            r"contact the developer. Error: " + str(ex))
         lg.install()
-        locale.setlocale(locale.LC_ALL, lgcode)
+        try:
+            locale.setlocale(locale.LC_ALL, lgcode)
+        except locale.Error:
+            import _locale
+            _locale._getdefaultlocale = (lambda *args: ['en_US', 'utf8'])
         self.lgcode = lgcode
 
     def auto_recognize_language(self):
