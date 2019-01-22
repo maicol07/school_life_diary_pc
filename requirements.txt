@@ -6,6 +6,6 @@ beautifulsoup4==4.7.1
 requests==2.21.0
 Pillow==5.4.1
 polib==1.1.0
-ttkthemes==2.2.0
+ttkthemes==2.3.0
 feedparser==5.2.1
 tkfontchooser==2.0.2
