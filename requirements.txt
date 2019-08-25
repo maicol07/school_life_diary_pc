@@ -1,4 +1,4 @@
-pip==19.1
+pip==19.2.3
 babel==2.6.0
 python-transifex==0.1.7
 bs4==0.0.1
