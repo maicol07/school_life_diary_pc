@@ -13,6 +13,8 @@
 [![forthebadge](http://forthebadge.com/images/badges/made-with-python.svg)](http://forthebadge.com)
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 
+# NOTE: THE APP IS DISCONTINUED AND NOT ACTIVELY MANTAINED!!! PLEASE READ THIS: https://community.maicol07.it/d/7-discontinuing-school-life-diary. IF YOU WANT TO MANTAIN THIS REPO CHECK HOW TO DO IT IN THE POST LINKED BEFORE
+
 Language:
 - [Italian](#italian)
 - [English](#english)
